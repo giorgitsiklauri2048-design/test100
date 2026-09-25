@@ -1,0 +1,450 @@
+{
+  "$schema_version": "1.0.0",
+  "source": {
+    "title": "High-throughput toxicogenomic screening of chemicals in the environment using metabolically competent hepatic cell cultures",
+    "authors": "Franzosa JA, Bonzo JA, Jack J, Baker NC, Kothiya P, Witek RP, Hurban P, Siferd S, Hester S, Shah I, Ferguson SS, Houck KA, Wambaugh JF",
+    "journal": "npj Systems Biology and Applications",
+    "year": 2021,
+    "volume": "7",
+    "article_number": "7",
+    "doi": "10.1038/s41540-020-00166-2",
+    "doi_url": "https://doi.org/10.1038/s41540-020-00166-2",
+    "pmid": "33504769",
+    "pmcid": "PMC7840683",
+    "retrieved_via": "PubMed Central full text (PMC7840683)",
+    "citation_note": "The article number is 7, not 12. Any citation of 'npj Syst Biol Appl 7:12' for this work is incorrect."
+  },
+  "provenance_policy": {
+    "paper_reported": "Value is stated explicitly in the article text of the source above.",
+    "external_identifier": "Standard identifier (e.g. CAS RN) added for lookup convenience; NOT reported in the source article.",
+    "synthetic": "Values generated for this package as test fixtures or worked examples. NOT measured data and NOT attributable to the source article.",
+    "not_reported": "The article does not report this quantity in its text; per-chemical curve-fit parameters live in the external files named under external_data_files."
+  },
+  "external_data_files": {
+    "note": "Per-chemical AC50 / efficacy values are NOT in the article text. They are distributed as supplementary archives, which this package deliberately does not bundle or download.",
+    "level_2_raw": "LTEA_Level2_20191119.zip (raw, unnormalized qRT-PCR data)",
+    "level_5_curve_fits": "LTEA_Level5_20191119.zip (results of concentration-response curve-fitting)",
+    "imagery": "LTEA_Inucyte_Images.zip (20,493 images, >15 GB, FTP only)",
+    "dashboard": "Curve fits are also browsable via the EPA CompTox Chemicals Dashboard.",
+    "provenance": "paper_reported"
+  },
+
+  "assay": {
+    "assay_suite_name": "LTEA",
+    "assay_suite_name_origin": "Named for the two contractors that performed the assays: Life Technologies and Expression Analysis.",
+    "cell_model": "Differentiated human HepaRG cell cultures (single lot, Thermo Fisher Scientific)",
+    "cell_model_origin": "Human liver tumor-derived cell culture model",
+    "plating": "96-well collagen type I coated plates, ~100,000 cells/well, HepaRG Thaw/Plate/General Purpose media (HPRG770), 48 h incubation",
+    "vehicle_control": "0.5% DMSO",
+    "vehicle_rationale": "0.5% DMSO 'induction medium' was used to intentionally lower basal expression of DMSO-induced drug metabolizing enzymes, modelling a Zone-2-like state of hepatocyte differentiation that retains both baseline and inducible drug metabolizing activity.",
+    "positive_control_transcriptomics": "Phenobarbital",
+    "positive_control_metabolic": "Aflatoxin B1",
+    "transcriptomic_platform": "TaqMan quantitative RT-PCR on Fluidigm 96.96 dynamic arrays",
+    "transcripts_measured": 93,
+    "assays_per_array": 96,
+    "housekeeping_genes": ["ACTB", "GAPDH", "POLR2A"],
+    "cytotoxicity_assay": "Lactate dehydrogenase (LDH) release, resazurin-coupled, resorufin fluorescence (Tecan Safire plate reader)",
+    "chemical_library_size": 1060,
+    "chemical_library": "ToxCast screening library",
+    "concentration_response_design": "Eight-point concentration-response",
+    "endpoints_per_transcript": 2,
+    "endpoints_per_transcript_note": "Each transcript yields two ToxCast assay endpoints because each curve is fit separately in upregulation and downregulation mode; the LDH assay provides one additional endpoint.",
+    "probe_substitutions": {
+      "note": "After the first reference plate, five probes were identified as having too many non-detects.",
+      "replaced_transcripts": ["KLK3", "MMP1", "SLC10A1", "SLC22A6"],
+      "replacement_transcripts": ["MIR122", "NFE2L2", "PDK4", "XBP1"],
+      "reprobed": "CYP24A1 probe Hs00167999_m1 was replaced by Hs00989017_m1 (also CYP24A1)."
+    },
+    "provenance": "paper_reported"
+  },
+
+  "analysis_pipeline": {
+    "software": "R package tcpl (ToxCast Pipeline)",
+    "response_value": "rval = cval - bval = ΔΔCt = log2 fold-change per transcript",
+    "baseline_value": "bval = plate-wise median of the neutral (DMSO) control wells",
+    "models_fit": ["constant", "hill", "gain-loss"],
+    "gain_loss_definition": "Non-monotonic product of two Hill functions with a shared top.",
+    "model_selection": "Akaike Information Criterion (AIC); the model with the lowest AIC is the winning model.",
+    "potency_parameter": "modl_ga — the half-maximal activity value (50% activity concentration, AC50)",
+    "efficacy_parameter": "modl_tp — the modeled top of the curve",
+    "transcriptomic_hit_criterion": "A chemical is a hit if it exceeds either three times the BMAD (typical of ToxCast assays) or a 1.2-fold-change cutoff at any concentration.",
+    "transcriptomic_bmad_multiplier": 3.0,
+    "transcriptomic_fold_change_cutoff": 1.2,
+    "cytotoxicity_hit_criterion": "Exceeding ten times the BMAD, justified by the relatively high (for ToxCast) signal-to-noise ratio of the LDH assay.",
+    "cytotoxicity_bmad_multiplier": 10.0,
+    "bmad_definition": "Median average deviation of all normalized response values at the lowest two tested concentrations.",
+    "high_concentration_signal_loss": "Any loss of signal at high concentration was interpreted as being due to cytotoxicity.",
+    "benchmark_dose_note": "This study does NOT perform benchmark dose/concentration (BMD/BMC) modelling and does not use a benchmark response of 1.349 SD. That convention belongs to the BMDExpress / NTP transcriptomic dose-response approach (Thomas et al., Toxicol Sci 2007; NTP Research Report 5, 2018) and must not be attributed to this paper.",
+    "provenance": "paper_reported"
+  },
+
+  "receptors": {
+    "modeled": {
+      "AhR": {
+        "full_name": "Aryl hydrocarbon receptor",
+        "uniprot": "P35869",
+        "canonical_markers_reported": ["CYP1A1", "CYP1A2"],
+        "modeled_by_bayesian_network": true
+      },
+      "CAR": {
+        "full_name": "Constitutive androstane receptor (NR1I3)",
+        "uniprot": "Q14994",
+        "canonical_markers_reported": ["CYP2B6"],
+        "modeled_by_bayesian_network": true
+      },
+      "PXR": {
+        "full_name": "Pregnane X receptor (NR1I2)",
+        "uniprot": "O75469",
+        "canonical_markers_reported": ["CYP3A4"],
+        "modeled_by_bayesian_network": true
+      },
+      "FXR": {
+        "full_name": "Farnesoid X receptor (NR1H4)",
+        "uniprot": "Q96RI1",
+        "canonical_markers_reported": ["ABCB11"],
+        "modeled_by_bayesian_network": true
+      },
+      "AR": {
+        "full_name": "Androgen receptor",
+        "uniprot": "P10275",
+        "canonical_markers_reported": [],
+        "modeled_by_bayesian_network": true
+      },
+      "PPARA": {
+        "full_name": "Peroxisome proliferator-activated receptor alpha",
+        "uniprot": "Q07869",
+        "canonical_markers_reported": ["HMGCS2"],
+        "modeled_by_bayesian_network": true
+      }
+    },
+    "marker_provenance": "paper_reported — 'Omeprazole was active against CYP1A2 and CYP1A1 (corresponding to AhR); fenofibric acid was active against HMGCS2 (PPARα); rifampicin against CYP3A4 (PXR); phenobarbital against CYP2B6 (CAR); and chenodeoxycholic acid was active against ABCB11 (FXR).'",
+    "not_modeled_annotation": {
+      "NFE2L2": {
+        "full_name": "Nuclear factor erythroid 2-related factor 2 (Nrf2)",
+        "uniprot": "Q16236",
+        "on_panel": true,
+        "modeled_by_bayesian_network": false,
+        "status_note": "NFE2L2 is present on the 93-transcript panel only as one of four replacement probes introduced after the first reference plate. It is NOT one of the six receptors modeled by the Bayesian network, and this study reports no Nrf2 oxidative-stress signature. Any Nrf2 inference from these data is an extrapolation beyond the source article.",
+        "annotation_markers": ["NFE2L2"],
+        "provenance": "paper_reported (panel membership); interpretation flagged as outside the paper's modeled scope"
+      }
+    }
+  },
+
+  "network_model": {
+    "framework": "Three-step Bayesian analysis integrating peer-reviewed literature priors with new transcriptomic data",
+    "reference_chemical_count": 10,
+    "transcripts_responding_to_reference_chemicals": 45,
+    "transcripts_excluded_as_receptor_unrelated": 13,
+    "excluded_transcripts": ["ACOX1", "APOA5", "BCL2", "CAT", "EGR1", "EZR", "FASN", "HSPA1A", "MIR122", "MMP10", "MYC", "PPP2R4", "SDHB"],
+    "transcripts_in_final_network": 32,
+    "final_network_note": "The article text names the 13 excluded transcripts but does not enumerate all 32 retained transcripts; only the canonical markers above are named in text. The full panel is given in the article's Supplementary Tables.",
+    "chemicals_analyzed_in_network": 1053,
+    "compute_note": "Parallel MCMC on at least 16 × 2.3 GHz processors: ~1 week for the 32-gene, 1053-chemical dataset.",
+    "crosstalk_note": "Substantial cross-talk was observed between the six receptors.",
+    "provenance": "paper_reported"
+  },
+
+  "screening_summary": {
+    "chemicals_tested": 1060,
+    "chemicals_with_any_systematic_relationship": 1037,
+    "chemicals_with_any_systematic_relationship_pct": 98,
+    "chemicals_after_omitting_curve_fit_warning_flags": 718,
+    "chemicals_after_omitting_curve_fit_warning_flags_pct": 68,
+    "conservative_filter_note": "Omitting all relationships carrying curve-fit warning flags is described as a very conservative assumption with respect to true activity.",
+    "most_frequent_responses": [
+      {"transcript": "CYP1A1", "direction": "up", "n_chemicals": 360},
+      {"transcript": "CYP2B6", "direction": "up", "n_chemicals": 352},
+      {"transcript": "CYP2E1", "direction": "down", "n_chemicals": 323}
+    ],
+    "direction_split": {"upregulation_pct": 65, "downregulation_pct": 35},
+    "ar_cross_assay_validation": {
+      "comparator": "ToxCast Factorial assay (modified HepG2 cells)",
+      "chemicals_in_agreement": 8,
+      "mean_probability_for_agreeing_chemicals": 0.75,
+      "additional_chemicals_found_only_by_bayesian_model": 29,
+      "mean_probability_for_additional_chemicals": 0.085
+    },
+    "provenance": "paper_reported"
+  },
+
+  "reference_chemicals": [
+    {
+      "name": "Phenobarbital sodium",
+      "synonyms": ["phenobarbital", "phenobarbitone sodium"],
+      "casrn": "57-30-7",
+      "casrn_provenance": "external_identifier",
+      "activates_receptors": ["CAR", "PXR"],
+      "canonical_marker_reported": "CYP2B6",
+      "max_concentration_reference_plate_uM": 500,
+      "max_concentration_library_uM": 100,
+      "role": "Transcriptomics positive control and reference activator",
+      "reported_notes": "Least potent of any of the reference chemicals considered.",
+      "ac50_uM": null,
+      "ac50_provenance": "not_reported",
+      "cytotoxicity_ac50_uM": null,
+      "cytotoxicity_provenance": "not_reported"
+    },
+    {
+      "name": "Chenodeoxycholic acid",
+      "synonyms": ["CDCA"],
+      "casrn": "474-25-9",
+      "casrn_provenance": "external_identifier",
+      "activates_receptors": ["FXR", "CAR"],
+      "canonical_marker_reported": "ABCB11",
+      "role": "Sole FXR reference activator in the screening library",
+      "reported_notes": "A group of genes is downregulated by chenodeoxycholic acid, indicating a potential signature for FXR agonists.",
+      "ac50_uM": null,
+      "ac50_provenance": "not_reported",
+      "cytotoxicity_ac50_uM": null,
+      "cytotoxicity_provenance": "not_reported"
+    },
+    {
+      "name": "Fenofibric acid",
+      "synonyms": [],
+      "casrn": "42017-89-0",
+      "casrn_provenance": "external_identifier",
+      "activates_receptors": ["PPARA", "CAR", "PXR"],
+      "canonical_marker_reported": "HMGCS2",
+      "role": "PPARα reference activator",
+      "reported_notes": "Both chemicals that activate PPARα (fenofibric acid and pirinixic acid) also activate additional receptors.",
+      "ac50_uM": null,
+      "ac50_provenance": "not_reported",
+      "cytotoxicity_ac50_uM": null,
+      "cytotoxicity_provenance": "not_reported"
+    },
+    {
+      "name": "Pirinixic acid",
+      "synonyms": ["WY-14643", "WY14643"],
+      "casrn": "50892-23-4",
+      "casrn_provenance": "external_identifier",
+      "activates_receptors": ["PPARA", "PXR"],
+      "canonical_marker_reported": null,
+      "role": "PPARα reference activator",
+      "reported_notes": "Clustered with fenofibric acid, though a distinct PPARα pattern is less obvious, perhaps reflecting limited coverage of PPARα-regulated transcripts on the panel.",
+      "ac50_uM": null,
+      "ac50_provenance": "not_reported",
+      "cytotoxicity_ac50_uM": null,
+      "cytotoxicity_provenance": "not_reported"
+    },
+    {
+      "name": "Rifampicin",
+      "synonyms": ["rifampin"],
+      "casrn": "13292-46-1",
+      "casrn_provenance": "external_identifier",
+      "activates_receptors": ["PXR"],
+      "canonical_marker_reported": "CYP3A4",
+      "role": "PXR reference activator",
+      "reported_notes": "Active against CYP3A4, the canonical PXR response gene.",
+      "ac50_uM": null,
+      "ac50_provenance": "not_reported",
+      "cytotoxicity_ac50_uM": null,
+      "cytotoxicity_provenance": "not_reported"
+    },
+    {
+      "name": "Omeprazole",
+      "synonyms": [],
+      "casrn": "73590-58-6",
+      "casrn_provenance": "external_identifier",
+      "activates_receptors": ["AhR"],
+      "canonical_marker_reported": "CYP1A1",
+      "additional_markers_reported": ["CYP1A2"],
+      "role": "Sole AhR reference activator in the screening library; also a metabolic competence probe",
+      "reported_notes": "Produced a robust 4.2-fold induction of CYP3A4 after 48 h, which is not expected of a direct AhR agonist and is attributed to extensive metabolism to sulfone metabolites known to induce CYP3A4 in primary human hepatocyte cultures. Literature data for omeprazole are the most incomplete of the reference set.",
+      "cyp3a4_fold_induction": 4.2,
+      "cyp3a4_fold_induction_time_h": 48,
+      "ac50_uM": null,
+      "ac50_provenance": "not_reported",
+      "cytotoxicity_ac50_uM": null,
+      "cytotoxicity_provenance": "not_reported"
+    },
+    {
+      "name": "17-Methyltestosterone",
+      "synonyms": ["methyl testosterone", "methyltestosterone"],
+      "casrn": "58-18-4",
+      "casrn_provenance": "external_identifier",
+      "activates_receptors": ["AR"],
+      "canonical_marker_reported": null,
+      "role": "Sole AR reference activator in the screening library",
+      "reported_notes": "The most distinct chemical in the reference set, downregulating a series of transcripts largely unaffected by the other chemicals except perhaps rifampicin.",
+      "ac50_uM": null,
+      "ac50_provenance": "not_reported",
+      "cytotoxicity_ac50_uM": null,
+      "cytotoxicity_provenance": "not_reported"
+    },
+    {
+      "name": "p,p'-DDT",
+      "synonyms": ["4,4'-DDT", "DDT"],
+      "casrn": "50-29-3",
+      "casrn_provenance": "external_identifier",
+      "activates_receptors": ["CAR", "PXR"],
+      "canonical_marker_reported": null,
+      "role": "Organochlorine insecticide reference activator",
+      "reported_notes": "Selected from the screening library to clarify receptor activation profiles.",
+      "ac50_uM": null,
+      "ac50_provenance": "not_reported",
+      "cytotoxicity_ac50_uM": null,
+      "cytotoxicity_provenance": "not_reported"
+    },
+    {
+      "name": "o,p'-DDT",
+      "synonyms": ["2,4'-DDT"],
+      "casrn": "789-02-6",
+      "casrn_provenance": "external_identifier",
+      "activates_receptors": ["PXR"],
+      "canonical_marker_reported": null,
+      "role": "Organochlorine insecticide reference activator",
+      "reported_notes": "Selected from the screening library to clarify receptor activation profiles.",
+      "ac50_uM": null,
+      "ac50_provenance": "not_reported",
+      "cytotoxicity_ac50_uM": null,
+      "cytotoxicity_provenance": "not_reported"
+    },
+    {
+      "name": "Methoxychlor",
+      "synonyms": [],
+      "casrn": "72-43-5",
+      "casrn_provenance": "external_identifier",
+      "activates_receptors": ["PXR"],
+      "canonical_marker_reported": null,
+      "role": "Organochlorine insecticide reference activator",
+      "reported_notes": "Selected from the screening library to clarify receptor activation profiles.",
+      "ac50_uM": null,
+      "ac50_provenance": "not_reported",
+      "cytotoxicity_ac50_uM": null,
+      "cytotoxicity_provenance": "not_reported"
+    },
+    {
+      "name": "Aflatoxin B1",
+      "synonyms": ["AFB1"],
+      "casrn": "1162-65-8",
+      "casrn_provenance": "external_identifier",
+      "activates_receptors": [],
+      "canonical_marker_reported": null,
+      "role": "Metabolic positive control (cytotoxicity), not a receptor reference activator",
+      "reported_notes": "A mycotoxicant whose cytotoxicity is metabolically dependent (CYP3A-mediated bioactivation). Produced visually apparent, concentration-related cell death and a concentration-related increase in LDH release across all reference plates, demonstrating sustained HepaRG metabolic competence throughout screening.",
+      "low_concentration_imaged_uM": 3.16,
+      "high_concentration_imaged_uM": 100,
+      "cytotoxicity_pct_of_total_lysis": 12,
+      "ac50_uM": null,
+      "ac50_provenance": "not_reported",
+      "cytotoxicity_ac50_uM": null,
+      "cytotoxicity_provenance": "not_reported"
+    }
+  ],
+
+  "metabolic_competence": {
+    "cell_models": {
+      "HepaRG": {
+        "label": "Differentiated human HepaRG cell cultures",
+        "origin": "Human liver tumor-derived",
+        "xenobiotic_receptor_repertoire": "full",
+        "donor_variability": "low (single genetic background, consistent lot-to-lot screening year over year)",
+        "supply": "effectively unlimited",
+        "relative_metabolic_activity_vs_human_liver": 0.10,
+        "relative_metabolic_activity_basis": "Stated as 'likely ~10% of human liver and suspensions of primary human hepatocytes'; a consequence of the deliberate Zone-2 induction medium (0.5% DMSO), not an intrinsic ceiling of the model.",
+        "zonation_modeled": "Zone-2-like hepatocyte differentiation",
+        "provenance": "paper_reported"
+      },
+      "primary_human_hepatocytes": {
+        "label": "Primary human hepatocytes (PHH)",
+        "origin": "Freshly isolated human liver",
+        "xenobiotic_receptor_repertoire": "full (expresses the full suite of enzymes and transporters involved in hepatic metabolism)",
+        "donor_variability": "high (pronounced donor-to-donor variability)",
+        "supply": "finite per donor",
+        "relative_metabolic_activity_vs_human_liver": 1.0,
+        "relative_metabolic_activity_basis": "Reference point. PHH suspensions comprise both Zone-2 and Zone-3 hepatocytes.",
+        "zonation_modeled": "Zone-2 and Zone-3",
+        "prior_toxcast_use": "The initial phase of ToxCast used primary human hepatocytes to profile 14 transcripts for 309 chemicals (Rotroff et al.).",
+        "provenance": "paper_reported"
+      },
+      "HepG2": {
+        "label": "HepG2 hepatoma-derived cell line",
+        "origin": "Human hepatocellular carcinoma",
+        "xenobiotic_receptor_repertoire": "incomplete (lacks a full repertoire of xenobiotic sensing receptors, metabolizing enzymes and transporters; lacks native expression levels and functionality for various nuclear receptor signaling pathways)",
+        "donor_variability": "none (immortalized line)",
+        "supply": "effectively unlimited",
+        "relative_metabolic_activity_vs_human_liver": null,
+        "relative_metabolic_activity_basis": "not_reported — the article describes HepG2 qualitatively as de-differentiated and metabolically deficient, without a quantitative ratio.",
+        "zonation_modeled": null,
+        "provenance": "paper_reported"
+      }
+    },
+    "cyp450_evidence": {
+      "note": "The article reports CYP450 competence as qualitative induction evidence and screening-wide hit frequencies. It does NOT publish a table of baseline CYP450 expression ratios between HepaRG and primary human hepatocytes, so no such ratios are supplied here.",
+      "CYP1A2": {
+        "receptor": "AhR",
+        "evidence": "Omeprazole, the AhR reference activator, was active against CYP1A2 (and CYP1A1).",
+        "baseline_ratio_vs_PHH": null,
+        "provenance": "not_reported"
+      },
+      "CYP2B6": {
+        "receptor": "CAR",
+        "evidence": "Phenobarbital, the CAR reference activator and transcriptomics positive control, was active against CYP2B6. CYP2B6 upregulation was the second most frequent response across the library (352 chemicals).",
+        "screening_hit_count_up": 352,
+        "baseline_ratio_vs_PHH": null,
+        "provenance": "not_reported"
+      },
+      "CYP3A4": {
+        "receptor": "PXR",
+        "evidence": "Rifampicin, the PXR reference activator, was active against CYP3A4. Independently, omeprazole produced a robust 4.2-fold induction of CYP3A4 after 48 h — a metabolite-driven response consistent with metabolically competent systems and with primary human hepatocyte cultures.",
+        "omeprazole_fold_induction": 4.2,
+        "baseline_ratio_vs_PHH": null,
+        "provenance": "not_reported"
+      }
+    },
+    "functional_evidence": [
+      "Cell morphology of vehicle (0.5% DMSO) cultures showed healthy, well-differentiated cultures composed of the two distinct cell morphologies typical of HepaRG.",
+      "Aflatoxin B1, whose cytotoxicity is metabolically dependent, produced concentration-related cell death and LDH release on all reference plates.",
+      "Omeprazole produced 4.2-fold CYP3A4 induction at 48 h, attributable to its sulfone metabolites rather than direct AhR agonism.",
+      "Baseline gene expression levels and functional responses to prototype human hepatic receptor activators were consistent with a differentiation state analogous to primary human hepatocyte cultures."
+    ],
+    "reported_limitations": [
+      "Metabolic activity was likely ~10% of human liver and of PHH suspensions, limiting the ability to detect differences in cytotoxic potency and efficacy versus historical ToxCast assays lacking metabolic capacity.",
+      "Gerets et al. found frank cytotoxicity in HepaRG cultures to be less sensitive than primary human hepatocytes for detecting known hepatotoxicants, though more sensitive than the HepG2 carcinoma line.",
+      "The proportion of active chemicals was lower than in previous ToxCast HTS datasets; metabolic competence may attenuate activity overall.",
+      "Substantial inferred cross-talk between the six receptors may offset the specificity gained by the network model."
+    ],
+    "provenance": "paper_reported"
+  },
+
+  "synthetic_fixtures": {
+    "_warning": "SYNTHETIC. These arrays were generated for this package to exercise the curve-fitting code and to provide runnable worked examples. They are NOT measured data, NOT from LTEA Level 2/5, and must NOT be cited as results of Franzosa et al. 2021.",
+    "concentration_series_uM": [0.03, 0.1, 0.32, 1.0, 3.16, 10.0, 31.6, 100.0],
+    "concentration_series_note": "An eight-point half-log series spanning the design described in the paper; the paper's per-chemical concentration ranges are in the external Level 2 files.",
+    "cases": [
+      {
+        "id": "synthetic_hill_active",
+        "description": "Monotonic induction, well-fit by a Hill model. Shape only; no chemical attribution.",
+        "responses_log2fc": [0.02, 0.05, 0.11, 0.41, 1.12, 1.78, 2.01, 2.08],
+        "expected_winning_model": "hill",
+        "expected_hit": true,
+        "provenance": "synthetic"
+      },
+      {
+        "id": "synthetic_gnls_cytotoxic_falloff",
+        "description": "Induction followed by loss of signal at the top two concentrations — the pattern the paper interprets as cytotoxicity-driven and fits with a gain-loss model.",
+        "responses_log2fc": [0.01, 0.04, 0.22, 0.95, 1.85, 1.92, 0.75, 0.05],
+        "expected_winning_model": "gnls",
+        "expected_hit": true,
+        "provenance": "synthetic"
+      },
+      {
+        "id": "synthetic_inactive",
+        "description": "No systematic concentration-response; expected to be won by the constant model and called inactive.",
+        "responses_log2fc": [0.03, -0.02, 0.05, -0.04, 0.01, 0.06, -0.03, 0.02],
+        "expected_winning_model": "cnst",
+        "expected_hit": false,
+        "provenance": "synthetic"
+      },
+      {
+        "id": "synthetic_downregulation",
+        "description": "Monotonic repression, fit in downregulation mode. Mirrors the 35% of chemical-transcript pairs reported as downward relationships.",
+        "responses_log2fc": [-0.01, -0.06, -0.19, -0.62, -1.24, -1.61, -1.74, -1.79],
+        "expected_winning_model": "hill",
+        "expected_hit": true,
+        "provenance": "synthetic"
+      }
+    ]
+  }
+}

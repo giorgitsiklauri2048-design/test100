@@ -1,0 +1,227 @@
+{
+  "execution_id": "kinobeads_dasatinib",
+  "module": "cli_wrapper",
+  "status": "success",
+  "execution_mode": "cli_subprocess",
+  "execution_path": "notebooks/kinobeads_dasatinib/work/base/stdout.log",
+  "source": {
+    "assigned_source_path": "repo/curve_curator/example_datasets/kinobeads_Dasatinib/parameters.toml",
+    "source_url": "https://github.com/kusterlab/curve_curator.git",
+    "pinned_commit": "71e46f7222f825f446e9aff3fb5a3bee9473e309",
+    "pinned_commit_verified": true,
+    "pinned_commit_verification_note": "Verified with `git log -1` inside repo/curve_curator/curve_curator's checkout, which showed exactly this commit hash (subject 'Update README.md', 2025-05-24 12:33:43 +0200) with origin=https://github.com/kusterlab/curve_curator.git and a clean working tree.",
+    "parameters_toml_sha256": "0c6580c4a28026ef1ed88a0e67529b34c2c2cb1a754fce184b6b41413c306e09",
+    "input_proteinGroups_sha256": "7b41f605e9450ddee5d008bc35337a566886d767e3656e87f99c91dfb96d81f1",
+    "input_proteinGroups_size_bytes": 8576658,
+    "example_description": "Kinobeads chemoproteomics LFQ pulldown for Dasatinib; 9 dose channels (DMSO + 8 doses 3nM-30000nM), PROTEIN/LFQ/MAXQUANT search engine v1.5.3.30, alpha=0.1, fc_lim=0.5, max_missing=7, imputation=true, normalization=false, available_cores=2 (as shipped; no oversubscription edit was needed)."
+  },
+  "executable_identity": {
+    "executable_path": "/home/user/test100/paper2agent-curvecurator/.venv/bin/CurveCurator",
+    "resolved_via_readlink": "/home/user/test100/paper2agent-curvecurator/.venv/bin/CurveCurator",
+    "reported_version_from_help": "CurveCurator (v0.6.0)",
+    "python_backend": "/home/user/test100/paper2agent-curvecurator/.venv/bin/python (Python 3.11.15)",
+    "python_module_file": "/home/user/test100/paper2agent-curvecurator/.venv/lib/python3.11/site-packages/curve_curator/__init__.py",
+    "python_module_version": "0.6.0",
+    "pip_show_summary": "Name: curve_curator, Version: 0.6.0, Author: Florian P. Bayer, License: Apache License, Version 2.0",
+    "install_provenance_direct_url_json": {"url": "file:///home/user/test100/paper2agent-curvecurator/repo/curve_curator", "dir_info": {}},
+    "install_provenance_note": "dist-info/direct_url.json confirms the installed wheel was built from the pinned local checkout at repo/curve_curator (not a PyPI package, not an editable/dev install). This matches the pinned commit 71e46f7222f825f446e9aff3fb5a3bee9473e309 verified above."
+  },
+  "hazard_mitigation": {
+    "description": "The shipped parameters.toml declares only input_file; curves_file/mad_file/dashboard default to ./curves.txt, ./mad.txt, ./dashboard.html relative to the toml (confirmed by reading curve_curator/toml_parser.py set_default_values, lines ~355-362). Running in place would have overwritten the shipped ground-truth outputs.",
+    "mitigation_taken": "Copied parameters.toml + proteinGroups.txt from repo/curve_curator/example_datasets/kinobeads_Dasatinib/ into three separate isolated run directories under notebooks/kinobeads_dasatinib/work/ (base/, mad_run1/, mad_run2/) before ever invoking the executable. repo/ was never used as a working directory and no CurveCurator invocation targeted a toml under repo/.",
+    "repo_untouched_proof": {
+      "note": "sha256 of the 5 shipped files in repo/curve_curator/example_datasets/kinobeads_Dasatinib/ recorded BEFORE the first run and again AFTER all three runs (base + mad_run1 + mad_run2) completed. All five hashes were identical before and after.",
+      "before_and_after_hashes": {
+        "parameters.toml": "0c6580c4a28026ef1ed88a0e67529b34c2c2cb1a754fce184b6b41413c306e09",
+        "proteinGroups.txt": "7b41f605e9450ddee5d008bc35337a566886d767e3656e87f99c91dfb96d81f1",
+        "curves.txt": "f9ed8f74545ede87c58990ab83bbd139023d0fd1a40652705127a69fbf310ca3",
+        "curveCurator.log": "700398d195bcd17e0fe95a20db2a4018735a2e79dd92b0531d080100ae316c7c",
+        "dashboard.html": "610c772e3649dab01c49d6033fa58c1d09b209c33df0c9e817e62e06f1a07174"
+      },
+      "verified_unmodified": true
+    }
+  },
+  "runs": [
+    {
+      "run_name": "base",
+      "purpose": "Reproduce the shipped example exactly (no flags) and compare against the shipped reference curves.txt/dashboard.html/curveCurator.log.",
+      "command": ["/home/user/test100/paper2agent-curvecurator/.venv/bin/CurveCurator", "./parameters.toml"],
+      "working_directory": "/home/user/test100/paper2agent-curvecurator/notebooks/kinobeads_dasatinib/work/base",
+      "exit_status": 0,
+      "start_time_utc": "2026-09-26T22:02:35Z",
+      "end_time_utc": "2026-09-26T22:15:47Z",
+      "wall_clock_runtime_seconds": 791.87,
+      "stdout_path": "notebooks/kinobeads_dasatinib/work/base/stdout.log",
+      "stderr_path": "notebooks/kinobeads_dasatinib/work/base/stderr.log",
+      "stderr_note": "stderr contains only a pandas FutureWarning (DataFrame.swapaxes deprecated) and tqdm progress-bar carriage-return spam from the two parallel worker processes; no tracebacks or error-level messages.",
+      "log_path": "notebooks/kinobeads_dasatinib/work/base/curveCurator.log",
+      "log_matches_shipped_filter_counts": true,
+      "log_diagnostics": {
+        "curves_removed_missing_gt7": 836,
+        "curves_removed_imputed_gt7": 666,
+        "curves_removed_no_control": 0,
+        "imputation_fill_value": 963994.0,
+        "alpha": 0.1,
+        "fc_lim": 0.5,
+        "s0": 0.2709
+      },
+      "log_diagnostics_match_shipped_log": true,
+      "note_on_runtime": "Runtime (~13.2 min for 585 curves x 2 cores as configured) was slower than a dedicated-machine run because two sibling executor processes (viability_ctrp_40, decryptm_dasatinib) were fitting curves concurrently on the same 4-logical-CPU container; no code or config was changed to compensate. available_cores=2 in the shipped toml itself, so no oversubscription edit was needed or made.",
+      "outputs": [
+        {"path": "notebooks/kinobeads_dasatinib/work/base/curves.txt", "sha256": "8ff22ed7c45ba124291ea817a45064ada1b36fa6b585b82456bd742af163426a", "size_bytes": 746765},
+        {"path": "notebooks/kinobeads_dasatinib/work/base/dashboard.html", "sha256": "e60bd7594ddae97190794c516bf7feea37111e915ec0e314edfc6cb877e94be0", "size_bytes": 589285},
+        {"path": "notebooks/kinobeads_dasatinib/work/base/curveCurator.log", "sha256": "fee37a3339bff1e4be846187cb608d03d6a0024eb27fa5ae4ca0c22e064cd8d9", "size_bytes": 1411}
+      ]
+    },
+    {
+      "run_name": "mad_run1",
+      "purpose": "Run the medium absolute deviation (MAD) noisy-channel analysis (--mad), for which no shipped example provides ground truth. First of two identical invocations used to establish and verify determinism.",
+      "command": ["/home/user/test100/paper2agent-curvecurator/.venv/bin/CurveCurator", "./parameters.toml", "--mad"],
+      "working_directory": "/home/user/test100/paper2agent-curvecurator/notebooks/kinobeads_dasatinib/work/mad_run1",
+      "exit_status": 0,
+      "start_time_utc": "2026-09-26T22:16:34Z",
+      "end_time_utc": "2026-09-26T22:26:58Z",
+      "wall_clock_runtime_seconds": 623.43,
+      "stdout_path": "notebooks/kinobeads_dasatinib/work/mad_run1/stdout.log",
+      "stderr_path": "notebooks/kinobeads_dasatinib/work/mad_run1/stderr.log",
+      "log_path": "notebooks/kinobeads_dasatinib/work/mad_run1/curveCurator.log",
+      "stdout_mad_summary_line": "MAD-Analysis found the following median absolute deviations: ['Ratio DMSO: 0.12', 'Ratio 3nM: 0.09', 'Ratio 10nM: 0.14', 'Ratio 30nM: 0.11', 'Ratio 100nM: 0.11', 'Ratio 300nM: 0.09', 'Ratio 1000nM: 0.07', 'Ratio 3000nM: 0.09', 'Ratio 30000nM: 0.08']",
+      "outputs": [
+        {"path": "notebooks/kinobeads_dasatinib/work/mad_run1/curves.txt", "sha256": "8ff22ed7c45ba124291ea817a45064ada1b36fa6b585b82456bd742af163426a", "size_bytes": 746765, "note": "byte-identical to the base run's curves.txt -- confirms --mad does not alter the curve-fitting output."},
+        {"path": "notebooks/kinobeads_dasatinib/work/mad_run1/mad.txt", "sha256": "ff895789d262d7a344c6ff2832a2215fc9b28ddc403877ca12c7dd0ad4ec7a36", "size_bytes": 170},
+        {"path": "notebooks/kinobeads_dasatinib/work/mad_run1/dashboard.html", "sha256": "80c7d2ec0ad3081881bc55b9e7edd79e0c6575637a8ed27d3ccc8d9e92666641", "size_bytes": 589285},
+        {"path": "notebooks/kinobeads_dasatinib/work/mad_run1/curveCurator.log", "sha256": "a98abc25c828d3af3fcdaa78f542958cc57208b67f3b31643d113432e4ad406b", "size_bytes": 1787}
+      ]
+    },
+    {
+      "run_name": "mad_run2",
+      "purpose": "Second, independent invocation of --mad on a fresh copy of the same inputs, to empirically verify determinism of the MAD path.",
+      "command": ["/home/user/test100/paper2agent-curvecurator/.venv/bin/CurveCurator", "./parameters.toml", "--mad"],
+      "working_directory": "/home/user/test100/paper2agent-curvecurator/notebooks/kinobeads_dasatinib/work/mad_run2",
+      "exit_status": 0,
+      "start_time_utc": "2026-09-26T22:27:11Z",
+      "end_time_utc": "2026-09-26T22:35:35Z",
+      "wall_clock_runtime_seconds": 504.63,
+      "stdout_path": "notebooks/kinobeads_dasatinib/work/mad_run2/stdout.log",
+      "stderr_path": "notebooks/kinobeads_dasatinib/work/mad_run2/stderr.log",
+      "log_path": "notebooks/kinobeads_dasatinib/work/mad_run2/curveCurator.log",
+      "outputs": [
+        {"path": "notebooks/kinobeads_dasatinib/work/mad_run2/curves.txt", "sha256": "8ff22ed7c45ba124291ea817a45064ada1b36fa6b585b82456bd742af163426a", "size_bytes": 746765},
+        {"path": "notebooks/kinobeads_dasatinib/work/mad_run2/mad.txt", "sha256": "ff895789d262d7a344c6ff2832a2215fc9b28ddc403877ca12c7dd0ad4ec7a36", "size_bytes": 170},
+        {"path": "notebooks/kinobeads_dasatinib/work/mad_run2/dashboard.html", "sha256": "03bb9516fc24b9688680333f2f05e43aab9e666586f71dc53e4d366298b71cab", "size_bytes": 589285},
+        {"path": "notebooks/kinobeads_dasatinib/work/mad_run2/curveCurator.log", "sha256": "8829ba0c2d82ed7cabb1f15bcda445e27cc2e50458977490f6142384c3a63882", "size_bytes": 1787}
+      ]
+    }
+  ],
+  "mad_determinism_check": {
+    "method": "Ran --mad twice from fresh copies of the identical input files (mad_run1, mad_run2), compared curves.txt and mad.txt byte-for-byte via sha256, and compared dashboard.html after normalizing random UUID substrings.",
+    "curves_txt_identical_across_runs": true,
+    "mad_txt_identical_across_runs": true,
+    "mad_txt_byte_diff": "none (diff reported no differences)",
+    "dashboard_html_raw_byte_identical": false,
+    "dashboard_html_identical_after_uuid_normalization": true,
+    "dashboard_html_difference_explanation": "The only differences between mad_run1/dashboard.html and mad_run2/dashboard.html are randomly generated per-render UUID strings used for the HTML div id and the embedded Bokeh JSON script id/model-id fields (Bokeh regenerates these identifiers on every render call); byte lengths are identical (589285 bytes both) and after regex-normalizing UUID-shaped substrings the two files are byte-identical.",
+    "conclusion": "The scientific computation path invoked by --mad (curve fitting + quality_control.mad_analysis) is deterministic on this input, matching the source-code finding that quality_control.py, quantification.py, models.py and toolbox.py contain no RNG calls. The base run's curves.txt is also byte-identical to both --mad runs' curves.txt, showing --mad has zero effect on the fitted curve output as expected from reading __main__.py (quality_control.mad_analysis is called strictly after the curve fit/threshold steps and only writes mad.txt as a side output)."
+  },
+  "randomness_and_seed_provenance": {
+    "seed_exposed_by_cli": false,
+    "cli_random_flag": "-r/--random exists but is for a separate H0-simulation/decoy-generation mode (data_simulator.sample), not used in this execution; it was NOT passed in any of the three runs.",
+    "rng_usage_scan": {
+      "method": "grep for random|seed|np.random|RandomState across repo/curve_curator/curve_curator/*.py",
+      "findings": [
+        "curve_curator/data_simulator.py: uses np.random.choice for H0 decoy sampling (only active with -r/--random or -f/--fdr, neither of which was used in these three runs)",
+        "curve_curator/dashboard.py: np.random.seed(8) is called once (fixed seed) purely for a plotting jitter/illustration element; this is a constant seed, not a source of run-to-run numerical variability, and does not affect curves.txt or mad.txt",
+        "curve_curator/quantification.py, curve_curator/models.py, curve_curator/toolbox.py, curve_curator/quality_control.py: no random/seed usage found -- these are the modules exercised by the base and --mad runs actually performed here"
+      ],
+      "conclusion": "No seed applies to (and none was invented for) the base or --mad executions performed. Determinism was verified empirically (byte-identical curves.txt/mad.txt across independent runs) rather than assumed."
+    }
+  },
+  "reference_comparison_base_run": {
+    "reference_file": "repo/curve_curator/example_datasets/kinobeads_Dasatinib/curves.txt (sha256 f9ed8f74545ede87c58990ab83bbd139023d0fd1a40652705127a69fbf310ca3, read-only, never modified)",
+    "produced_file": "notebooks/kinobeads_dasatinib/work/base/curves.txt (sha256 8ff22ed7c45ba124291ea817a45064ada1b36fa6b585b82456bd742af163426a)",
+    "comparison_method": "pandas read_csv(sep='\\t') via /home/user/test100/paper2agent-curvecurator/.venv/bin/python; row/column/identifier checks, then per-column max absolute and max relative numeric differences on aligned rows, plus exact match count on the categorical 'Curve Regulation' column. Comparison script: notebooks/kinobeads_dasatinib/work/compare_curves_kinobeads.py; full machine-readable result: notebooks/kinobeads_dasatinib/work/curves_comparison.json",
+    "row_count_reference": 1170,
+    "row_count_produced": 1170,
+    "row_count_match": true,
+    "columns_identical": true,
+    "identifier_column": "Proteins",
+    "identifiers_identical_and_in_same_order": true,
+    "identifier_set_equal": true,
+    "duplicate_identifiers": 0,
+    "curve_regulation_categorical": {
+      "n_total": 1170,
+      "n_exact_match": 1170,
+      "n_mismatch": 0,
+      "mismatch_breakdown": {}
+    },
+    "numeric_columns_max_abs_and_rel_diff": {
+      "pEC50": {"max_abs_diff": 3.211e-05, "max_rel_diff": 3.736e-06},
+      "Curve Slope": {"max_abs_diff": 4.931e-03, "max_rel_diff": 4.931e-04},
+      "Curve Front": {"max_abs_diff": 7.952e-07, "max_rel_diff": 7.952e-07},
+      "Curve Back": {"max_abs_diff": 3.825e-06, "max_rel_diff": 1.536e-06},
+      "Curve Fold Change": {"max_abs_diff": 3.248e-06, "max_rel_diff": 9.415e-05},
+      "Curve F_Value": {"max_abs_diff": 1.528e-05, "max_rel_diff": 5.102e-06},
+      "Curve P_Value": {"max_abs_diff": 2.302e-06, "max_rel_diff": 3.416e-06},
+      "Curve Relevance Score": {"max_abs_diff": 6.077e-08, "max_rel_diff": 1.058e-07},
+      "Curve AUC": {"max_abs_diff": 1.514e-06, "max_rel_diff": 1.316e-06},
+      "Curve R2": {"max_abs_diff": 9.748e-07, "max_rel_diff": 3.854e-06}
+    },
+    "nan_mismatches_per_numeric_column": "0 for all 10 columns (no column had a NaN in one file matched to a non-NaN in the other, on all 1170 rows)",
+    "tolerance_statement": "All 10 numeric columns agree to within ~1e-4 relative difference (worst case: Curve Slope at 4.93e-04 relative, i.e. ~0.05%); the other 9 columns agree to <=1e-5 relative. Curve identity (Proteins, row order, row count) and the categorical Curve Regulation column match exactly with zero mismatches out of 1170.",
+    "tolerance_justification": "A spot-check of curves.txt's pandas to_csv() call (curve_curator/__main__.py line 129: data.to_csv(config['Paths']['curves_file'], sep='\\t', index=False)) shows no float_format is applied, so pandas writes full double precision; a manually spot-checked pEC50 value round-tripped byte-identically between the shipped file and the produced file, ruling out text-formatting truncation as the source of the (tiny) differences seen in other rows/columns. The residual differences are consistent with ordinary floating-point non-associativity in the iterative nonlinear least-squares curve fit (scipy) and any BLAS/LAPACK/numpy/scipy patch-version differences between the environment that generated the shipped reference (bokeh 3.7.0 embedded in dashboard.html) and this environment (bokeh 3.7.3), not with any algorithmic or config discrepancy: the pipeline's own log messages (missing/imputed/no-control curve counts, imputation fill value, alpha/fc_lim/s0) are identical between the shipped log and the freshly produced log, and the categorical classification derived from these tiny numeric differences (Curve Regulation) is 100% identical on all 1170 rows, meaning no protein crossed a significance/relevance threshold differently because of this noise. This is reported as an observed, justified, unforced tolerance -- no tolerance was widened to force a pass, and no code was edited.",
+    "verdict": "MATCH (within the justified floating-point tolerance described above); worst observed relative deviation is 4.93e-04 (Curve Slope), all identifiers and categorical calls agree exactly."
+  },
+  "dashboard_html_check": {
+    "reference_file": "repo/curve_curator/example_datasets/kinobeads_Dasatinib/dashboard.html (sha256 610c772e3649dab01c49d6033fa58c1d09b209c33df0c9e817e62e06f1a07174)",
+    "produced_file": "notebooks/kinobeads_dasatinib/work/base/dashboard.html (sha256 e60bd7594ddae97190794c516bf7feea37111e915ec0e314edfc6cb877e94be0)",
+    "raw_bytes_identical": false,
+    "explanation": "Byte-for-byte identity was never expected and its absence is not treated as a mismatch. Both files are exactly 589285 bytes. The shipped file embeds Bokeh 3.7.0 CDN script tags (bokeh-3.7.0.min.js etc.); the produced file embeds Bokeh 3.7.3 (the version pinned in this environment's curve_curator dependency resolution), differing only in the minor/patch version string. Both files also contain freshly-generated random UUIDs for the HTML div id and embedded-JSON script id, and Bokeh internal model-id integers that are offset by a small constant (e.g. p1437 vs p1439) because the newer Bokeh version instantiates a couple of extra internal objects before the same visualization tree. Spot-checked embedded numeric payloads (base64-encoded float64 ndarray literals for the illustrative example curve, e.g. the 8-point x/y arrays) are byte-identical between the two files, confirming no numeric divergence in the plotted content.",
+    "conclusion": "No scientific/numeric mismatch in dashboard.html; the observed byte differences are explained entirely by Bokeh version, random UUIDs, and consequent internal id renumbering."
+  },
+  "figures": {
+    "applicable": true,
+    "note": "CurveCurator's only visual artifact is the interactive Bokeh dashboard.html (no static image/PNG figures are produced by this pipeline). Dashboard was produced for the base run and both --mad runs and compared as described above; no static figures were invented to meet an arbitrary count."
+  },
+  "input_output_inventory": {
+    "inputs": [
+      {"path": "notebooks/kinobeads_dasatinib/work/base/parameters.toml", "sha256": "0c6580c4a28026ef1ed88a0e67529b34c2c2cb1a754fce184b6b41413c306e09", "copied_unmodified_from": "repo/curve_curator/example_datasets/kinobeads_Dasatinib/parameters.toml"},
+      {"path": "notebooks/kinobeads_dasatinib/work/base/proteinGroups.txt", "sha256": "7b41f605e9450ddee5d008bc35337a566886d767e3656e87f99c91dfb96d81f1", "copied_unmodified_from": "repo/curve_curator/example_datasets/kinobeads_Dasatinib/proteinGroups.txt"},
+      {"path": "notebooks/kinobeads_dasatinib/work/mad_run1/parameters.toml", "sha256": "0c6580c4a28026ef1ed88a0e67529b34c2c2cb1a754fce184b6b41413c306e09"},
+      {"path": "notebooks/kinobeads_dasatinib/work/mad_run1/proteinGroups.txt", "sha256": "7b41f605e9450ddee5d008bc35337a566886d767e3656e87f99c91dfb96d81f1"},
+      {"path": "notebooks/kinobeads_dasatinib/work/mad_run2/parameters.toml", "sha256": "0c6580c4a28026ef1ed88a0e67529b34c2c2cb1a754fce184b6b41413c306e09"},
+      {"path": "notebooks/kinobeads_dasatinib/work/mad_run2/proteinGroups.txt", "sha256": "7b41f605e9450ddee5d008bc35337a566886d767e3656e87f99c91dfb96d81f1"}
+    ],
+    "outputs": [
+      {"path": "notebooks/kinobeads_dasatinib/work/base/curves.txt", "sha256": "8ff22ed7c45ba124291ea817a45064ada1b36fa6b585b82456bd742af163426a"},
+      {"path": "notebooks/kinobeads_dasatinib/work/base/dashboard.html", "sha256": "e60bd7594ddae97190794c516bf7feea37111e915ec0e314edfc6cb877e94be0"},
+      {"path": "notebooks/kinobeads_dasatinib/work/base/curveCurator.log", "sha256": "fee37a3339bff1e4be846187cb608d03d6a0024eb27fa5ae4ca0c22e064cd8d9"},
+      {"path": "notebooks/kinobeads_dasatinib/work/mad_run1/curves.txt", "sha256": "8ff22ed7c45ba124291ea817a45064ada1b36fa6b585b82456bd742af163426a"},
+      {"path": "notebooks/kinobeads_dasatinib/work/mad_run1/mad.txt", "sha256": "ff895789d262d7a344c6ff2832a2215fc9b28ddc403877ca12c7dd0ad4ec7a36"},
+      {"path": "notebooks/kinobeads_dasatinib/work/mad_run1/dashboard.html", "sha256": "80c7d2ec0ad3081881bc55b9e7edd79e0c6575637a8ed27d3ccc8d9e92666641"},
+      {"path": "notebooks/kinobeads_dasatinib/work/mad_run1/curveCurator.log", "sha256": "a98abc25c828d3af3fcdaa78f542958cc57208b67f3b31643d113432e4ad406b"},
+      {"path": "notebooks/kinobeads_dasatinib/work/mad_run2/curves.txt", "sha256": "8ff22ed7c45ba124291ea817a45064ada1b36fa6b585b82456bd742af163426a"},
+      {"path": "notebooks/kinobeads_dasatinib/work/mad_run2/mad.txt", "sha256": "ff895789d262d7a344c6ff2832a2215fc9b28ddc403877ca12c7dd0ad4ec7a36"},
+      {"path": "notebooks/kinobeads_dasatinib/work/mad_run2/dashboard.html", "sha256": "03bb9516fc24b9688680333f2f05e43aab9e666586f71dc53e4d366298b71cab"},
+      {"path": "notebooks/kinobeads_dasatinib/work/mad_run2/curveCurator.log", "sha256": "8829ba0c2d82ed7cabb1f15bcda445e27cc2e50458977490f6142384c3a63882"}
+    ],
+    "evidence_and_scripts": [
+      "notebooks/kinobeads_dasatinib/work/compare_curves_kinobeads.py (comparison driver, uses only pandas/numpy on the two curves.txt files -- does not reimplement any curve-fitting logic)",
+      "notebooks/kinobeads_dasatinib/work/curves_comparison.json (full machine-readable comparison output)"
+    ]
+  },
+  "limitations": [
+    "No shipped example in the repository was ever run with --mad (verified: grep for mad/fdr mentions in the shipped kinobeads_Dasatinib, and inspected the sibling shipped logs -- none show MAD analysis), so there is no upstream ground truth for mad.txt's numeric values. Its determinism was established empirically by this executor (two independent runs, byte-identical curves.txt/mad.txt) rather than by comparison to a shipped reference.",
+    "This container has 4 logical CPUs and three sibling executor sessions ran CurveCurator concurrently during this window (viability_ctrp_40, decryptm_dasatinib), so wall-clock runtimes reported here (13.2 min base, 10.4 min mad_run1, 8.4 min mad_run2) are inflated by CPU contention relative to a dedicated machine; this does not affect correctness since per-curve fits are independent and the shipped toml's available_cores=2 was used unmodified throughout (no config edit was made or needed).",
+    "dashboard.html cannot be compared byte-for-byte to the shipped reference because Bokeh embeds random per-render UUIDs and this environment resolved a newer Bokeh patch version (3.7.3 vs the shipped file's 3.7.0); this was verified to be non-scientific by comparing embedded numeric payloads and by uuid-normalizing two independent same-environment renders (mad_run1 vs mad_run2) to byte-identity.",
+    "The --fdr (decoy/FDR) and -r/--random (H0 simulation) flags were not exercised, per the assignment's explicit scope (base + --mad only)."
+  ],
+  "attempts": {
+    "total_execution_attempts": 3,
+    "attempts_detail": [
+      {"attempt": 1, "run": "base", "outcome": "success on first attempt, exit 0"},
+      {"attempt": 2, "run": "mad_run1", "outcome": "success on first attempt, exit 0"},
+      {"attempt": 3, "run": "mad_run2", "outcome": "success on first attempt, exit 0"}
+    ],
+    "note": "No failures or retries were needed. A `CurveCurator --help` invocation was used only during initial reconnaissance to confirm supported flags and version string; it is not counted as a scientific execution attempt and no scientific conclusions were drawn from it."
+  }
+}

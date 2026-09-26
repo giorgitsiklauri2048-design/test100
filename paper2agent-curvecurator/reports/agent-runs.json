@@ -85,14 +85,20 @@
       "role": "executor",
       "task": "kinobeads_dasatinib",
       "agent_id": "a03a9f260d8625bdb",
-      "status": "running",
+      "status": "succeeded",
       "started_at": "2026-09-26T22:01:41.117Z",
-      "finished_at": null,
+      "finished_at": "2026-09-26T22:38:51.609Z",
       "owned_paths": [
         "notebooks/kinobeads_dasatinib",
         "reports/executed_notebook_kinobeads_dasatinib.json"
       ],
-      "report": "reports/executed_notebook_kinobeads_dasatinib.json"
+      "report": "reports/executed_notebook_kinobeads_dasatinib.json",
+      "report_sha256": "d7d783730d4a40dc39c1b955e849e2badee4fb3c61d761c1bf092e7b6566ec94",
+      "produced_files": {
+        "notebooks/kinobeads_dasatinib/work/base/curves.txt": "8ff22ed7c45ba124291ea817a45064ada1b36fa6b585b82456bd742af163426a",
+        "notebooks/kinobeads_dasatinib/work/mad_run1/mad.txt": "ff895789d262d7a344c6ff2832a2215fc9b28ddc403877ca12c7dd0ad4ec7a36",
+        "notebooks/kinobeads_dasatinib/work/mad_run2/mad.txt": "ff895789d262d7a344c6ff2832a2215fc9b28ddc403877ca12c7dd0ad4ec7a36"
+      }
     },
     {
       "id": "execute_viability_ctrp_40_attempt_1",
@@ -113,10 +119,10 @@
     {
       "kind": "tutorial",
       "id": "decryptm_dasatinib",
-      "reason": "Excluded on resource grounds by explicit user decision: the run reached ~11% of curve fitting (277/2432 batches) in 18.5 min with ~2h51m projected remaining, because three concurrent executors each honoured available_cores=5 on a 4-CPU container (load ~47). Terminated with SIGTERM; no curves file was produced, so no reference comparison exists. Two smaller examples remain and still cover the cli_wrapper module.",
+      "reason": "Excluded on resource grounds by explicit user decision: the run reached ~11% of curve fitting (277/2432 batches) in 18.5 min with ~2h51m projected remaining, because three concurrent executors requested 5/2/5 cores on a 4-CPU container, ~12 workers, load ~47. Terminated with SIGTERM; no curves file was produced, so no reference comparison exists. Two smaller examples remain and still cover the cli_wrapper module.",
       "at": "2026-09-26T22:22:00Z",
       "report": "reports/exclusions/decryptm-dasatinib.json",
-      "report_sha256": "b783e2bd48eb6b8c81a1bd049b0c1dc5aa5d8f76a84b116ba18782052f1b819c"
+      "report_sha256": "c60a106589d0bcbd04dc9ff3fca5b8a66fb410263118039e9b0b827daac3af5a"
     }
   ]
 }

@@ -144,20 +144,22 @@
       "role": "verifier",
       "task": "cli_wrapper",
       "agent_id": "aaf54bd89f104fd69",
-      "status": "running",
+      "status": "cancelled",
       "started_at": "2026-09-26T23:17:12.769Z",
-      "finished_at": null,
+      "finished_at": "2026-09-27T00:05:00.000Z",
       "owned_paths": [
+        "reports/cancelled/verify-cli_wrapper-attempt-1.json",
+        "reports/mcp-acceptance-cli_wrapper.json",
+        "reports/verification-cli_wrapper.json",
         "src/tools/cli_wrapper.py",
         "tests/code",
-        "tests/results",
         "tests/logs",
-        "tests/summary",
-        "reports/verification-cli_wrapper.json",
-        "reports/mcp-acceptance-cli_wrapper.json"
+        "tests/results",
+        "tests/summary"
       ],
-      "report": "reports/verification-cli_wrapper.json",
-      "implementation_run_id": "extract_cli_wrapper_attempt_1"
+      "report": "reports/cancelled/verify-cli_wrapper-attempt-1.json",
+      "implementation_run_id": "extract_cli_wrapper_attempt_1",
+      "report_sha256": "b3a276e4353c985c395e854e74728234c7c690461d100fcf50ebefeab686e1e7"
     }
   ],
   "exclusions": [

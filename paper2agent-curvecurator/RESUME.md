@@ -22,7 +22,7 @@ Markers present in `.pipeline/`: `project_setup_done`, `source_setup_done`,
 `workspace_setup_done`, `environment_and_selection_done`, `reference_execution_done`.
 **`implementation_and_verification_done` is absent** — that is the resume point.
 
-At the pause, the verifier had **11 of 31 tests passing with 0 failures** and had not
+At the pause, the verifier had **27 tests passing with 0 failures** (28 of 29 test functions completed; only `test_wrong_runtime_override_is_rejected` was never reached) and had not
 modified `src/tools/cli_wrapper.py` (hash still
 `18d3d5e503c90e3dc0424685f9c6f63f0de66c7363b1a365945a66bb563ff46b`, matching the
 `produced_files` entry in `reports/agent-runs.json`). Its two reports
@@ -158,3 +158,23 @@ Two sibling branches hold a **separate, hand-built** MCP server for the same pap
 useful for comparison but not part of this run:
 `claude/sweet-newton-2u7xfq` (PR #2) and, for a different paper,
 `claude/paper2agent-franzosa-mcp-vssru8` (PR #1). This run is PR #3.
+
+## Addendum written at the pause
+
+Stage 3B got much further than the earlier progress note suggested. Final tally from
+`tests/logs/pytest-cli_wrapper.log`: **27 passed, 0 failed**, with 28 of the 29 test
+functions completed. The only test never reached was
+`test_wrong_runtime_override_is_rejected` (executable-identity rejection).
+
+`src/tools/cli_wrapper.py` was **not modified** by the verifier — its hash still
+matches the implementer's `produced_files` entry — so no repair was attempted or
+needed, and nothing in the completed suite contradicts the implementation.
+
+Practical consequence: the re-run of Stage 3B is expected to be quick and to pass.
+What is missing is not evidence of correctness but the two **report artifacts** the
+gate requires (`reports/verification-cli_wrapper.json`,
+`reports/mcp-acceptance-cli_wrapper.json`), plus that one unreached test. The
+interrupted attempt is recorded terminally as `cancelled` in
+`reports/agent-runs.json`, pointing at
+`reports/cancelled/verify-cli_wrapper-attempt-1.json`. Retain that record and append
+a new attempt rather than rewriting it.

@@ -66,9 +66,19 @@ What this means for the artefact: the server follows the Paper2Agent *pattern*
 — paper → typed tools + resource + guided prompt, every tool bound to existing
 repository code — built directly on the official Python MCP SDK. It is **not** a
 Paper2Agent output and must not be described as one. It has not been through that
-pipeline's automated tool extraction, validation or ZIP delivery contract, and it
-exposes stdio rather than the HTTP endpoint Paper2Agent's documented
-`claude mcp add --transport http` registration expects.
+pipeline's automated tool extraction, independent verification or ZIP delivery
+contract.
+
+Transport is *not* a difference: Paper2Agent's default conversion also produces a
+stdio server, and its own `scripts/verify_mcp_server.py` validates one over stdio.
+The `claude mcp add --transport http` registration in its top-level README applies
+to its hosted demo Spaces, which are an opt-in remote-deployment extension.
+
+The resource and prompt here also line up with what that pipeline calls optional
+extensions — a resource supplying "input schemas, package-method documentation,
+reference-data metadata" under stable URIs with source attribution, and a prompt
+specifying "required inputs, tool order, dependent outputs, and interpretation
+limits". Convergent, but arrived at independently.
 
 A Paper2Agent run on `kusterlab/curve_curator` would plausibly yield tools this
 server lacks, in particular executing the full pipeline over a real input file to

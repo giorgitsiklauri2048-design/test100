@@ -1,0 +1,260 @@
+{
+  "source": {
+    "authors": "Bayer FP, Gander M, Kuster B, The M",
+    "title": "CurveCurator: a recalibrated F-statistic to assess, classify, and explore significance of dose-response curves",
+    "journal": "Nature Communications",
+    "volume": "14",
+    "article_number": "7902",
+    "year": 2023,
+    "doi": "10.1038/s41467-023-43696-z",
+    "pmid": "38036588",
+    "pmcid": "PMC10689459",
+    "publication_date": "2023-11-30",
+    "affiliation": "Proteomics and Bioanalytics, School of Life Sciences, Technical University of Munich, Freising, Germany",
+    "software_version_in_manuscript": "0.2.1",
+    "text_retrieval": "Full text retrieved from PubMed Central (PMC10689459); metadata from PubMed.",
+    "provenance": "paper_reported"
+  },
+
+  "implementation_binding": {
+    "statement": "This server does not reimplement the paper's statistics. Every returned number is produced by the authors' own curve_curator package, called as a library.",
+    "package": "curve_curator",
+    "pinned_version": ">=0.6.0,<0.7.0",
+    "manuscript_version": "0.2.1",
+    "verified_identical_between_0_2_1_and_0_6_0": [
+      "LogisticModel.get_dofs (effective degrees of freedom)",
+      "recalibrated F-statistic expression (m0_sse - m1_sse) / m1_sse * (n / k)",
+      "F-distribution location default loc = 0.12",
+      "thresholding.get_s0",
+      "thresholding.sam_correction",
+      "relevance score conversion -log10(F.sf(F_adj, dfn, dfd, loc, scale))"
+    ],
+    "changed_after_0_2_1_not_used_for_manuscript_fidelity_claims": [
+      "R2 calculation fixed in v0.5.0",
+      "curve RMSE became an output column in v0.5.0",
+      "clipping option added in v0.4.0",
+      "max_imputation parameter added in v0.5.0",
+      "dashboard rewrites (bokeh >= 3.4)"
+    ],
+    "verification_method": "Function bodies diffed between the curve_curator 0.2.1 wheel from PyPI and the v0.6.0 source tree; the six items above were byte-identical.",
+    "provenance": "verified_against_source"
+  },
+
+  "statistical_framework": {
+    "models": {
+      "null_model_M0": {
+        "description": "Mean model. The response is independent of the dose.",
+        "n_parameters": 1,
+        "provenance": "paper_reported"
+      },
+      "alternative_model_M1": {
+        "description": "4-parameter log-logistic function.",
+        "parameters": ["pEC50", "slope", "front plateau", "back plateau"],
+        "functional_form_code": "y = (front - back) / (1 + 10**(slope * (x + pEC50))) + back",
+        "x_units": "log10 of molar dose",
+        "pEC50_definition": "pEC50 = -log10(EC50)",
+        "n_parameters": 4,
+        "provenance": "paper_reported"
+      }
+    },
+    "control_point": {
+      "x": "-inf",
+      "y": 1.0,
+      "note": "Responses are ratios to the control, so the control contributes one data point at x = -inf with ratio 1.0. n therefore equals the number of finite dose points plus one, matching the paper's 'n = 17 data points (doses and one control)' for CTRP and 'n = 9' for Kinobeads.",
+      "provenance": "verified_against_source"
+    },
+    "parameter_estimation": {
+      "ols": {"algorithm": "L-BFGS-B with analytical Jacobian", "library": "scipy.optimize"},
+      "mle": {"algorithm": "Nelder-Mead", "library": "scipy.optimize"},
+      "bounds": {
+        "pEC50": "experimental dose range +/- 4 orders of magnitude",
+        "slope": [0.01, 20],
+        "front": [0.001, 1000000.0],
+        "back": [0.001, 1000000.0]
+      },
+      "global_minimum_strategy": "The sigmoidal optimisation surface is non-convex. CurveCurator applies a heuristic (best initial guess, then refits from several fixed slopes) that reaches the global minimum in almost all cases.",
+      "provenance": "paper_reported"
+    },
+    "recalibrated_f_statistic": {
+      "expression": "F = (SSE_M0 - SSE_M1) / SSE_M1 * (n / k)",
+      "k": "number of parameters of M1 (4 for the unrestricted model)",
+      "paper_statement": "n/k was found to be a more appropriate scaling factor for the 4-parameter log-logistic function than the linear-model dfd/dfn.",
+      "clipping": "Negative F-values are set to 0.0.",
+      "p_value": "p = survival function of a parameterised F-distribution at F, with effective degrees of freedom and a location shift.",
+      "calibration_basis": "5 million dose-response curves simulated under H0 for each number of data points n.",
+      "provenance": "paper_reported"
+    },
+    "effective_degrees_of_freedom": {
+      "dfn": 5,
+      "dfd_expression": "(0.8 - 1/((n - 4)**4 / n + 4)) * (n - 2.5)",
+      "loc_default": 0.12,
+      "scale_default": 1.0,
+      "low_n_note": "The subtracted term is a small-n correction, material for roughly n = 5-8 and negligible above n = 10.",
+      "linear_fallback": "dfn = k - 1, dfd = n - k. Correct only for linear models; the paper shows it yields poorly calibrated p-values here.",
+      "minimum_n": "n must exceed 4.",
+      "provenance": "verified_against_source",
+      "note": "The paper states these as a 'simple quasi-linear function' in numbered equations. The numeric coefficients above were taken from the authors' code, not transcribed from the article text, because the equations are rendered as images in the PMC full text."
+    },
+    "relevance_score": {
+      "s0_expression": "s0 = |fc_lim| / sqrt(F.ppf(1 - alpha, dfn, dfd))",
+      "sam_adjusted_f": "F_adj = 1 / ((1/sqrt(F)) + (s0 / |curve_fold_change|))**2",
+      "score_expression": "relevance_score = -log10(F.sf(F_adj, dfn, dfd, loc, scale))",
+      "decision_rule": "A curve is called regulated if relevance_score >= -log10(alpha).",
+      "range": "0 to infinity; 0 means no relevance.",
+      "s0_zero_case": "With fc_lim = 0 (hence s0 = 0) the relevance score is exactly -log10(p-value).",
+      "not_a_p_value": "With fc_lim > 0 the relevance score is NOT a valid p-value. The fold-change asymptote strongly reduces false positives at fixed alpha, so the score's absolute value describes no tangible biological or statistical quantity. It is an ordering that combines significance and effect size.",
+      "n_dependence": "s0 depends on n through the effective degrees of freedom, so curves with missing values get their own s0.",
+      "one_sided_default": "The F-test is one-sided by default (two_sided = false).",
+      "origin": "SAM s0 fudge-factor principle (Tusher VG, Tibshirani R, Chu G. Significance analysis of microarrays applied to the ionizing radiation response. PNAS 98:5116-5121 (2001). doi:10.1073/pnas.091062498), transferred from the t-statistic to the F-statistic using the F = t^2 equality for the two plateau groups.",
+      "provenance": "paper_reported"
+    },
+    "curve_fold_change": {
+      "default": "log2 ratio of the fitted model between the lowest and the highest dose.",
+      "alternative": "log2 ratio of the fitted model at the highest dose relative to the control (control_fold_change = true).",
+      "limitation": "The default requires the lowest dose to sit close to the front plateau. If a compound is more potent than the assayed range, the fold change is compressed, producing false negatives among the most potent curves. Using the control-relative definition avoids this at the cost of more false positives in unstable assays.",
+      "provenance": "paper_reported"
+    },
+    "classification": {
+      "categories": ["up", "down", "not", "unclear"],
+      "up_down_criteria": "relevance_score >= -log10(alpha) AND |curve fold change| >= fc_lim AND sign of fold change AND pEC50 within the optional pEC50 filter.",
+      "not_criteria": "relevance_score < -log10(alpha) AND null-model intercept within +/- fc_lim/2 of 1.0 on a log2 scale AND Null RMSE <= not_rmse_limit (default 0.1). Optionally an additional maximum p-value.",
+      "unclear_rationale": "It is fundamentally impossible to prove the absence of an effect statistically. Curves that are neither confidently regulated nor confidently flat are deliberately left 'unclear' so that high-variance curves do not contaminate a negative training set.",
+      "provenance": "paper_reported"
+    },
+    "fdr": {
+      "method": "Target-decoy.",
+      "decoy_construction": "Decoy curves are drawn from the sample variance distribution estimated from the input dataset itself, then passed through the identical analysis pipeline.",
+      "fdr_expression": "FDR = (n_decoys_above_threshold + 1) / (n_targets_above_threshold + 1), scaled by the target:decoy ratio and capped at 1.0.",
+      "q_values": "Monotonised cumulative-minimum q-values from the target-decoy ordering of the relevance score.",
+      "cli": "--fdr",
+      "availability": "Only defined for the SAM / relevance-score route, not for the classical multiple-testing-correction route.",
+      "guidance": "The authors explicitly recommend against tuning the boundary to hit a pre-specified FDR. Fix the alpha asymptote (statistical relevance) and the fold-change asymptote (biological relevance) first, then accept the resulting FDR. Raising a 0.1% FDR to 10% in a dataset with many regulated curves admits many curves with undesirably small effect sizes.",
+      "provenance": "paper_reported"
+    },
+    "h0_simulation": {
+      "n_curves_per_n": 5000000,
+      "construction": "A variance is drawn from an empirical variance distribution, then normal errors of that variance are added to the null model.",
+      "note_on_invariance": "F-values and p-values of H0 curves are independent of the drawn variance because rescaling the responses affects numerator and denominator of the F-value equally. Fold-change estimates do depend on it, which is why a variance is drawn at all.",
+      "default_variance_model_in_code": "scipy.stats.f(dfn=11, dfd=11, loc=0.035, scale=0.066), described in the source as estimated from decryptM data",
+      "default_variance_model_provenance": "implementation_detail",
+      "provenance": "paper_reported"
+    }
+  },
+
+  "pipeline_defaults": {
+    "alpha": 0.05,
+    "fc_lim": 0.45,
+    "optimized_dofs": true,
+    "loc": 0.12,
+    "scale": 1.0,
+    "two_sided": false,
+    "mtc_method": "sam",
+    "not_rmse_limit": 0.1,
+    "not_p_limit": "+inf",
+    "quality_min": "-inf",
+    "decoy_ratio": 1.0,
+    "pEC50_filter": ["-inf", "+inf"],
+    "fit_type": "OLS",
+    "fit_speed": "standard",
+    "max_iterations": 1100,
+    "control_fold_change": false,
+    "alpha_recommendation": "The paper suggests 5% for the alpha asymptote, by analogy with the usual threshold in t-tests. The fold-change asymptote is assay-dependent and has no universal default.",
+    "provenance": "verified_against_source"
+  },
+
+  "datasets": {
+    "kinobeads": {
+      "label": "Kinobeads drug-target binding",
+      "original_study": "Klaeger S et al. The target landscape of clinical kinase drugs. Science 358:eaan4368 (2017). doi:10.1126/science.aan4368",
+      "original_study_note": "The CurveCurator article refers to this dataset as the \"target landscape of clinical kinase inhibitors\"; the published title says \"drugs\".",
+      "measurement": "Kinobeads competition binding, LFQ intensities",
+      "repository": "PRIDE PXD005336",
+      "preprocessing": "Filtered to direct binders (255 proteins that bind Kinobeads via an ATP pocket, including 216 kinases). Binders with fewer than two data points per curve or missing in the control were excluded. Remaining missing values imputed per experiment with the 0.5% intensity quantile.",
+      "matrix": "278 unique drugs, 9 data points per curve",
+      "alpha": 0.1,
+      "fc_lim": 0.5,
+      "n_curves": 54223,
+      "pct_down_regulated": 9,
+      "concordance_with_manual_annotation_pct": 97,
+      "n_kinases_assayed": 247,
+      "afatinib_significant_interactions": 9,
+      "afatinib_note": "The designated target was the most potent, followed by a second target with roughly 100-fold lower potency. The specific gene symbols appear in the article figures, which are not part of the PMC text.",
+      "provenance": "paper_reported"
+    },
+    "ctrp": {
+      "label": "CTRP cell viability screen",
+      "original_study": "Cancer Therapeutics Response Portal",
+      "measurement": "Phenotypic cell viability",
+      "retrieval": "PharmacoGx R package (R 3.6.3, PharmacoGx 1.17.1)",
+      "matrix_methods": "373,324 drug-cell line combinations from 545 drugs and 887 cell lines, n = 17 data points (doses plus one control)",
+      "n_curves_results_section": 379324,
+      "internal_discrepancy": "The Methods report 373,324 drug-cell line combinations while the Results report 379,324 dose-response curves. Both numbers are reproduced here as printed; the article does not reconcile them.",
+      "internal_discrepancy_provenance": "internal_discrepancy",
+      "pct_down_regulated": 63,
+      "pct_not_regulated": 25,
+      "preprocessing": "Split into one input file per dose range because the screen used several dose ranges. Missing values were sparse and missing at random, so no imputation was performed. Output files were recombined and the FDR estimated once over all curves.",
+      "decision_boundaries_analysis": [
+        {"boundary": "A", "alpha": 0.01, "fc_lim": 0.0, "reported_fdr_pct": 1.4},
+        {"boundary": "B", "alpha": 0.1, "fc_lim": 0.0, "reported_fdr_pct": 11.8},
+        {"boundary": "C", "alpha": 0.01, "fc_lim": 0.3, "reported_fdr_pct": 0.005},
+        {"boundary": "D", "alpha": 0.1, "fc_lim": 0.21, "reported_fdr_pct": 0.1}
+      ],
+      "boundary_note": "C and D share the same s0 but differ in both asymptotes, which is why the authors advise fixing the asymptotes rather than the FDR.",
+      "moa_analysis": {"alpha": 0.05, "fc_lim": 0.3, "control_fold_change": true,
+        "control_fold_change_reason": "Several drugs already showed significant regulation at the lowest dose."},
+      "robustness": "Varying the fold-change asymptote around 0.3 by +/- 0.05 expands or reduces the set of significant curves by about 1.8%. The trend is near-linear over a wide range of both asymptotes in both directions.",
+      "afatinib_result": "755 of 760 cell lines showed significant down-regulation, but most with very weak potency. Read together with the binding data this separates cell lines into sensitivity groups driven by different Afatinib targets, rather than implying that every line is sensitive to the primary target.",
+      "provenance": "paper_reported"
+    },
+    "decryptm": {
+      "label": "decryptM drug-PTM phosphoproteome profiling",
+      "original_study": "Zecha J et al. Decrypting drug actions and protein modifications by dose- and time-resolved proteomics. Science 380:93-101 (2023). doi:10.1126/science.ade3925",
+      "measurement": "TMT-labelled phosphopeptides",
+      "repository": "PRIDE PXD037285",
+      "reanalysed_subsets": ["Dasatinib Triplicates Phosphoproteome MS3", "3Inhibitors Phosphoproteome"],
+      "preprocessing": "Experiments searched together were separated and run individually. TMT channels median-centred, missing values imputed, peptides with more than 4 missing values excluded.",
+      "alpha": 0.05,
+      "fc_lim": 0.45,
+      "fc_lim_note": "46% less stringent than the fold-change cutoff in the original decryptM publication, which the authors attribute to the specificity gained from the hyperbolic decision boundary.",
+      "a431_afatinib": {"n_curves": 19596, "pct_down": 5, "pct_up": 1, "pct_not": 46,
+        "cell_line": "A431", "driver": "EGFR-driven carcinoma"},
+      "k562_dasatinib": {"cell_line": "K562", "driver": "BCR-ABL positive",
+        "expected_responsive": "a few hundred phosphorylation sites",
+        "unresponsive_background": "more than 10,000 phosphorylation sites"},
+      "knowledge_bases": {
+        "phosphositeplus_release": "08/2023",
+        "kinase_library": "top 5 kinases with a combined motif-enrichment score > 3 were considered potential kinases",
+        "site_position_tolerance": "+/- 1 residue for S/T/Y, to absorb site-localisation ambiguity in MS data"
+      },
+      "relevance_vs_bh": {
+        "explained_by_prior_knowledge_intersection_pct": 56,
+        "explained_by_prior_knowledge_relevance_specific_pct": 44,
+        "explained_by_prior_knowledge_bh_specific_pct": 15,
+        "direct_substrate_enrichment": "about 10x more direct substrates in the relevance-score-specific subset than in the Benjamini-Hochberg-specific subset",
+        "downstream_site_enrichment": "about 3x more downstream sites",
+        "interpretation": "The relevance score retained more regulated curves at low FDR, including a known substrate of the driving fusion kinase. Benjamini-Hochberg only overtook it at higher FDRs, and the curves it added were of more questionable biological relevance."
+      },
+      "afatinib_moa_synthesis": {
+        "target_engagement_50_pct": "EGFR bound with a cellular Kd of about 10 nM",
+        "target_engagement_90_pct": "about 100 nM, where the bulk of downstream signalling is inhibited and substantial reduction in cell growth requires",
+        "off_target_note": "Inhibition of a second signalling axis occurred only at much higher doses, as predicted by the binding data, and is not relevant to the observed viability phenotype.",
+        "site_identity_note": "The article names specific phosphosites and gene symbols for the direct substrate, the downstream axes and the high-dose off-target. Those symbols are rendered inside the article figures and inline formatting that the PMC plain-text extraction dropped, so they are deliberately not reproduced here. Consult Fig. 4 of the article."
+      },
+      "provenance": "paper_reported"
+    }
+  },
+
+  "stated_limitations": [
+    {"limitation": "CurveCurator looks only for shapes describable by a 4-parameter log-logistic model, i.e. a single drug-target binding event. Curves shaped by multiple independent events are non-sigmoidal and typically come out with large effect sizes but poor p-values.", "provenance": "paper_reported"},
+    {"limitation": "The default fold-change calculation needs the lowest dose to be near the front plateau. Compounds more potent than the assayed range get compressed fold changes and become false negatives.", "provenance": "paper_reported"},
+    {"limitation": "Only relevant curves have interpretable curve parameters. Potency estimates from non-significant curves should not be used.", "provenance": "paper_reported"},
+    {"limitation": "Tuning the decision boundary to a target FDR is explicitly discouraged, because the relevance score is fixed at a given s0 and moving the boundary shifts both asymptotes together.", "provenance": "paper_reported"}
+  ],
+
+  "not_reproduced_here": {
+    "numbered_equations": "Equations 1-10 are rendered as images in the article. Their numeric content is taken from the authors' source code rather than transcribed, and the code docstrings themselves cite 'equations 6, 7, 8 Bayer et al. 2023'.",
+    "figures_and_supplementary": "Supplementary figures, the Peer Review File, Supplementary Data 1 and the Source Data file are not bundled.",
+    "gene_symbols_in_moa_figures": "Gene symbols and phosphosite identities in the Afatinib and Dasatinib mode-of-action figures were dropped by the PMC text extraction and are not guessed.",
+    "raw_datasets": "The three reprocessed datasets are not bundled. They are available from PRIDE (PXD005336, PXD037285) and via PharmacoGx."
+  }
+}

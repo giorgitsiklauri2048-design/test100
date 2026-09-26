@@ -1,0 +1,47 @@
+[96m######################################################################[0m
+
+[96m
+    #########              #################              #########
+             #             # Curve Curator #             #
+              #            #################            #
+               0 pEC50                           pEC50 0
+                #                                     #
+                 #                                   #
+                  #########                 #########
+
+                                               Florian P. Bayer - 2025
+
+    Please cite CurveCurator: 10.1038/s41467-023-43696-z[0m
+
+[96m######################################################################[0m
+
+ * Executing CurveCurator pipeline version 0.6.0. 
+
+ * Reading parameter file of experiment. 
+
+ * Loading data file /home/user/test100/paper2agent-curvecurator/notebooks/viability_ctrp_40/work/base/./dose_responses_40.0.tsv. 
+
+ * 9 curves were removed because of >4 missing value(s). 
+
+ * 0 curves were removed because they had no valid control value(s). 
+
+ * Fit will use interpolation X values: 
+
+   [-8.92, -8.77, -8.62, -8.46, -8.31, -8.16, -8.01, -7.87, -7.72, -7.57, -7.41, -7.26, -7.11, -6.95, -6.8, -6.65, -6.51, -6.36, -6.21, -6.06, -5.92, -5.76, -5.6, -5.45, -5.3, -5.15, -5.0, -4.85, -4.7, -4.55, -4.4] 
+
+ * Fitting curves parameters by standard OLS with 5 cores: 
+
+ * Fitting curves parameters done ! 
+
+ * Calculate Relevance Score and apply SAM user thresholds: 
+
+   alpha=0.05, fc_lim=0.3, s0=0.1692 
+
+ * Rendering interactive dashboard using webgl backend ... 
+
+ * Dashboard successfully rendered. 
+
+[92m
+################################ DONE ################################
+[0m
+

@@ -1,0 +1,9 @@
+Ratio DMSO	0.1203
+Ratio 3nM	0.0912
+Ratio 10nM	0.1393
+Ratio 30nM	0.1053
+Ratio 100nM	0.1129
+Ratio 300nM	0.0929
+Ratio 1000nM	0.0750
+Ratio 3000nM	0.0935
+Ratio 30000nM	0.0785

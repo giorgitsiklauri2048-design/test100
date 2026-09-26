@@ -16,4 +16,6 @@ tests/code/test_run_dose_response_pipeline.py::test_base_run_dashboard_is_a_boke
 tests/code/test_run_dose_response_pipeline.py::test_staged_parameter_file_is_a_faithful_copy_with_absolute_paths PASSED [ 22%]
 tests/code/test_run_dose_response_pipeline.py::test_mad_run_returns_mad_artifact_and_parsed_values PASSED [ 25%]
 tests/code/test_run_dose_response_pipeline.py::test_mad_run_leaves_the_curves_table_identical_to_the_base_run PASSED [ 29%]
-tests/code/test_run_dose_response_pipeline.py::test_fdr_run_produces_the_decoy_and_fdr_contract 
+tests/code/test_run_dose_response_pipeline.py::test_fdr_run_produces_the_decoy_and_fdr_contract PASSED [ 32%]
+tests/code/test_run_dose_response_pipeline.py::test_fdr_run_adds_qvalues_without_changing_the_target_fits PASSED [ 35%]
+tests/code/test_run_dose_response_pipeline.py::test_paths_with_spaces_and_upstream_default_output_names 

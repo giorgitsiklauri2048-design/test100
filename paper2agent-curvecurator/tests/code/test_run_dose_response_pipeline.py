@@ -52,6 +52,8 @@ REFERENCE_DIR = PROJECT_ROOT / "repo" / "curve_curator" / "example_datasets" / "
 STAGE2_BASE = PROJECT_ROOT / "notebooks" / "viability_ctrp_40" / "work" / "base"
 STAGE2_FDR1 = PROJECT_ROOT / "notebooks" / "viability_ctrp_40" / "work" / "fdr_run1"
 STAGE2_FDR2 = PROJECT_ROOT / "notebooks" / "viability_ctrp_40" / "work" / "fdr_run2"
+KINOBEADS_STAGE2 = PROJECT_ROOT / "notebooks" / "kinobeads_dasatinib" / "work" / "base"
+KINOBEADS_REF = PROJECT_ROOT / "repo" / "curve_curator" / "example_datasets" / "kinobeads_Dasatinib"
 
 # Scratch tree for this verification run; tmp/ is gitignored project scratch space.
 WORK_ROOT = PROJECT_ROOT / "tmp" / "verify_cli_wrapper"
@@ -270,6 +272,14 @@ def inputs() -> dict:
     not_toml = broken / "parameters_40.0.txt"
     not_toml.write_text(original, encoding="utf-8")
 
+    # A genuine nonzero exit: ['Processing'] available_cores is not value-checked by
+    # toml_parser.check_toml_params, so int('five') raises inside set_default_values outside any
+    # try/except and the process dies with a traceback and exit status 1.
+    bad_cores = broken / "bad_available_cores.toml"
+    bad_cores.write_text(
+        replace_assignment(original, "Processing", "available_cores", "'five'"), encoding="utf-8"
+    )
+
     return {
         "toml": toml,
         "data": data,
@@ -284,6 +294,7 @@ def inputs() -> dict:
         "no_meta": no_meta,
         "bad_columns": bad_columns_toml,
         "not_toml": not_toml,
+        "bad_cores": bad_cores,
     }
 
 
@@ -332,8 +343,83 @@ def spaces_run(inputs) -> dict:
 
 
 @pytest.fixture(scope="session")
-def all_runs(base_run, mad_run, fdr_run, spaces_run) -> list[dict]:
-    return [base_run, mad_run, fdr_run, spaces_run]
+def subset_inputs() -> dict:
+    """A 60-curve row subset of the viability example: a genuinely changed input.
+
+    All rows belonging to a selected `Name` are kept together, because data_parser aggregates
+    duplicate identifiers (this table has 1246 rows for 1220 names) and splitting a duplicate group
+    would change its aggregate. Under mtc_method='sam' every pipeline step is per curve, so the
+    surviving curves must reproduce the full run's fits exactly.
+    """
+    directory = WORK_ROOT / "subset"
+    directory.mkdir(parents=True, exist_ok=True)
+    table = pd.read_csv(STAGE2_BASE / "dose_responses_40.0.tsv", sep="\t")
+    chosen = list(dict.fromkeys(table["Name"].tolist()))[:60]
+    table[table["Name"].isin(chosen)].to_csv(
+        directory / "dose_responses_subset.tsv", sep="\t", index=False
+    )
+    original = (STAGE2_BASE / "parameters_40.0.toml").read_text(encoding="utf-8")
+    toml = directory / "parameters_subset.toml"
+    toml.write_text(
+        replace_assignment(original, "Paths", "input_file", "'./dose_responses_subset.tsv'"),
+        encoding="utf-8",
+    )
+    return {"toml": toml, "data": directory / "dose_responses_subset.tsv", "names": chosen}
+
+
+def _subset_call(subset_inputs: dict, run_mad: bool = False) -> dict:
+    return call_data(
+        {
+            "toml_path": str(subset_inputs["toml"]),
+            "run_mad": run_mad,
+            "output_dir": str(OUTPUTS),
+            "timeout_seconds": LONG_TIMEOUT,
+        }
+    )
+
+
+@pytest.fixture(scope="session")
+def subset_run(subset_inputs) -> dict:
+    return _subset_call(subset_inputs)
+
+
+@pytest.fixture(scope="session")
+def subset_mad_run_a(subset_inputs) -> dict:
+    return _subset_call(subset_inputs, run_mad=True)
+
+
+@pytest.fixture(scope="session")
+def subset_mad_run_b(subset_inputs) -> dict:
+    return _subset_call(subset_inputs, run_mad=True)
+
+
+@pytest.fixture(scope="session")
+def kinobeads_inputs() -> dict:
+    """Working copy of the second reference example (8.2 MiB MaxQuant proteinGroups table)."""
+    directory = WORK_ROOT / "kinobeads"
+    directory.mkdir(parents=True, exist_ok=True)
+    toml = directory / "parameters.toml"
+    toml.write_text((KINOBEADS_STAGE2 / "parameters.toml").read_text(encoding="utf-8"), encoding="utf-8")
+    data = directory / "proteinGroups.txt"
+    if not data.exists():
+        data.write_bytes((KINOBEADS_STAGE2 / "proteinGroups.txt").read_bytes())
+    return {"toml": toml, "data": data, "toml_sha": _sha256(toml), "data_sha": _sha256(data)}
+
+
+@pytest.fixture(scope="session")
+def kinobeads_run(kinobeads_inputs) -> dict:
+    return call_data(
+        {
+            "toml_path": str(kinobeads_inputs["toml"]),
+            "output_dir": str(OUTPUTS),
+            "timeout_seconds": FDR_TIMEOUT,
+        }
+    )
+
+
+@pytest.fixture(scope="session")
+def all_runs(base_run, mad_run, fdr_run, spaces_run, subset_run) -> list[dict]:
+    return [base_run, mad_run, fdr_run, spaces_run, subset_run]
 
 
 @pytest.fixture
@@ -863,3 +949,123 @@ def test_pinned_executable_identity_matches_the_recorded_version(clean_identity_
     probe = subprocess.run([executable, "-h"], capture_output=True, text=True, timeout=120)
     assert probe.returncode == 0
     assert f"CurveCurator (v{EXPECTED_CLI_VERSION})" in re.sub(r"\x1b\[[0-9;]*m", "", probe.stdout)
+
+
+# --------------------------------------- second round: changed input, determinism, nonzero exit,
+# --------------------------------------- and the second reference example
+
+
+def test_row_subset_reproduces_the_same_per_curve_fits(subset_run, base_run, subset_inputs):
+    """A changed input must be analysed, not ignored: 60 curves in, 60 curves out.
+
+    Under mtc_method='sam' every step of this pipeline is per curve (the SAM s0 depends only on
+    alpha/fc_lim and the curve's own degrees of freedom; imputation and normalization are off in
+    this TOML), so each retained curve must come out exactly as in the full 1211-curve run. This
+    detects a wrapper that had hardcoded the example input or its expected outputs.
+    """
+    assert subset_run["exit_code"] == 0
+    assert subset_run["num_curves"] == 60
+    assert Path(subset_run["input_file"]) == subset_inputs["data"]
+    assert subset_run["output_dir"] != base_run["output_dir"]
+
+    produced = read_curves(artifact_path(subset_run, "curves_40.0.txt"))
+    full = read_curves(artifact_path(base_run, "curves_40.0.txt"))
+    assert produced["Name"].is_unique and full["Name"].is_unique
+    assert set(produced["Name"]) == set(subset_inputs["names"])
+
+    # Both identifier columns are unique here, so a key join is safe; that is asserted, not assumed.
+    aligned = full.set_index("Name").loc[produced["Name"].tolist()].reset_index()
+    assert_positionally_aligned(aligned, produced)
+    for column in CORE_COLUMNS + ["N duplicates", "Signal Quality"]:
+        assert np.array_equal(
+            aligned[column].to_numpy(), produced[column].to_numpy(), equal_nan=True
+        ), f"subset run changed {column}"
+    assert (
+        produced["Curve Regulation"].fillna("<none>").tolist()
+        == aligned["Curve Regulation"].fillna("<none>").tolist()
+    )
+
+
+def test_mad_analysis_is_reproducible_across_independent_calls(subset_mad_run_a, subset_mad_run_b):
+    """--mad involves no random draw, so two independent calls must agree byte for byte."""
+    assert subset_mad_run_a["output_dir"] != subset_mad_run_b["output_dir"]
+    assert _sha256(artifact_path(subset_mad_run_a, "mad_40.0.txt")) == _sha256(
+        artifact_path(subset_mad_run_b, "mad_40.0.txt")
+    )
+    assert subset_mad_run_a["mad"] == pytest.approx(subset_mad_run_b["mad"])
+    assert _sha256(artifact_path(subset_mad_run_a, "curves_40.0.txt")) == _sha256(
+        artifact_path(subset_mad_run_b, "curves_40.0.txt")
+    )
+    assert set(subset_mad_run_a["mad"]) == {f"Ratio {i}" for i in range(EXPECTED_EXPERIMENTS)}
+
+
+def test_genuine_nonzero_exit_is_an_mcp_error(inputs):
+    """A real nonzero exit (uncaught upstream exception) must never be swallowed."""
+    with pytest.raises(ToolError) as excinfo:
+        call_tool({"toml_path": str(inputs["bad_cores"]), "output_dir": str(OUTPUTS)})
+    message = str(excinfo.value)
+    assert "failed with exit code 1" in message
+    assert "ValueError" in message
+    assert "available_cores" in message
+    # The bounded diagnostics were kept on disk, not on the server's protocol stdout.
+    match = re.search(r"Diagnostics were written to (.+?) and (.+?)\.\n", message)
+    assert match, message
+    for path in match.groups():
+        assert Path(path).is_file()
+
+
+@pytest.mark.slow
+def test_kinobeads_example_agrees_with_the_shipped_upstream_reference(kinobeads_run, kinobeads_inputs):
+    """Second reference example: MaxQuant LFQ protein groups, imputation on, named dose channels.
+
+    This dataset is where joining on `Name` is actively unsafe: its reference table carries a
+    duplicated identifier (TMPO), so the comparison is aligned by row order only.
+    """
+    assert kinobeads_run["exit_code"] == 0
+    assert kinobeads_run["num_curves"] == 1170
+    names = {Path(entry["path"]).name for entry in kinobeads_run["artifacts"]}
+    # This TOML declares only input_file, so the basenames are the upstream defaults.
+    assert {"curves.txt", "dashboard.html", "curveCurator.log", "parameters.toml"} <= names
+
+    produced = read_curves(artifact_path(kinobeads_run, "curves.txt"))
+    reference = read_curves(KINOBEADS_REF / "curves.txt")
+    assert produced["Name"].duplicated().any(), "the duplicated-identifier hazard is expected here"
+    assert_positionally_aligned(reference, produced)
+    assert list(produced.columns) == list(reference.columns)
+
+    assert (
+        produced["Curve Regulation"].fillna("<none>").tolist()
+        == reference["Curve Regulation"].fillna("<none>").tolist()
+    )
+    significant = produced["Curve Regulation"].isin(["up", "down"]).to_numpy()
+    assert significant.sum() == 175
+
+    passthrough = [c for c in produced.columns if c.startswith(("Raw ", "Ratio "))] + [
+        "N duplicates",
+        "Signal Quality",
+        "Null RMSE",
+    ]
+    for column in passthrough:
+        assert np.array_equal(
+            reference[column].to_numpy(), produced[column].to_numpy(), equal_nan=True
+        ), f"passthrough column {column} changed"
+
+    for column in CORE_COLUMNS:
+        assert (reference[column].isna().to_numpy() == produced[column].isna().to_numpy()).all()
+        delta = np.abs(reference[column].to_numpy() - produced[column].to_numpy())
+        worst = np.nanmax(delta[significant])
+        tolerance = SIG_TOL_PEC50 if column == "pEC50" else SIG_TOL
+        assert worst <= tolerance, f"significant curves deviate in {column}: {worst:.3e}"
+    for column in ERROR_COLUMNS:
+        delta = np.abs(reference[column].to_numpy() - produced[column].to_numpy())
+        assert np.nanmax(delta[significant]) <= SIG_TOL_ERRORS
+
+    # On this example no curve at all drifts by more than 0.01 in pEC50.
+    assert int((np.abs(reference["pEC50"].to_numpy() - produced["pEC50"].to_numpy()) > 0.01).sum()) == 0
+
+    # And the wrapper reproduces the Stage 2 standalone run byte for byte.
+    assert _sha256(artifact_path(kinobeads_run, "curves.txt")) == _sha256(KINOBEADS_STAGE2 / "curves.txt")
+
+    # The user's 8.2 MiB input and its TOML were not touched.
+    assert _sha256(kinobeads_inputs["toml"]) == kinobeads_inputs["toml_sha"]
+    assert _sha256(kinobeads_inputs["data"]) == kinobeads_inputs["data_sha"]

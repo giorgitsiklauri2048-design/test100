@@ -1,0 +1,850 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.15, pytest-7.4.4, pluggy-1.6.0 -- /home/user/test100/paper2agent-curvecurator/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /home/user/test100/paper2agent-curvecurator
+configfile: pytest.ini
+plugins: platformdirs-4.12.0, asyncio-0.23.8, anyio-4.15.1
+asyncio: mode=Mode.STRICT
+collecting ... collected 31 items
+
+tests/code/test_run_dose_response_pipeline.py::test_tool_is_exposed_with_the_declared_schema PASSED [  3%]
+tests/code/test_run_dose_response_pipeline.py::test_wrapper_does_not_reimplement_any_scientific_computation PASSED [  6%]
+tests/code/test_run_dose_response_pipeline.py::test_base_run_returns_the_declared_contract PASSED [  9%]
+tests/code/test_run_dose_response_pipeline.py::test_base_run_reproduces_the_stage2_standalone_run_byte_for_byte PASSED [ 12%]
+tests/code/test_run_dose_response_pipeline.py::test_base_run_agrees_with_the_shipped_upstream_reference PASSED [ 16%]
+tests/code/test_run_dose_response_pipeline.py::test_base_run_dashboard_is_a_bokeh_html_document PASSED [ 19%]
+tests/code/test_run_dose_response_pipeline.py::test_staged_parameter_file_is_a_faithful_copy_with_absolute_paths PASSED [ 22%]
+tests/code/test_run_dose_response_pipeline.py::test_mad_run_returns_mad_artifact_and_parsed_values PASSED [ 25%]
+tests/code/test_run_dose_response_pipeline.py::test_mad_run_leaves_the_curves_table_identical_to_the_base_run PASSED [ 29%]
+tests/code/test_run_dose_response_pipeline.py::test_fdr_run_produces_the_decoy_and_fdr_contract PASSED [ 32%]
+tests/code/test_run_dose_response_pipeline.py::test_fdr_run_adds_qvalues_without_changing_the_target_fits PASSED [ 35%]
+tests/code/test_run_dose_response_pipeline.py::test_paths_with_spaces_and_upstream_default_output_names ERROR [ 38%]
+tests/code/test_run_dose_response_pipeline.py::test_repeated_calls_get_isolated_fresh_output_directories ERROR [ 41%]
+tests/code/test_run_dose_response_pipeline.py::test_user_inputs_are_never_modified ERROR [ 45%]
+tests/code/test_run_dose_response_pipeline.py::test_pinned_source_and_stage2_evidence_are_untouched ERROR [ 48%]
+tests/code/test_run_dose_response_pipeline.py::test_missing_toml_file_is_an_mcp_error PASSED [ 51%]
+tests/code/test_run_dose_response_pipeline.py::test_non_toml_input_is_an_mcp_error PASSED [ 54%]
+tests/code/test_run_dose_response_pipeline.py::test_malformed_toml_is_an_mcp_error PASSED [ 58%]
+tests/code/test_run_dose_response_pipeline.py::test_toml_without_paths_section_is_an_mcp_error PASSED [ 61%]
+tests/code/test_run_dose_response_pipeline.py::test_toml_without_input_file_key_is_an_mcp_error PASSED [ 64%]
+tests/code/test_run_dose_response_pipeline.py::test_nonexistent_declared_input_file_is_an_mcp_error PASSED [ 67%]
+tests/code/test_run_dose_response_pipeline.py::test_zero_exit_with_no_outputs_is_still_an_mcp_error PASSED [ 70%]
+tests/code/test_run_dose_response_pipeline.py::test_malformed_input_table_is_an_mcp_error PASSED [ 74%]
+tests/code/test_run_dose_response_pipeline.py::test_nonpositive_timeout_is_an_mcp_error PASSED [ 77%]
+tests/code/test_run_dose_response_pipeline.py::test_timeout_terminates_the_process_and_raises_an_mcp_error PASSED [ 80%]
+tests/code/test_run_dose_response_pipeline.py::test_default_output_directory_is_used_when_none_is_given PASSED [ 83%]
+tests/code/test_run_dose_response_pipeline.py::test_wrong_runtime_override_is_rejected[true] PASSED [ 87%]
+tests/code/test_run_dose_response_pipeline.py::test_wrong_runtime_override_is_rejected[echo] PASSED [ 90%]
+tests/code/test_run_dose_response_pipeline.py::test_wrong_runtime_override_is_rejected[ls] PASSED [ 93%]
+tests/code/test_run_dose_response_pipeline.py::test_nonexistent_executable_override_is_rejected PASSED [ 96%]
+tests/code/test_run_dose_response_pipeline.py::test_pinned_executable_identity_matches_the_recorded_version PASSED [100%]
+
+==================================== ERRORS ====================================
+__ ERROR at setup of test_paths_with_spaces_and_upstream_default_output_names __
+
+inputs = {'bad_columns': PosixPath('/home/user/test100/paper2agent-curvecurator/tmp/verify_cli_wrapper/bad_columns/parameters_4...malformed': PosixPath('/home/user/test100/paper2agent-curvecurator/tmp/verify_cli_wrapper/broken/malformed.toml'), ...}
+
+    @pytest.fixture(scope="session")
+    def spaces_run(inputs) -> dict:
+        """A TOML declaring only input_file, run from and into directories whose names have spaces."""
+>       return call_data(
+            {
+                "toml_path": str(inputs["minimal_toml"]),
+                "output_dir": str(OUTPUTS_WITH_SPACES),
+                "timeout_seconds": LONG_TIMEOUT,
+            }
+        )
+
+tests/code/test_run_dose_response_pipeline.py:325: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/code/test_run_dose_response_pipeline.py:121: in call_data
+    return call_tool(arguments).data
+tests/code/test_run_dose_response_pipeline.py:116: in call_tool
+    return asyncio.run(_run())
+/usr/lib/python3.11/asyncio/runners.py:190: in run
+    return runner.run(main)
+/usr/lib/python3.11/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/lib/python3.11/asyncio/base_events.py:654: in run_until_complete
+    return future.result()
+tests/code/test_run_dose_response_pipeline.py:114: in _run
+    return await client.call_tool(TOOL, arguments, raise_on_error=raise_on_error)
+.venv/lib/python3.11/site-packages/fastmcp/client/mixins/tools.py:336: in call_tool
+    return await self._parse_call_tool_result(
+.venv/lib/python3.11/site-packages/fastmcp/client/mixins/tools.py:272: in _parse_call_tool_result
+    return await _parse_call_tool_result(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'run_dose_response_pipeline'
+result = CallToolResult(meta={'io.modelcontextprotocol/serverInfo': {'name': 'cli_wrapper', 'version': '4.0.3'}}, content=[Text...3:48<01:12,  1.17s/it]', annotations=None, meta=None)], structured_content=None, is_error=True, result_type='complete')
+tool_output_schemas = {}
+list_tools_fn = <bound method ClientSession.list_tools of <mcp.client.session.ClientSession object at 0x7f4c2cfa7e50>>
+client_name = 'Client-652c', raise_on_error = True
+
+    async def _parse_call_tool_result(
+        name: str,
+        result: mcp_types.CallToolResult,
+        tool_output_schemas: dict[str, dict[str, Any] | None],
+        list_tools_fn: Any,  # Callable[[], Awaitable[None]]
+        client_name: str | None = None,
+        raise_on_error: bool = False,
+    ) -> CallToolResult:
+        """Parse an mcp_types.CallToolResult into our CallToolResult dataclass.
+    
+        Args:
+            name: Tool name (for schema lookup)
+            result: Raw MCP protocol result
+            tool_output_schemas: Dictionary mapping tool names to their output schemas
+            list_tools_fn: Async function to refresh tool schemas if needed
+            client_name: Optional client name for logging
+            raise_on_error: Whether to raise ToolError on errors
+    
+        Returns:
+            CallToolResult: Parsed result with structured data
+        """
+        # Local import: CallToolResult is under TYPE_CHECKING at module level to
+        # avoid a circular import (client.client -> mixins.tools -> client.client),
+        # but we need the concrete class here to construct the return value.
+        from fastmcp.client.client import CallToolResult
+    
+        data = None
+        if result.is_error and raise_on_error:
+            if result.content and isinstance(result.content[0], mcp_types.TextContent):
+                msg = result.content[0].text
+            else:
+                msg = f"Tool '{name}' returned an error"
+>           raise ToolError(msg)
+E           fastmcp.exceptions.ToolError: CurveCurator failed with exit code -15. Diagnostics were written to /home/user/test100/paper2agent-curvecurator/tmp/verify_cli_wrapper/outputs with spaces/curvecurator_20260926_234847_400ebeb89394/cli_stdout.log and /home/user/test100/paper2agent-curvecurator/tmp/verify_cli_wrapper/outputs with spaces/curvecurator_20260926_234847_400ebeb89394/cli_stderr.log.
+E           stdout tail:
+E           ######################################################################
+E           
+E           
+E               #########              #################              #########
+E                        #             # Curve Curator #             #
+E                         #            #################            #
+E                          0 pEC50                           pEC50 0
+E                           #                                     #
+E                            #                                   #
+E                             #########                 #########
+E           
+E                                                          Florian P. Bayer - 2025
+E           
+E               Please cite CurveCurator: 10.1038/s41467-023-43696-z
+E           
+E           ######################################################################
+E           
+E            * Executing CurveCurator pipeline version 0.6.0. 
+E           
+E            * Reading parameter file of experiment. 
+E           
+E            * Loading data file /home/user/test100/paper2agent-curvecurator/tmp/verify_cli_wrapper/inputs with spaces/dose_responses_40.0.tsv. 
+E           
+E            * 9 curves were removed because of >4 missing value(s). 
+E           
+E            * 0 curves were removed because they had no valid control value(s). 
+E           
+E            * Fit will use interpolation X values: 
+E           
+E              [-8.92, -8.77, -8.62, -8.46, -8.31, -8.16, -8.01, -7.87, -7.72, -7.57, -7.41, -7.26, -7.11, -6.95, -6.8, -6.65, -6.51, -6.36, -6.21, -6.06, -5.92, -5.76, -5.6, -5.45, -5.3, -5.15, -5.0, -4.85, -4.7, -4.55, -4.4] 
+E           
+E            * Fitting curves parameters by standard OLS with 5 cores:
+E           stderr tail:
+E           ...[truncated]...
+E           
+E            68%|██████▊   | 164/242 [03:29<01:30,  1.16s/it]
+E            67%|██████▋   | 161/242 [03:30<01:31,  1.13s/it]
+E            69%|██████▉   | 167/242 [03:30<01:41,  1.36s/it]
+E            67%|██████▋   | 161/242 [03:30<01:38,  1.22s/it]
+E            68%|██████▊   | 166/243 [03:31<01:48,  1.40s/it]
+E            67%|██████▋   | 162/242 [03:31<01:24,  1.06s/it]
+E            68%|██████▊   | 165/242 [03:31<01:38,  1.29s/it]
+E            69%|██████▊   | 167/243 [03:31<01:26,  1.13s/it]
+E            67%|██████▋   | 162/242 [03:32<01:36,  1.21s/it]
+E            69%|██████▉   | 168/242 [03:32<01:42,  1.39s/it]
+E            67%|██████▋   | 163/242 [03:32<01:22,  1.05s/it]
+E            69%|██████▊   | 166/242 [03:32<01:35,  1.25s/it]
+E            69%|██████▉   | 168/243 [03:32<01:28,  1.17s/it]
+E            67%|██████▋   | 163/242 [03:33<01:30,  1.14s/it]
+E            70%|██████▉   | 169/242 [03:33<01:40,  1.37s/it]
+E            69%|██████▉   | 167/242 [03:33<01:27,  1.16s/it]
+E            68%|██████▊   | 164/242 [03:33<01:33,  1.19s/it]
+E            70%|██████▉   | 169/243 [03:34<01:24,  1.15s/it]
+E            68%|██████▊   | 164/242 [03:34<01:23,  1.08s/it]
+E            70%|███████   | 170/242 [03:34<01:28,  1.23s/it]
+E            69%|██████▉   | 168/242 [03:34<01:27,  1.19s/it]
+E            68%|██████▊   | 165/242 [03:35<01:23,  1.09s/it]
+E            68%|██████▊   | 165/242 [03:35<01:36,  1.26s/it]
+E            71%|███████   | 171/242 [03:35<01:25,  1.21s/it]
+E            70%|██████▉   | 170/243 [03:35<01:33,  1.28s/it]
+E            70%|██████▉   | 169/242 [03:35<01:20,  1.10s/it]
+E            69%|██████▊   | 166/242 [03:36<01:28,  1.16s/it]
+E            71%|███████   | 172/242 [03:36<01:24,  1.21s/it]
+E            69%|██████▊   | 166/242 [03:36<01:35,  1.26s/it]
+E            70%|███████   | 171/243 [03:36<01:32,  1.29s/it]
+E            70%|███████   | 170/242 [03:37<01:26,  1.20s/it]
+E            69%|██████▉   | 167/242 [03:37<01:37,  1.30s/it]
+E            69%|██████▉   | 167/242 [03:38<01:32,  1.23s/it]
+E            71%|███████▏  | 173/242 [03:38<01:24,  1.22s/it]
+E            71%|███████   | 172/243 [03:38<01:28,  1.25s/it]
+E            71%|███████   | 171/242 [03:38<01:23,  1.17s/it]
+E            69%|██████▉   | 168/242 [03:38<01:28,  1.20s/it]
+E            71%|███████   | 172/242 [03:39<01:17,  1.11s/it]
+E            69%|██████▉   | 168/242 [03:39<01:32,  1.25s/it]
+E            72%|███████▏  | 174/242 [03:39<01:25,  1.26s/it]
+E            71%|███████   | 173/243 [03:39<01:28,  1.26s/it]
+E            72%|███████▏  | 174/243 [03:40<01:14,  1.09s/it]
+E            70%|██████▉   | 169/242 [03:40<01:22,  1.13s/it]
+E            71%|███████▏  | 173/242 [03:40<01:13,  1.07s/it]
+E            70%|██████▉   | 169/242 [03:40<01:33,  1.28s/it]
+E            72%|███████▏  | 175/242 [03:40<01:21,  1.21s/it]
+E            72%|███████▏  | 175/243 [03:41<01:14,  1.09s/it]
+E            72%|███████▏  | 174/242 [03:41<01:11,  1.05s/it]
+E            70%|███████   | 170/242 [03:41<01:21,  1.13s/it]
+E            73%|███████▎  | 176/242 [03:41<01:19,  1.21s/it]
+E            70%|███████   | 170/242 [03:42<01:45,  1.47s/it]
+E            72%|███████▏  | 175/242 [03:42<01:15,  1.12s/it]
+E            72%|███████▏  | 176/243 [03:42<01:18,  1.18s/it]
+E            71%|███████   | 171/242 [03:42<01:24,  1.19s/it]
+E            71%|███████   | 171/242 [03:42<01:29,  1.26s/it]
+E            73%|███████▎  | 177/242 [03:43<01:24,  1.30s/it]
+E            71%|███████   | 172/242 [03:43<01:15,  1.07s/it]
+E            73%|███████▎  | 177/243 [03:43<01:20,  1.21s/it]
+E            71%|███████   | 172/242 [03:43<01:26,  1.24s/it]
+E            73%|███████▎  | 176/242 [03:43<01:21,  1.24s/it]
+E            74%|███████▎  | 178/242 [03:44<01:26,  1.35s/it]
+E            71%|███████▏  | 173/242 [03:44<01:19,  1.15s/it]
+E            73%|███████▎  | 177/242 [03:44<01:13,  1.14s/it]
+E            71%|███████▏  | 173/242 [03:45<01:33,  1.35s/it]
+E            72%|███████▏  | 174/242 [03:46<01:18,  1.16s/it]
+E            73%|███████▎  | 178/243 [03:46<01:37,  1.50s/it]
+E            74%|███████▍  | 179/242 [03:46<01:25,  1.36s/it]
+E            74%|███████▎  | 178/242 [03:46<01:14,  1.17s/it]
+E            72%|███████▏  | 174/242 [03:46<01:19,  1.17s/it]
+E            74%|███████▎  | 179/243 [03:47<01:28,  1.39s/it]
+E            74%|███████▍  | 180/242 [03:47<01:21,  1.31s/it]
+E            74%|███████▍  | 179/242 [03:47<01:14,  1.18s/it]
+E            72%|███████▏  | 175/242 [03:47<01:26,  1.29s/it]
+E            72%|███████▏  | 175/242 [03:47<01:21,  1.21s/it]
+E            74%|███████▍  | 180/243 [03:47<01:13,  1.16s/it]
+E            75%|███████▍  | 181/242 [03:48<01:19,  1.31s/it]
+E            74%|███████▍  | 180/242 [03:48<01:16,  1.24s/it]
+E            73%|███████▎  | 176/242 [03:48<01:22,  1.26s/it]
+E            73%|███████▎  | 176/242 [03:48<01:19,  1.21s/it]
+E            74%|███████▍  | 181/243 [03:48<01:12,  1.17s/it]
+
+.venv/lib/python3.11/site-packages/fastmcp/client/mixins/tools.py:373: ToolError
+---------------------------- Captured stderr setup -----------------------------
+[09/26/26 23:52:38] Error calling tool 'run_dose_response_pipeline'             
+_ ERROR at setup of test_repeated_calls_get_isolated_fresh_output_directories __
+
+inputs = {'bad_columns': PosixPath('/home/user/test100/paper2agent-curvecurator/tmp/verify_cli_wrapper/bad_columns/parameters_4...malformed': PosixPath('/home/user/test100/paper2agent-curvecurator/tmp/verify_cli_wrapper/broken/malformed.toml'), ...}
+
+    @pytest.fixture(scope="session")
+    def spaces_run(inputs) -> dict:
+        """A TOML declaring only input_file, run from and into directories whose names have spaces."""
+>       return call_data(
+            {
+                "toml_path": str(inputs["minimal_toml"]),
+                "output_dir": str(OUTPUTS_WITH_SPACES),
+                "timeout_seconds": LONG_TIMEOUT,
+            }
+        )
+
+tests/code/test_run_dose_response_pipeline.py:325: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/code/test_run_dose_response_pipeline.py:121: in call_data
+    return call_tool(arguments).data
+tests/code/test_run_dose_response_pipeline.py:116: in call_tool
+    return asyncio.run(_run())
+/usr/lib/python3.11/asyncio/runners.py:190: in run
+    return runner.run(main)
+/usr/lib/python3.11/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/lib/python3.11/asyncio/base_events.py:654: in run_until_complete
+    return future.result()
+tests/code/test_run_dose_response_pipeline.py:114: in _run
+    return await client.call_tool(TOOL, arguments, raise_on_error=raise_on_error)
+.venv/lib/python3.11/site-packages/fastmcp/client/mixins/tools.py:336: in call_tool
+    return await self._parse_call_tool_result(
+.venv/lib/python3.11/site-packages/fastmcp/client/mixins/tools.py:272: in _parse_call_tool_result
+    return await _parse_call_tool_result(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'run_dose_response_pipeline'
+result = CallToolResult(meta={'io.modelcontextprotocol/serverInfo': {'name': 'cli_wrapper', 'version': '4.0.3'}}, content=[Text...3:48<01:12,  1.17s/it]', annotations=None, meta=None)], structured_content=None, is_error=True, result_type='complete')
+tool_output_schemas = {}
+list_tools_fn = <bound method ClientSession.list_tools of <mcp.client.session.ClientSession object at 0x7f4c2cfa7e50>>
+client_name = 'Client-652c', raise_on_error = True
+
+    async def _parse_call_tool_result(
+        name: str,
+        result: mcp_types.CallToolResult,
+        tool_output_schemas: dict[str, dict[str, Any] | None],
+        list_tools_fn: Any,  # Callable[[], Awaitable[None]]
+        client_name: str | None = None,
+        raise_on_error: bool = False,
+    ) -> CallToolResult:
+        """Parse an mcp_types.CallToolResult into our CallToolResult dataclass.
+    
+        Args:
+            name: Tool name (for schema lookup)
+            result: Raw MCP protocol result
+            tool_output_schemas: Dictionary mapping tool names to their output schemas
+            list_tools_fn: Async function to refresh tool schemas if needed
+            client_name: Optional client name for logging
+            raise_on_error: Whether to raise ToolError on errors
+    
+        Returns:
+            CallToolResult: Parsed result with structured data
+        """
+        # Local import: CallToolResult is under TYPE_CHECKING at module level to
+        # avoid a circular import (client.client -> mixins.tools -> client.client),
+        # but we need the concrete class here to construct the return value.
+        from fastmcp.client.client import CallToolResult
+    
+        data = None
+        if result.is_error and raise_on_error:
+            if result.content and isinstance(result.content[0], mcp_types.TextContent):
+                msg = result.content[0].text
+            else:
+                msg = f"Tool '{name}' returned an error"
+>           raise ToolError(msg)
+E           fastmcp.exceptions.ToolError: CurveCurator failed with exit code -15. Diagnostics were written to /home/user/test100/paper2agent-curvecurator/tmp/verify_cli_wrapper/outputs with spaces/curvecurator_20260926_234847_400ebeb89394/cli_stdout.log and /home/user/test100/paper2agent-curvecurator/tmp/verify_cli_wrapper/outputs with spaces/curvecurator_20260926_234847_400ebeb89394/cli_stderr.log.
+E           stdout tail:
+E           ######################################################################
+E           
+E           
+E               #########              #################              #########
+E                        #             # Curve Curator #             #
+E                         #            #################            #
+E                          0 pEC50                           pEC50 0
+E                           #                                     #
+E                            #                                   #
+E                             #########                 #########
+E           
+E                                                          Florian P. Bayer - 2025
+E           
+E               Please cite CurveCurator: 10.1038/s41467-023-43696-z
+E           
+E           ######################################################################
+E           
+E            * Executing CurveCurator pipeline version 0.6.0. 
+E           
+E            * Reading parameter file of experiment. 
+E           
+E            * Loading data file /home/user/test100/paper2agent-curvecurator/tmp/verify_cli_wrapper/inputs with spaces/dose_responses_40.0.tsv. 
+E           
+E            * 9 curves were removed because of >4 missing value(s). 
+E           
+E            * 0 curves were removed because they had no valid control value(s). 
+E           
+E            * Fit will use interpolation X values: 
+E           
+E              [-8.92, -8.77, -8.62, -8.46, -8.31, -8.16, -8.01, -7.87, -7.72, -7.57, -7.41, -7.26, -7.11, -6.95, -6.8, -6.65, -6.51, -6.36, -6.21, -6.06, -5.92, -5.76, -5.6, -5.45, -5.3, -5.15, -5.0, -4.85, -4.7, -4.55, -4.4] 
+E           
+E            * Fitting curves parameters by standard OLS with 5 cores:
+E           stderr tail:
+E           ...[truncated]...
+E           
+E            68%|██████▊   | 164/242 [03:29<01:30,  1.16s/it]
+E            67%|██████▋   | 161/242 [03:30<01:31,  1.13s/it]
+E            69%|██████▉   | 167/242 [03:30<01:41,  1.36s/it]
+E            67%|██████▋   | 161/242 [03:30<01:38,  1.22s/it]
+E            68%|██████▊   | 166/243 [03:31<01:48,  1.40s/it]
+E            67%|██████▋   | 162/242 [03:31<01:24,  1.06s/it]
+E            68%|██████▊   | 165/242 [03:31<01:38,  1.29s/it]
+E            69%|██████▊   | 167/243 [03:31<01:26,  1.13s/it]
+E            67%|██████▋   | 162/242 [03:32<01:36,  1.21s/it]
+E            69%|██████▉   | 168/242 [03:32<01:42,  1.39s/it]
+E            67%|██████▋   | 163/242 [03:32<01:22,  1.05s/it]
+E            69%|██████▊   | 166/242 [03:32<01:35,  1.25s/it]
+E            69%|██████▉   | 168/243 [03:32<01:28,  1.17s/it]
+E            67%|██████▋   | 163/242 [03:33<01:30,  1.14s/it]
+E            70%|██████▉   | 169/242 [03:33<01:40,  1.37s/it]
+E            69%|██████▉   | 167/242 [03:33<01:27,  1.16s/it]
+E            68%|██████▊   | 164/242 [03:33<01:33,  1.19s/it]
+E            70%|██████▉   | 169/243 [03:34<01:24,  1.15s/it]
+E            68%|██████▊   | 164/242 [03:34<01:23,  1.08s/it]
+E            70%|███████   | 170/242 [03:34<01:28,  1.23s/it]
+E            69%|██████▉   | 168/242 [03:34<01:27,  1.19s/it]
+E            68%|██████▊   | 165/242 [03:35<01:23,  1.09s/it]
+E            68%|██████▊   | 165/242 [03:35<01:36,  1.26s/it]
+E            71%|███████   | 171/242 [03:35<01:25,  1.21s/it]
+E            70%|██████▉   | 170/243 [03:35<01:33,  1.28s/it]
+E            70%|██████▉   | 169/242 [03:35<01:20,  1.10s/it]
+E            69%|██████▊   | 166/242 [03:36<01:28,  1.16s/it]
+E            71%|███████   | 172/242 [03:36<01:24,  1.21s/it]
+E            69%|██████▊   | 166/242 [03:36<01:35,  1.26s/it]
+E            70%|███████   | 171/243 [03:36<01:32,  1.29s/it]
+E            70%|███████   | 170/242 [03:37<01:26,  1.20s/it]
+E            69%|██████▉   | 167/242 [03:37<01:37,  1.30s/it]
+E            69%|██████▉   | 167/242 [03:38<01:32,  1.23s/it]
+E            71%|███████▏  | 173/242 [03:38<01:24,  1.22s/it]
+E            71%|███████   | 172/243 [03:38<01:28,  1.25s/it]
+E            71%|███████   | 171/242 [03:38<01:23,  1.17s/it]
+E            69%|██████▉   | 168/242 [03:38<01:28,  1.20s/it]
+E            71%|███████   | 172/242 [03:39<01:17,  1.11s/it]
+E            69%|██████▉   | 168/242 [03:39<01:32,  1.25s/it]
+E            72%|███████▏  | 174/242 [03:39<01:25,  1.26s/it]
+E            71%|███████   | 173/243 [03:39<01:28,  1.26s/it]
+E            72%|███████▏  | 174/243 [03:40<01:14,  1.09s/it]
+E            70%|██████▉   | 169/242 [03:40<01:22,  1.13s/it]
+E            71%|███████▏  | 173/242 [03:40<01:13,  1.07s/it]
+E            70%|██████▉   | 169/242 [03:40<01:33,  1.28s/it]
+E            72%|███████▏  | 175/242 [03:40<01:21,  1.21s/it]
+E            72%|███████▏  | 175/243 [03:41<01:14,  1.09s/it]
+E            72%|███████▏  | 174/242 [03:41<01:11,  1.05s/it]
+E            70%|███████   | 170/242 [03:41<01:21,  1.13s/it]
+E            73%|███████▎  | 176/242 [03:41<01:19,  1.21s/it]
+E            70%|███████   | 170/242 [03:42<01:45,  1.47s/it]
+E            72%|███████▏  | 175/242 [03:42<01:15,  1.12s/it]
+E            72%|███████▏  | 176/243 [03:42<01:18,  1.18s/it]
+E            71%|███████   | 171/242 [03:42<01:24,  1.19s/it]
+E            71%|███████   | 171/242 [03:42<01:29,  1.26s/it]
+E            73%|███████▎  | 177/242 [03:43<01:24,  1.30s/it]
+E            71%|███████   | 172/242 [03:43<01:15,  1.07s/it]
+E            73%|███████▎  | 177/243 [03:43<01:20,  1.21s/it]
+E            71%|███████   | 172/242 [03:43<01:26,  1.24s/it]
+E            73%|███████▎  | 176/242 [03:43<01:21,  1.24s/it]
+E            74%|███████▎  | 178/242 [03:44<01:26,  1.35s/it]
+E            71%|███████▏  | 173/242 [03:44<01:19,  1.15s/it]
+E            73%|███████▎  | 177/242 [03:44<01:13,  1.14s/it]
+E            71%|███████▏  | 173/242 [03:45<01:33,  1.35s/it]
+E            72%|███████▏  | 174/242 [03:46<01:18,  1.16s/it]
+E            73%|███████▎  | 178/243 [03:46<01:37,  1.50s/it]
+E            74%|███████▍  | 179/242 [03:46<01:25,  1.36s/it]
+E            74%|███████▎  | 178/242 [03:46<01:14,  1.17s/it]
+E            72%|███████▏  | 174/242 [03:46<01:19,  1.17s/it]
+E            74%|███████▎  | 179/243 [03:47<01:28,  1.39s/it]
+E            74%|███████▍  | 180/242 [03:47<01:21,  1.31s/it]
+E            74%|███████▍  | 179/242 [03:47<01:14,  1.18s/it]
+E            72%|███████▏  | 175/242 [03:47<01:26,  1.29s/it]
+E            72%|███████▏  | 175/242 [03:47<01:21,  1.21s/it]
+E            74%|███████▍  | 180/243 [03:47<01:13,  1.16s/it]
+E            75%|███████▍  | 181/242 [03:48<01:19,  1.31s/it]
+E            74%|███████▍  | 180/242 [03:48<01:16,  1.24s/it]
+E            73%|███████▎  | 176/242 [03:48<01:22,  1.26s/it]
+E            73%|███████▎  | 176/242 [03:48<01:19,  1.21s/it]
+E            74%|███████▍  | 181/243 [03:48<01:12,  1.17s/it]
+
+.venv/lib/python3.11/site-packages/fastmcp/client/mixins/tools.py:373: ToolError
+____________ ERROR at setup of test_user_inputs_are_never_modified _____________
+
+inputs = {'bad_columns': PosixPath('/home/user/test100/paper2agent-curvecurator/tmp/verify_cli_wrapper/bad_columns/parameters_4...malformed': PosixPath('/home/user/test100/paper2agent-curvecurator/tmp/verify_cli_wrapper/broken/malformed.toml'), ...}
+
+    @pytest.fixture(scope="session")
+    def spaces_run(inputs) -> dict:
+        """A TOML declaring only input_file, run from and into directories whose names have spaces."""
+>       return call_data(
+            {
+                "toml_path": str(inputs["minimal_toml"]),
+                "output_dir": str(OUTPUTS_WITH_SPACES),
+                "timeout_seconds": LONG_TIMEOUT,
+            }
+        )
+
+tests/code/test_run_dose_response_pipeline.py:325: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/code/test_run_dose_response_pipeline.py:121: in call_data
+    return call_tool(arguments).data
+tests/code/test_run_dose_response_pipeline.py:116: in call_tool
+    return asyncio.run(_run())
+/usr/lib/python3.11/asyncio/runners.py:190: in run
+    return runner.run(main)
+/usr/lib/python3.11/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/lib/python3.11/asyncio/base_events.py:654: in run_until_complete
+    return future.result()
+tests/code/test_run_dose_response_pipeline.py:114: in _run
+    return await client.call_tool(TOOL, arguments, raise_on_error=raise_on_error)
+.venv/lib/python3.11/site-packages/fastmcp/client/mixins/tools.py:336: in call_tool
+    return await self._parse_call_tool_result(
+.venv/lib/python3.11/site-packages/fastmcp/client/mixins/tools.py:272: in _parse_call_tool_result
+    return await _parse_call_tool_result(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'run_dose_response_pipeline'
+result = CallToolResult(meta={'io.modelcontextprotocol/serverInfo': {'name': 'cli_wrapper', 'version': '4.0.3'}}, content=[Text...3:48<01:12,  1.17s/it]', annotations=None, meta=None)], structured_content=None, is_error=True, result_type='complete')
+tool_output_schemas = {}
+list_tools_fn = <bound method ClientSession.list_tools of <mcp.client.session.ClientSession object at 0x7f4c2cfa7e50>>
+client_name = 'Client-652c', raise_on_error = True
+
+    async def _parse_call_tool_result(
+        name: str,
+        result: mcp_types.CallToolResult,
+        tool_output_schemas: dict[str, dict[str, Any] | None],
+        list_tools_fn: Any,  # Callable[[], Awaitable[None]]
+        client_name: str | None = None,
+        raise_on_error: bool = False,
+    ) -> CallToolResult:
+        """Parse an mcp_types.CallToolResult into our CallToolResult dataclass.
+    
+        Args:
+            name: Tool name (for schema lookup)
+            result: Raw MCP protocol result
+            tool_output_schemas: Dictionary mapping tool names to their output schemas
+            list_tools_fn: Async function to refresh tool schemas if needed
+            client_name: Optional client name for logging
+            raise_on_error: Whether to raise ToolError on errors
+    
+        Returns:
+            CallToolResult: Parsed result with structured data
+        """
+        # Local import: CallToolResult is under TYPE_CHECKING at module level to
+        # avoid a circular import (client.client -> mixins.tools -> client.client),
+        # but we need the concrete class here to construct the return value.
+        from fastmcp.client.client import CallToolResult
+    
+        data = None
+        if result.is_error and raise_on_error:
+            if result.content and isinstance(result.content[0], mcp_types.TextContent):
+                msg = result.content[0].text
+            else:
+                msg = f"Tool '{name}' returned an error"
+>           raise ToolError(msg)
+E           fastmcp.exceptions.ToolError: CurveCurator failed with exit code -15. Diagnostics were written to /home/user/test100/paper2agent-curvecurator/tmp/verify_cli_wrapper/outputs with spaces/curvecurator_20260926_234847_400ebeb89394/cli_stdout.log and /home/user/test100/paper2agent-curvecurator/tmp/verify_cli_wrapper/outputs with spaces/curvecurator_20260926_234847_400ebeb89394/cli_stderr.log.
+E           stdout tail:
+E           ######################################################################
+E           
+E           
+E               #########              #################              #########
+E                        #             # Curve Curator #             #
+E                         #            #################            #
+E                          0 pEC50                           pEC50 0
+E                           #                                     #
+E                            #                                   #
+E                             #########                 #########
+E           
+E                                                          Florian P. Bayer - 2025
+E           
+E               Please cite CurveCurator: 10.1038/s41467-023-43696-z
+E           
+E           ######################################################################
+E           
+E            * Executing CurveCurator pipeline version 0.6.0. 
+E           
+E            * Reading parameter file of experiment. 
+E           
+E            * Loading data file /home/user/test100/paper2agent-curvecurator/tmp/verify_cli_wrapper/inputs with spaces/dose_responses_40.0.tsv. 
+E           
+E            * 9 curves were removed because of >4 missing value(s). 
+E           
+E            * 0 curves were removed because they had no valid control value(s). 
+E           
+E            * Fit will use interpolation X values: 
+E           
+E              [-8.92, -8.77, -8.62, -8.46, -8.31, -8.16, -8.01, -7.87, -7.72, -7.57, -7.41, -7.26, -7.11, -6.95, -6.8, -6.65, -6.51, -6.36, -6.21, -6.06, -5.92, -5.76, -5.6, -5.45, -5.3, -5.15, -5.0, -4.85, -4.7, -4.55, -4.4] 
+E           
+E            * Fitting curves parameters by standard OLS with 5 cores:
+E           stderr tail:
+E           ...[truncated]...
+E           
+E            68%|██████▊   | 164/242 [03:29<01:30,  1.16s/it]
+E            67%|██████▋   | 161/242 [03:30<01:31,  1.13s/it]
+E            69%|██████▉   | 167/242 [03:30<01:41,  1.36s/it]
+E            67%|██████▋   | 161/242 [03:30<01:38,  1.22s/it]
+E            68%|██████▊   | 166/243 [03:31<01:48,  1.40s/it]
+E            67%|██████▋   | 162/242 [03:31<01:24,  1.06s/it]
+E            68%|██████▊   | 165/242 [03:31<01:38,  1.29s/it]
+E            69%|██████▊   | 167/243 [03:31<01:26,  1.13s/it]
+E            67%|██████▋   | 162/242 [03:32<01:36,  1.21s/it]
+E            69%|██████▉   | 168/242 [03:32<01:42,  1.39s/it]
+E            67%|██████▋   | 163/242 [03:32<01:22,  1.05s/it]
+E            69%|██████▊   | 166/242 [03:32<01:35,  1.25s/it]
+E            69%|██████▉   | 168/243 [03:32<01:28,  1.17s/it]
+E            67%|██████▋   | 163/242 [03:33<01:30,  1.14s/it]
+E            70%|██████▉   | 169/242 [03:33<01:40,  1.37s/it]
+E            69%|██████▉   | 167/242 [03:33<01:27,  1.16s/it]
+E            68%|██████▊   | 164/242 [03:33<01:33,  1.19s/it]
+E            70%|██████▉   | 169/243 [03:34<01:24,  1.15s/it]
+E            68%|██████▊   | 164/242 [03:34<01:23,  1.08s/it]
+E            70%|███████   | 170/242 [03:34<01:28,  1.23s/it]
+E            69%|██████▉   | 168/242 [03:34<01:27,  1.19s/it]
+E            68%|██████▊   | 165/242 [03:35<01:23,  1.09s/it]
+E            68%|██████▊   | 165/242 [03:35<01:36,  1.26s/it]
+E            71%|███████   | 171/242 [03:35<01:25,  1.21s/it]
+E            70%|██████▉   | 170/243 [03:35<01:33,  1.28s/it]
+E            70%|██████▉   | 169/242 [03:35<01:20,  1.10s/it]
+E            69%|██████▊   | 166/242 [03:36<01:28,  1.16s/it]
+E            71%|███████   | 172/242 [03:36<01:24,  1.21s/it]
+E            69%|██████▊   | 166/242 [03:36<01:35,  1.26s/it]
+E            70%|███████   | 171/243 [03:36<01:32,  1.29s/it]
+E            70%|███████   | 170/242 [03:37<01:26,  1.20s/it]
+E            69%|██████▉   | 167/242 [03:37<01:37,  1.30s/it]
+E            69%|██████▉   | 167/242 [03:38<01:32,  1.23s/it]
+E            71%|███████▏  | 173/242 [03:38<01:24,  1.22s/it]
+E            71%|███████   | 172/243 [03:38<01:28,  1.25s/it]
+E            71%|███████   | 171/242 [03:38<01:23,  1.17s/it]
+E            69%|██████▉   | 168/242 [03:38<01:28,  1.20s/it]
+E            71%|███████   | 172/242 [03:39<01:17,  1.11s/it]
+E            69%|██████▉   | 168/242 [03:39<01:32,  1.25s/it]
+E            72%|███████▏  | 174/242 [03:39<01:25,  1.26s/it]
+E            71%|███████   | 173/243 [03:39<01:28,  1.26s/it]
+E            72%|███████▏  | 174/243 [03:40<01:14,  1.09s/it]
+E            70%|██████▉   | 169/242 [03:40<01:22,  1.13s/it]
+E            71%|███████▏  | 173/242 [03:40<01:13,  1.07s/it]
+E            70%|██████▉   | 169/242 [03:40<01:33,  1.28s/it]
+E            72%|███████▏  | 175/242 [03:40<01:21,  1.21s/it]
+E            72%|███████▏  | 175/243 [03:41<01:14,  1.09s/it]
+E            72%|███████▏  | 174/242 [03:41<01:11,  1.05s/it]
+E            70%|███████   | 170/242 [03:41<01:21,  1.13s/it]
+E            73%|███████▎  | 176/242 [03:41<01:19,  1.21s/it]
+E            70%|███████   | 170/242 [03:42<01:45,  1.47s/it]
+E            72%|███████▏  | 175/242 [03:42<01:15,  1.12s/it]
+E            72%|███████▏  | 176/243 [03:42<01:18,  1.18s/it]
+E            71%|███████   | 171/242 [03:42<01:24,  1.19s/it]
+E            71%|███████   | 171/242 [03:42<01:29,  1.26s/it]
+E            73%|███████▎  | 177/242 [03:43<01:24,  1.30s/it]
+E            71%|███████   | 172/242 [03:43<01:15,  1.07s/it]
+E            73%|███████▎  | 177/243 [03:43<01:20,  1.21s/it]
+E            71%|███████   | 172/242 [03:43<01:26,  1.24s/it]
+E            73%|███████▎  | 176/242 [03:43<01:21,  1.24s/it]
+E            74%|███████▎  | 178/242 [03:44<01:26,  1.35s/it]
+E            71%|███████▏  | 173/242 [03:44<01:19,  1.15s/it]
+E            73%|███████▎  | 177/242 [03:44<01:13,  1.14s/it]
+E            71%|███████▏  | 173/242 [03:45<01:33,  1.35s/it]
+E            72%|███████▏  | 174/242 [03:46<01:18,  1.16s/it]
+E            73%|███████▎  | 178/243 [03:46<01:37,  1.50s/it]
+E            74%|███████▍  | 179/242 [03:46<01:25,  1.36s/it]
+E            74%|███████▎  | 178/242 [03:46<01:14,  1.17s/it]
+E            72%|███████▏  | 174/242 [03:46<01:19,  1.17s/it]
+E            74%|███████▎  | 179/243 [03:47<01:28,  1.39s/it]
+E            74%|███████▍  | 180/242 [03:47<01:21,  1.31s/it]
+E            74%|███████▍  | 179/242 [03:47<01:14,  1.18s/it]
+E            72%|███████▏  | 175/242 [03:47<01:26,  1.29s/it]
+E            72%|███████▏  | 175/242 [03:47<01:21,  1.21s/it]
+E            74%|███████▍  | 180/243 [03:47<01:13,  1.16s/it]
+E            75%|███████▍  | 181/242 [03:48<01:19,  1.31s/it]
+E            74%|███████▍  | 180/242 [03:48<01:16,  1.24s/it]
+E            73%|███████▎  | 176/242 [03:48<01:22,  1.26s/it]
+E            73%|███████▎  | 176/242 [03:48<01:19,  1.21s/it]
+E            74%|███████▍  | 181/243 [03:48<01:12,  1.17s/it]
+
+.venv/lib/python3.11/site-packages/fastmcp/client/mixins/tools.py:373: ToolError
+____ ERROR at setup of test_pinned_source_and_stage2_evidence_are_untouched ____
+
+inputs = {'bad_columns': PosixPath('/home/user/test100/paper2agent-curvecurator/tmp/verify_cli_wrapper/bad_columns/parameters_4...malformed': PosixPath('/home/user/test100/paper2agent-curvecurator/tmp/verify_cli_wrapper/broken/malformed.toml'), ...}
+
+    @pytest.fixture(scope="session")
+    def spaces_run(inputs) -> dict:
+        """A TOML declaring only input_file, run from and into directories whose names have spaces."""
+>       return call_data(
+            {
+                "toml_path": str(inputs["minimal_toml"]),
+                "output_dir": str(OUTPUTS_WITH_SPACES),
+                "timeout_seconds": LONG_TIMEOUT,
+            }
+        )
+
+tests/code/test_run_dose_response_pipeline.py:325: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/code/test_run_dose_response_pipeline.py:121: in call_data
+    return call_tool(arguments).data
+tests/code/test_run_dose_response_pipeline.py:116: in call_tool
+    return asyncio.run(_run())
+/usr/lib/python3.11/asyncio/runners.py:190: in run
+    return runner.run(main)
+/usr/lib/python3.11/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/lib/python3.11/asyncio/base_events.py:654: in run_until_complete
+    return future.result()
+tests/code/test_run_dose_response_pipeline.py:114: in _run
+    return await client.call_tool(TOOL, arguments, raise_on_error=raise_on_error)
+.venv/lib/python3.11/site-packages/fastmcp/client/mixins/tools.py:336: in call_tool
+    return await self._parse_call_tool_result(
+.venv/lib/python3.11/site-packages/fastmcp/client/mixins/tools.py:272: in _parse_call_tool_result
+    return await _parse_call_tool_result(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'run_dose_response_pipeline'
+result = CallToolResult(meta={'io.modelcontextprotocol/serverInfo': {'name': 'cli_wrapper', 'version': '4.0.3'}}, content=[Text...3:48<01:12,  1.17s/it]', annotations=None, meta=None)], structured_content=None, is_error=True, result_type='complete')
+tool_output_schemas = {}
+list_tools_fn = <bound method ClientSession.list_tools of <mcp.client.session.ClientSession object at 0x7f4c2cfa7e50>>
+client_name = 'Client-652c', raise_on_error = True
+
+    async def _parse_call_tool_result(
+        name: str,
+        result: mcp_types.CallToolResult,
+        tool_output_schemas: dict[str, dict[str, Any] | None],
+        list_tools_fn: Any,  # Callable[[], Awaitable[None]]
+        client_name: str | None = None,
+        raise_on_error: bool = False,
+    ) -> CallToolResult:
+        """Parse an mcp_types.CallToolResult into our CallToolResult dataclass.
+    
+        Args:
+            name: Tool name (for schema lookup)
+            result: Raw MCP protocol result
+            tool_output_schemas: Dictionary mapping tool names to their output schemas
+            list_tools_fn: Async function to refresh tool schemas if needed
+            client_name: Optional client name for logging
+            raise_on_error: Whether to raise ToolError on errors
+    
+        Returns:
+            CallToolResult: Parsed result with structured data
+        """
+        # Local import: CallToolResult is under TYPE_CHECKING at module level to
+        # avoid a circular import (client.client -> mixins.tools -> client.client),
+        # but we need the concrete class here to construct the return value.
+        from fastmcp.client.client import CallToolResult
+    
+        data = None
+        if result.is_error and raise_on_error:
+            if result.content and isinstance(result.content[0], mcp_types.TextContent):
+                msg = result.content[0].text
+            else:
+                msg = f"Tool '{name}' returned an error"
+>           raise ToolError(msg)
+E           fastmcp.exceptions.ToolError: CurveCurator failed with exit code -15. Diagnostics were written to /home/user/test100/paper2agent-curvecurator/tmp/verify_cli_wrapper/outputs with spaces/curvecurator_20260926_234847_400ebeb89394/cli_stdout.log and /home/user/test100/paper2agent-curvecurator/tmp/verify_cli_wrapper/outputs with spaces/curvecurator_20260926_234847_400ebeb89394/cli_stderr.log.
+E           stdout tail:
+E           ######################################################################
+E           
+E           
+E               #########              #################              #########
+E                        #             # Curve Curator #             #
+E                         #            #################            #
+E                          0 pEC50                           pEC50 0
+E                           #                                     #
+E                            #                                   #
+E                             #########                 #########
+E           
+E                                                          Florian P. Bayer - 2025
+E           
+E               Please cite CurveCurator: 10.1038/s41467-023-43696-z
+E           
+E           ######################################################################
+E           
+E            * Executing CurveCurator pipeline version 0.6.0. 
+E           
+E            * Reading parameter file of experiment. 
+E           
+E            * Loading data file /home/user/test100/paper2agent-curvecurator/tmp/verify_cli_wrapper/inputs with spaces/dose_responses_40.0.tsv. 
+E           
+E            * 9 curves were removed because of >4 missing value(s). 
+E           
+E            * 0 curves were removed because they had no valid control value(s). 
+E           
+E            * Fit will use interpolation X values: 
+E           
+E              [-8.92, -8.77, -8.62, -8.46, -8.31, -8.16, -8.01, -7.87, -7.72, -7.57, -7.41, -7.26, -7.11, -6.95, -6.8, -6.65, -6.51, -6.36, -6.21, -6.06, -5.92, -5.76, -5.6, -5.45, -5.3, -5.15, -5.0, -4.85, -4.7, -4.55, -4.4] 
+E           
+E            * Fitting curves parameters by standard OLS with 5 cores:
+E           stderr tail:
+E           ...[truncated]...
+E           
+E            68%|██████▊   | 164/242 [03:29<01:30,  1.16s/it]
+E            67%|██████▋   | 161/242 [03:30<01:31,  1.13s/it]
+E            69%|██████▉   | 167/242 [03:30<01:41,  1.36s/it]
+E            67%|██████▋   | 161/242 [03:30<01:38,  1.22s/it]
+E            68%|██████▊   | 166/243 [03:31<01:48,  1.40s/it]
+E            67%|██████▋   | 162/242 [03:31<01:24,  1.06s/it]
+E            68%|██████▊   | 165/242 [03:31<01:38,  1.29s/it]
+E            69%|██████▊   | 167/243 [03:31<01:26,  1.13s/it]
+E            67%|██████▋   | 162/242 [03:32<01:36,  1.21s/it]
+E            69%|██████▉   | 168/242 [03:32<01:42,  1.39s/it]
+E            67%|██████▋   | 163/242 [03:32<01:22,  1.05s/it]
+E            69%|██████▊   | 166/242 [03:32<01:35,  1.25s/it]
+E            69%|██████▉   | 168/243 [03:32<01:28,  1.17s/it]
+E            67%|██████▋   | 163/242 [03:33<01:30,  1.14s/it]
+E            70%|██████▉   | 169/242 [03:33<01:40,  1.37s/it]
+E            69%|██████▉   | 167/242 [03:33<01:27,  1.16s/it]
+E            68%|██████▊   | 164/242 [03:33<01:33,  1.19s/it]
+E            70%|██████▉   | 169/243 [03:34<01:24,  1.15s/it]
+E            68%|██████▊   | 164/242 [03:34<01:23,  1.08s/it]
+E            70%|███████   | 170/242 [03:34<01:28,  1.23s/it]
+E            69%|██████▉   | 168/242 [03:34<01:27,  1.19s/it]
+E            68%|██████▊   | 165/242 [03:35<01:23,  1.09s/it]
+E            68%|██████▊   | 165/242 [03:35<01:36,  1.26s/it]
+E            71%|███████   | 171/242 [03:35<01:25,  1.21s/it]
+E            70%|██████▉   | 170/243 [03:35<01:33,  1.28s/it]
+E            70%|██████▉   | 169/242 [03:35<01:20,  1.10s/it]
+E            69%|██████▊   | 166/242 [03:36<01:28,  1.16s/it]
+E            71%|███████   | 172/242 [03:36<01:24,  1.21s/it]
+E            69%|██████▊   | 166/242 [03:36<01:35,  1.26s/it]
+E            70%|███████   | 171/243 [03:36<01:32,  1.29s/it]
+E            70%|███████   | 170/242 [03:37<01:26,  1.20s/it]
+E            69%|██████▉   | 167/242 [03:37<01:37,  1.30s/it]
+E            69%|██████▉   | 167/242 [03:38<01:32,  1.23s/it]
+E            71%|███████▏  | 173/242 [03:38<01:24,  1.22s/it]
+E            71%|███████   | 172/243 [03:38<01:28,  1.25s/it]
+E            71%|███████   | 171/242 [03:38<01:23,  1.17s/it]
+E            69%|██████▉   | 168/242 [03:38<01:28,  1.20s/it]
+E            71%|███████   | 172/242 [03:39<01:17,  1.11s/it]
+E            69%|██████▉   | 168/242 [03:39<01:32,  1.25s/it]
+E            72%|███████▏  | 174/242 [03:39<01:25,  1.26s/it]
+E            71%|███████   | 173/243 [03:39<01:28,  1.26s/it]
+E            72%|███████▏  | 174/243 [03:40<01:14,  1.09s/it]
+E            70%|██████▉   | 169/242 [03:40<01:22,  1.13s/it]
+E            71%|███████▏  | 173/242 [03:40<01:13,  1.07s/it]
+E            70%|██████▉   | 169/242 [03:40<01:33,  1.28s/it]
+E            72%|███████▏  | 175/242 [03:40<01:21,  1.21s/it]
+E            72%|███████▏  | 175/243 [03:41<01:14,  1.09s/it]
+E            72%|███████▏  | 174/242 [03:41<01:11,  1.05s/it]
+E            70%|███████   | 170/242 [03:41<01:21,  1.13s/it]
+E            73%|███████▎  | 176/242 [03:41<01:19,  1.21s/it]
+E            70%|███████   | 170/242 [03:42<01:45,  1.47s/it]
+E            72%|███████▏  | 175/242 [03:42<01:15,  1.12s/it]
+E            72%|███████▏  | 176/243 [03:42<01:18,  1.18s/it]
+E            71%|███████   | 171/242 [03:42<01:24,  1.19s/it]
+E            71%|███████   | 171/242 [03:42<01:29,  1.26s/it]
+E            73%|███████▎  | 177/242 [03:43<01:24,  1.30s/it]
+E            71%|███████   | 172/242 [03:43<01:15,  1.07s/it]
+E            73%|███████▎  | 177/243 [03:43<01:20,  1.21s/it]
+E            71%|███████   | 172/242 [03:43<01:26,  1.24s/it]
+E            73%|███████▎  | 176/242 [03:43<01:21,  1.24s/it]
+E            74%|███████▎  | 178/242 [03:44<01:26,  1.35s/it]
+E            71%|███████▏  | 173/242 [03:44<01:19,  1.15s/it]
+E            73%|███████▎  | 177/242 [03:44<01:13,  1.14s/it]
+E            71%|███████▏  | 173/242 [03:45<01:33,  1.35s/it]
+E            72%|███████▏  | 174/242 [03:46<01:18,  1.16s/it]
+E            73%|███████▎  | 178/243 [03:46<01:37,  1.50s/it]
+E            74%|███████▍  | 179/242 [03:46<01:25,  1.36s/it]
+E            74%|███████▎  | 178/242 [03:46<01:14,  1.17s/it]
+E            72%|███████▏  | 174/242 [03:46<01:19,  1.17s/it]
+E            74%|███████▎  | 179/243 [03:47<01:28,  1.39s/it]
+E            74%|███████▍  | 180/242 [03:47<01:21,  1.31s/it]
+E            74%|███████▍  | 179/242 [03:47<01:14,  1.18s/it]
+E            72%|███████▏  | 175/242 [03:47<01:26,  1.29s/it]
+E            72%|███████▏  | 175/242 [03:47<01:21,  1.21s/it]
+E            74%|███████▍  | 180/243 [03:47<01:13,  1.16s/it]
+E            75%|███████▍  | 181/242 [03:48<01:19,  1.31s/it]
+E            74%|███████▍  | 180/242 [03:48<01:16,  1.24s/it]
+E            73%|███████▎  | 176/242 [03:48<01:22,  1.26s/it]
+E            73%|███████▎  | 176/242 [03:48<01:19,  1.21s/it]
+E            74%|███████▍  | 181/243 [03:48<01:12,  1.17s/it]
+
+.venv/lib/python3.11/site-packages/fastmcp/client/mixins/tools.py:373: ToolError
+- generated xml file: /home/user/test100/paper2agent-curvecurator/tests/results/junit-cli_wrapper.xml -
+============================= slowest 25 durations =============================
+582.11s setup    tests/code/test_run_dose_response_pipeline.py::test_fdr_run_produces_the_decoy_and_fdr_contract
+306.18s setup    tests/code/test_run_dose_response_pipeline.py::test_base_run_returns_the_declared_contract
+301.65s setup    tests/code/test_run_dose_response_pipeline.py::test_mad_run_returns_mad_artifact_and_parsed_values
+231.05s setup    tests/code/test_run_dose_response_pipeline.py::test_paths_with_spaces_and_upstream_default_output_names
+5.23s call     tests/code/test_run_dose_response_pipeline.py::test_zero_exit_with_no_outputs_is_still_an_mcp_error
+5.07s call     tests/code/test_run_dose_response_pipeline.py::test_timeout_terminates_the_process_and_raises_an_mcp_error
+1.76s call     tests/code/test_run_dose_response_pipeline.py::test_pinned_executable_identity_matches_the_recorded_version
+1.75s call     tests/code/test_run_dose_response_pipeline.py::test_malformed_input_table_is_an_mcp_error
+0.76s call     tests/code/test_run_dose_response_pipeline.py::test_default_output_directory_is_used_when_none_is_given
+0.05s call     tests/code/test_run_dose_response_pipeline.py::test_fdr_run_adds_qvalues_without_changing_the_target_fits
+0.04s call     tests/code/test_run_dose_response_pipeline.py::test_base_run_agrees_with_the_shipped_upstream_reference
+0.02s call     tests/code/test_run_dose_response_pipeline.py::test_fdr_run_produces_the_decoy_and_fdr_contract
+0.01s call     tests/code/test_run_dose_response_pipeline.py::test_wrong_runtime_override_is_rejected[true]
+0.01s call     tests/code/test_run_dose_response_pipeline.py::test_tool_is_exposed_with_the_declared_schema
+0.01s call     tests/code/test_run_dose_response_pipeline.py::test_wrong_runtime_override_is_rejected[ls]
+0.01s call     tests/code/test_run_dose_response_pipeline.py::test_wrong_runtime_override_is_rejected[echo]
+0.01s call     tests/code/test_run_dose_response_pipeline.py::test_missing_toml_file_is_an_mcp_error
+0.01s call     tests/code/test_run_dose_response_pipeline.py::test_malformed_toml_is_an_mcp_error
+0.01s call     tests/code/test_run_dose_response_pipeline.py::test_toml_without_input_file_key_is_an_mcp_error
+0.01s call     tests/code/test_run_dose_response_pipeline.py::test_toml_without_paths_section_is_an_mcp_error
+0.01s call     tests/code/test_run_dose_response_pipeline.py::test_nonexistent_declared_input_file_is_an_mcp_error
+0.01s call     tests/code/test_run_dose_response_pipeline.py::test_nonpositive_timeout_is_an_mcp_error
+0.01s call     tests/code/test_run_dose_response_pipeline.py::test_non_toml_input_is_an_mcp_error
+0.01s call     tests/code/test_run_dose_response_pipeline.py::test_nonexistent_executable_override_is_rejected
+
+(1 durations < 0.005s hidden.  Use -vv to show these durations.)
+=========================== short test summary info ============================
+ERROR tests/code/test_run_dose_response_pipeline.py::test_paths_with_spaces_and_upstream_default_output_names
+ERROR tests/code/test_run_dose_response_pipeline.py::test_repeated_calls_get_isolated_fresh_output_directories
+ERROR tests/code/test_run_dose_response_pipeline.py::test_user_inputs_are_never_modified
+ERROR tests/code/test_run_dose_response_pipeline.py::test_pinned_source_and_stage2_evidence_are_untouched
+================== 27 passed, 4 errors in 1437.61s (0:23:57) ===================

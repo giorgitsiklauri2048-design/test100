@@ -1,0 +1,18 @@
+# Project environment: regenerable, and orchestration requires generated
+# environments to stay out of the tracked scientific tree.
+.venv/
+
+# Pinned upstream source. Not vendored: its exact identity is recorded in
+# .pipeline/language.json and reports/agent-runs.json (url + commit
+# 71e46f7222f825f446e9aff3fb5a3bee9473e309) and restored with:
+#   git clone https://github.com/kusterlab/curve_curator.git repo/curve_curator
+#   git -C repo/curve_curator checkout 71e46f7222f825f446e9aff3fb5a3bee9473e309
+repo/
+
+# Scratch I/O for wrapper calls.
+tmp/
+
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/

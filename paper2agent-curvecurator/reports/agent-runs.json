@@ -120,6 +120,20 @@
         "notebooks/viability_ctrp_40/work/fdr_run1/decoys_40.0.txt": "fe5f96d8b62132de7a5aeee514147843dec830d4b9cf56139ee0ddb009df9123",
         "notebooks/viability_ctrp_40/work/fdr_run2/fdr_40.0.txt": "5ca8a66162809db2d79e6103e23f01d5158cac714d390d15be52d093e83031cd"
       }
+    },
+    {
+      "id": "extract_cli_wrapper_attempt_1",
+      "role": "implementer",
+      "task": "cli_wrapper",
+      "agent_id": "a0a778f78fc452cf4",
+      "status": "running",
+      "started_at": "2026-09-26T22:56:18.385Z",
+      "finished_at": null,
+      "owned_paths": [
+        "src/tools/cli_wrapper.py",
+        "reports/implementation-cli_wrapper.json"
+      ],
+      "report": "reports/implementation-cli_wrapper.json"
     }
   ],
   "exclusions": [

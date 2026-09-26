@@ -126,14 +126,38 @@
       "role": "implementer",
       "task": "cli_wrapper",
       "agent_id": "a0a778f78fc452cf4",
-      "status": "running",
+      "status": "succeeded",
       "started_at": "2026-09-26T22:56:18.385Z",
-      "finished_at": null,
+      "finished_at": "2026-09-26T23:15:08.841Z",
       "owned_paths": [
         "src/tools/cli_wrapper.py",
         "reports/implementation-cli_wrapper.json"
       ],
-      "report": "reports/implementation-cli_wrapper.json"
+      "report": "reports/implementation-cli_wrapper.json",
+      "report_sha256": "bf84b11936351d9d1d8e5411f84595833703b94e5fd9547e7274e35af0b36e1d",
+      "produced_files": {
+        "src/tools/cli_wrapper.py": "18d3d5e503c90e3dc0424685f9c6f63f0de66c7363b1a365945a66bb563ff46b"
+      }
+    },
+    {
+      "id": "verify_cli_wrapper_attempt_1",
+      "role": "verifier",
+      "task": "cli_wrapper",
+      "agent_id": "aaf54bd89f104fd69",
+      "status": "running",
+      "started_at": "2026-09-26T23:17:12.769Z",
+      "finished_at": null,
+      "owned_paths": [
+        "src/tools/cli_wrapper.py",
+        "tests/code",
+        "tests/results",
+        "tests/logs",
+        "tests/summary",
+        "reports/verification-cli_wrapper.json",
+        "reports/mcp-acceptance-cli_wrapper.json"
+      ],
+      "report": "reports/verification-cli_wrapper.json",
+      "implementation_run_id": "extract_cli_wrapper_attempt_1"
     }
   ],
   "exclusions": [

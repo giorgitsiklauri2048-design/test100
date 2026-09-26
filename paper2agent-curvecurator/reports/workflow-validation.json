@@ -2,7 +2,7 @@
   "validator": "paper2agent-workflow",
   "schema_version": 1,
   "success": true,
-  "through": "setup",
+  "through": "execution",
   "errors": [],
   "passed_assignments": [
     {
@@ -11,12 +11,31 @@
       "run_id": "environment_setup_attempt_1"
     },
     {
+      "role": "executor",
+      "task": "kinobeads_dasatinib",
+      "run_id": "execute_kinobeads_dasatinib_attempt_1"
+    },
+    {
+      "role": "executor",
+      "task": "viability_ctrp_40",
+      "run_id": "execute_viability_ctrp_40_attempt_1"
+    },
+    {
       "role": "scanner",
       "task": "project",
       "run_id": "scanner_selection_attempt_1"
     }
   ],
-  "exclusions": [],
+  "exclusions": [
+    {
+      "kind": "tutorial",
+      "id": "decryptm_dasatinib",
+      "reason": "Excluded on resource grounds by explicit user decision: the run reached ~11% of curve fitting (277/2432 batches) in 18.5 min with ~2h51m projected remaining, because three concurrent executors requested 5/2/5 cores on a 4-CPU container, ~12 workers, load ~47. Terminated with SIGTERM; no curves file was produced, so no reference comparison exists. Two smaller examples remain and still cover the cli_wrapper module.",
+      "at": "2026-09-26T22:22:00Z",
+      "report": "reports/exclusions/decryptm-dasatinib.json",
+      "report_sha256": "c60a106589d0bcbd04dc9ff3fca5b8a66fb410263118039e9b0b827daac3af5a"
+    }
+  ],
   "scope": "Validates recorded state and artifact consistency; does not authenticate host identities or establish numerical/scientific correctness.",
   "expected_assignments": [
     {
@@ -24,12 +43,19 @@
       "task": "project"
     },
     {
+      "role": "executor",
+      "task": "kinobeads_dasatinib"
+    },
+    {
+      "role": "executor",
+      "task": "viability_ctrp_40"
+    },
+    {
       "role": "scanner",
       "task": "project"
     }
   ],
   "active_tutorials": [
-    "decryptm_dasatinib",
     "kinobeads_dasatinib",
     "viability_ctrp_40"
   ],

@@ -105,14 +105,21 @@
       "role": "executor",
       "task": "viability_ctrp_40",
       "agent_id": "a39b5d23133937291",
-      "status": "running",
+      "status": "succeeded",
       "started_at": "2026-09-26T22:01:37.673Z",
-      "finished_at": null,
+      "finished_at": "2026-09-26T22:52:18.073Z",
       "owned_paths": [
         "notebooks/viability_ctrp_40",
         "reports/executed_notebook_viability_ctrp_40.json"
       ],
-      "report": "reports/executed_notebook_viability_ctrp_40.json"
+      "report": "reports/executed_notebook_viability_ctrp_40.json",
+      "report_sha256": "15f92c367067ebde594a39239d9b90b46b2b1cf843ec2f7cd6d74f39a0b59ba5",
+      "produced_files": {
+        "notebooks/viability_ctrp_40/work/base/curves_40.0.txt": "6d16700e0ccebdf43f9a218b3e23b4e19315ea95191e31cadac4e444c1592b0b",
+        "notebooks/viability_ctrp_40/work/fdr_run1/fdr_40.0.txt": "7783cc2ee6819486aeacef34ccdd2e8ded54f7451662ede9fba5b4eb2bcebecb",
+        "notebooks/viability_ctrp_40/work/fdr_run1/decoys_40.0.txt": "fe5f96d8b62132de7a5aeee514147843dec830d4b9cf56139ee0ddb009df9123",
+        "notebooks/viability_ctrp_40/work/fdr_run2/fdr_40.0.txt": "5ca8a66162809db2d79e6103e23f01d5158cac714d390d15be52d093e83031cd"
+      }
     }
   ],
   "exclusions": [

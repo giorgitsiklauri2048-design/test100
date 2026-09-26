@@ -178,3 +178,30 @@ interrupted attempt is recorded terminally as `cancelled` in
 `reports/agent-runs.json`, pointing at
 `reports/cancelled/verify-cli_wrapper-attempt-1.json`. Retain that record and append
 a new attempt rather than rewriting it.
+
+## Correction to the addendum above
+
+The JUnit result file `tests/results/junit-cli_wrapper-run1.xml` is the authoritative
+record, and it shows `tests="31" failures="0" errors="4"`. The earlier claim of
+"27 passed, 0 failed" was produced by grepping the log for PASSED/FAILED and
+therefore **missed four ERROR outcomes**. The accurate tally is:
+
+**27 passed, 0 failed, 4 errored.**
+
+All four errors are `exit code -15` (SIGTERM) and were **caused by the coordinator
+terminating the pipeline processes to stop the session**, not by any defect. They
+share a single setup fixture that runs a real CurveCurator invocation; killing that
+invocation failed the fixture, so the four tests errored on setup:
+
+- `test_paths_with_spaces_and_upstream_default_output_names` (231 s in when killed)
+- `test_repeated_calls_get_isolated_fresh_output_directories`
+- `test_user_inputs_are_never_modified`
+- `test_pinned_source_and_stage2_evidence_are_untouched`
+
+Two things follow. First, these four cases plus the never-reached
+`test_wrong_runtime_override_is_rejected` are the **five tests whose outcome is
+genuinely unknown**, and they happen to include the checks that user inputs and the
+pinned source are not modified — so re-running them matters, and should not be
+treated as a formality. Second, the wrapper surfaced the killed subprocess as a
+`fastmcp.exceptions.ToolError` rather than a false success, which is incidental
+evidence that its exit-status handling behaves as intended.

@@ -244,3 +244,31 @@ def test_engine_does_not_hard_code_the_dof_polynomial():
     source = inspect.getsource(engine)
     assert "n - 2.5" not in source
     assert "(n-4)**4" not in source
+
+
+# --------------------------------------------------------------------------
+# The CLI command we tell users to run must be the one that actually exists
+# --------------------------------------------------------------------------
+
+def test_emitted_cli_command_is_the_packages_real_console_script():
+    """The executable is ``CurveCurator``; ``curve_curator`` is only the module.
+
+    The repository declares ``CurveCurator = "curve_curator.__main__:main"``, so
+    telling a user to run ``curve_curator <toml>`` yields "command not found".
+    """
+    from importlib.metadata import entry_points
+
+    from curvecurator_mcp.config_builder import build_toml
+
+    declared = {
+        ep.name
+        for ep in entry_points(group="console_scripts")
+        if (ep.value or "").startswith("curve_curator")
+    }
+    assert declared == {"CurveCurator"}, f"unexpected console scripts: {declared}"
+
+    result = build_toml([1.0, 10.0, 100.0])
+    for command in result["run_commands"]:
+        assert command.split()[0] in declared, command
+    assert "CurveCurator <this file>" in result["toml"]
+    assert "curve_curator <" not in result["toml"]

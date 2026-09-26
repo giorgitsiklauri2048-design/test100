@@ -2,8 +2,12 @@
 
 The output is a parameter file for the authors' CLI:
 
-    curve_curator <params.toml>            # fit, classify, dashboard
-    curve_curator --fdr <params.toml>      # additionally estimate the FDR
+    CurveCurator <params.toml>            # fit, classify, dashboard
+    CurveCurator <params.toml> --fdr      # additionally estimate the FDR
+
+The console script is ``CurveCurator`` (declared in the repository's pyproject
+as ``CurveCurator = "curve_curator.__main__:main"``); ``curve_curator`` is the
+importable package name and is not an executable.
 """
 
 from __future__ import annotations
@@ -151,8 +155,8 @@ def build_toml(
         "# F-statistic to assess, classify, and explore significance of dose-response",
         "# curves. Nat Commun 14:7902 (2023). doi:10.1038/s41467-023-43696-z",
         "#",
-        "# Run:  curve_curator <this file>",
-        "#       curve_curator --fdr <this file>   # adds target-decoy FDR estimation",
+        "# Run:  CurveCurator <this file>",
+        "#       CurveCurator <this file> --fdr   # adds target-decoy FDR estimation",
         "#",
     ]
     if preset:
@@ -216,8 +220,8 @@ def build_toml(
         "preset": preset,
         "preset_notes": chosen.get("notes", []),
         "run_commands": [
-            "curve_curator <this file>",
-            "curve_curator --fdr <this file>",
+            "CurveCurator <this file>",
+            "CurveCurator <this file> --fdr",
         ],
         "input_file_expectation": (
             "The input file must contain one row per curve with the response columns named "

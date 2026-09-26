@@ -267,8 +267,8 @@ Emits a valid TOML parameter file for the real CLI, which is where the dashboard
 a dataset-wide FDR actually live:
 
 ```bash
-curve_curator params.toml          # fit, classify, dashboard
-curve_curator --fdr params.toml    # + target-decoy FDR
+CurveCurator params.toml          # fit, classify, dashboard
+CurveCurator params.toml --fdr    # + target-decoy FDR
 ```
 
 Presets carry the asymptotes and preprocessing the paper used:

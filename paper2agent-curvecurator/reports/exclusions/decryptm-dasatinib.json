@@ -1,0 +1,15 @@
+{
+  "kind": "tutorial",
+  "id": "decryptm_dasatinib",
+  "reason": "Excluded on resource grounds by explicit user decision. The base CurveCurator run reached only ~11% of curve fitting (277 of 2432 batches) after 18.5 minutes, with tqdm projecting ~2h51m remaining. The container has 4 logical CPUs while three concurrent executors each honoured available_cores=5, giving ~15 CPU-bound workers on 4 cores and a load average near 47; the smallest example in the set (155 KiB) consequently took 948s. The coordinator presented the options (continue, exclude, or restart serially) and the user chose to exclude this example and proceed with the two smaller ones. The pipeline processes were terminated with SIGTERM; no curves file was produced, so no reference comparison exists for this example.",
+  "at": "2026-09-26T22:22:00Z",
+  "report": "reports/exclusions/decryptm-dasatinib.json",
+  "scope_of_loss": {
+    "what_was_given_up": "The largest and most convincing ground-truth comparison available in this repository: ~12,000 curves from the paper's flagship decryptM Dasatinib TMT phosphoproteome reanalysis, with shipped per-curve reference values for pEC50, Curve F_Value, Curve P_Value, Curve Relevance Score, Curve Fold Change and Curve Regulation.",
+    "what_remains": "Two complete worked examples still provide reference evidence for the same single cli_wrapper module: kinobeads_dasatinib (LFQ protein, 8.2 MiB input, base run plus two deterministic --mad runs) and viability_ctrp_40 (cell viability, 155 KiB input, base run plus two --fdr runs). Both base runs produced curves files for exact comparison against their shipped references.",
+    "module_still_required": "cli_wrapper remains a required module because both remaining active tutorials map to it, so the implementer and the fresh independent verifier are unaffected.",
+    "honest_limitation": "Verification coverage is now narrower than planned. The remaining inputs are 8.2 MiB and 155 KiB, so the wrapper is not exercised against the ~16 MiB / ~12k-curve scale, and no evidence in this run speaks to its behaviour at that size or runtime. This must be stated in USAGE.md rather than implied away."
+  },
+  "not_a_defect": "This exclusion reflects a container resource limit and an orchestration misjudgement by the coordinator, which launched three multi-core examples concurrently on 4 CPUs instead of queueing them as orchestration.md permits. It is not evidence of any problem in curve_curator, in the shipped example, or in the executor's work.",
+  "tutorial_retained_in_state": "The decryptm_dasatinib entry stays in reports/agent-runs.json tutorials[] so its source hash continues to be checked; only its required execution assignment is released."
+}

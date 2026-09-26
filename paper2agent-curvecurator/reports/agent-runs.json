@@ -70,14 +70,15 @@
       "role": "executor",
       "task": "decryptm_dasatinib",
       "agent_id": "a1db50898c34802be",
-      "status": "running",
+      "status": "cancelled",
       "started_at": "2026-09-26T22:01:41.621Z",
-      "finished_at": null,
+      "finished_at": "2026-09-26T22:24:56.681Z",
       "owned_paths": [
         "notebooks/decryptm_dasatinib",
         "reports/executed_notebook_decryptm_dasatinib.json"
       ],
-      "report": "reports/executed_notebook_decryptm_dasatinib.json"
+      "report": "reports/executed_notebook_decryptm_dasatinib.json",
+      "report_sha256": "960e4038654a164b6777837af32ea31f6206573ddd63de844ec84821aca293f2"
     },
     {
       "id": "execute_kinobeads_dasatinib_attempt_1",

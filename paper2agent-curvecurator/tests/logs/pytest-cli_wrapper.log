@@ -1,0 +1,19 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.15, pytest-7.4.4, pluggy-1.6.0 -- /home/user/test100/paper2agent-curvecurator/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /home/user/test100/paper2agent-curvecurator
+configfile: pytest.ini
+plugins: platformdirs-4.12.0, asyncio-0.23.8, anyio-4.15.1
+asyncio: mode=Mode.STRICT
+collecting ... collected 31 items
+
+tests/code/test_run_dose_response_pipeline.py::test_tool_is_exposed_with_the_declared_schema PASSED [  3%]
+tests/code/test_run_dose_response_pipeline.py::test_wrapper_does_not_reimplement_any_scientific_computation PASSED [  6%]
+tests/code/test_run_dose_response_pipeline.py::test_base_run_returns_the_declared_contract PASSED [  9%]
+tests/code/test_run_dose_response_pipeline.py::test_base_run_reproduces_the_stage2_standalone_run_byte_for_byte PASSED [ 12%]
+tests/code/test_run_dose_response_pipeline.py::test_base_run_agrees_with_the_shipped_upstream_reference PASSED [ 16%]
+tests/code/test_run_dose_response_pipeline.py::test_base_run_dashboard_is_a_bokeh_html_document PASSED [ 19%]
+tests/code/test_run_dose_response_pipeline.py::test_staged_parameter_file_is_a_faithful_copy_with_absolute_paths PASSED [ 22%]
+tests/code/test_run_dose_response_pipeline.py::test_mad_run_returns_mad_artifact_and_parsed_values PASSED [ 25%]
+tests/code/test_run_dose_response_pipeline.py::test_mad_run_leaves_the_curves_table_identical_to_the_base_run PASSED [ 29%]
+tests/code/test_run_dose_response_pipeline.py::test_fdr_run_produces_the_decoy_and_fdr_contract 

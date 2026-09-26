@@ -53,12 +53,30 @@ above. Don't quote this server's R² as a manuscript-version number.
 
 ## How Paper2Agent was leveraged
 
-**It was not.** Stated plainly because the alternative is a false claim in a
-scientific artefact. There is no Paper2Agent skill or tooling in this environment
-(`~/.claude/skills/` holds only `session-start-hook` and `synced/`;
-`find / -iname "*paper2agent*"` matches only this repository's own directories).
-The server follows the Paper2Agent *pattern* — paper → typed tools + resource +
-guided prompt — built on the official Python MCP SDK.
+**It was not**, and not because it was unavailable.
+
+Paper2Agent ([jmiao24/Paper2Agent](https://github.com/jmiao24/Paper2Agent), MIT)
+is a multi-agent system that converts a paper's code repository into a tested MCP
+server. It was not installed in this environment, and the build proceeded by hand
+without attempting to install it — an oversight, not a constraint. The repository
+clones without issue here and installs with two commands, so the pipeline could
+have been run and was not.
+
+What this means for the artefact: the server follows the Paper2Agent *pattern*
+— paper → typed tools + resource + guided prompt, every tool bound to existing
+repository code — built directly on the official Python MCP SDK. It is **not** a
+Paper2Agent output and must not be described as one. It has not been through that
+pipeline's automated tool extraction, validation or ZIP delivery contract, and it
+exposes stdio rather than the HTTP endpoint Paper2Agent's documented
+`claude mcp add --transport http` registration expects.
+
+A Paper2Agent run on `kusterlab/curve_curator` would plausibly yield tools this
+server lacks, in particular executing the full pipeline over a real input file to
+produce `curves.txt` and `dashboard.html`; this server stops at generating the TOML
+and hands off to the CLI. The repository ships three complete worked examples
+(`decryptM_Dasatinib`, `kinobeads_Dasatinib`, `viability_CTRP_40`) with inputs,
+parameters and expected outputs, which makes it a strong candidate for that
+pipeline's validation stage.
 
 This is a standalone server. A companion server for a different paper
 (Franzosa et al. 2021, HepaRG toxicogenomics) is developed independently on its own

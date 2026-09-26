@@ -1,0 +1,18 @@
+2026-09-26 22:16:36,792 - INFO -  * Executing CurveCurator pipeline version 0.6.0.
+2026-09-26 22:16:36,792 - INFO -  * Reading parameter file of experiment.
+2026-09-26 22:16:36,793 - INFO -  * Loading data file /home/user/test100/paper2agent-curvecurator/notebooks/kinobeads_dasatinib/work/mad_run1/./proteinGroups.txt.
+2026-09-26 22:16:36,954 - INFO -  * 836 curves were removed because of >7 missing value(s).
+2026-09-26 22:16:37,039 - INFO -  * The following imputation value was used to fill NaNs: 963994.0
+2026-09-26 22:16:37,039 - INFO -  * 666 curves were removed because of >7 imputed value(s).
+2026-09-26 22:16:37,045 - INFO -  * 0 curves were removed because they had no valid control value(s).
+2026-09-26 22:16:37,047 - INFO -  * Fit will use interpolation X values:
+2026-09-26 22:16:37,047 - INFO -    [-8.52, -8.26, -8.0, -7.76, -7.52, -7.26, -7.0, -6.76, -6.52, -6.26, -6.0, -5.76, -5.52, -5.27, -5.02, -4.77, -4.52]
+2026-09-26 22:16:37,047 - INFO -  * Fitting curves parameters by standard OLS with 2 cores:
+2026-09-26 22:26:57,236 - INFO -  * Fitting curves parameters done !
+2026-09-26 22:26:57,240 - INFO -  * Calculate Relevance Score and apply SAM user thresholds:
+2026-09-26 22:26:57,241 - INFO -    alpha=0.1, fc_lim=0.5, s0=0.2709
+2026-09-26 22:26:57,251 - INFO -  * MAD-Analysis:
+2026-09-26 22:26:57,660 - INFO -  * MAD-Analysis found the following median absolute deviations:
+2026-09-26 22:26:57,661 - INFO -    ['Ratio DMSO: 0.12', 'Ratio 3nM: 0.09', 'Ratio 10nM: 0.14', 'Ratio 30nM: 0.11', 'Ratio 100nM: 0.11', 'Ratio 300nM: 0.09', 'Ratio 1000nM: 0.07', 'Ratio 3000nM: 0.09', 'Ratio 30000nM: 0.08']
+2026-09-26 22:26:57,721 - INFO -  * Rendering interactive dashboard using webgl backend ...
+2026-09-26 22:26:58,101 - INFO -  * Dashboard successfully rendered.

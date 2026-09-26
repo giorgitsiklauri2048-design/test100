@@ -1,0 +1,51 @@
+[96m######################################################################[0m
+
+[96m
+    #########              #################              #########
+             #             # Curve Curator #             #
+              #            #################            #
+               0 pEC50                           pEC50 0
+                #                                     #
+                 #                                   #
+                  #########                 #########
+
+                                               Florian P. Bayer - 2025
+
+    Please cite CurveCurator: 10.1038/s41467-023-43696-z[0m
+
+[96m######################################################################[0m
+
+ * Executing CurveCurator pipeline version 0.6.0. 
+
+ * Reading parameter file of experiment. 
+
+ * Loading data file /home/user/test100/paper2agent-curvecurator/notebooks/kinobeads_dasatinib/work/base/./proteinGroups.txt. 
+
+ * 836 curves were removed because of >7 missing value(s). 
+
+ * The following imputation value was used to fill NaNs: 963994.0 
+
+ * 666 curves were removed because of >7 imputed value(s). 
+
+ * 0 curves were removed because they had no valid control value(s). 
+
+ * Fit will use interpolation X values: 
+
+   [-8.52, -8.26, -8.0, -7.76, -7.52, -7.26, -7.0, -6.76, -6.52, -6.26, -6.0, -5.76, -5.52, -5.27, -5.02, -4.77, -4.52] 
+
+ * Fitting curves parameters by standard OLS with 2 cores: 
+
+ * Fitting curves parameters done ! 
+
+ * Calculate Relevance Score and apply SAM user thresholds: 
+
+   alpha=0.1, fc_lim=0.5, s0=0.2709 
+
+ * Rendering interactive dashboard using webgl backend ... 
+
+ * Dashboard successfully rendered. 
+
+[92m
+################################ DONE ################################
+[0m
+

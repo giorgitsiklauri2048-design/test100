@@ -1,0 +1,264 @@
+{
+  "agent": "tutorial-tool-extractor-cli",
+  "stage": "3A extract",
+  "module": "cli_wrapper",
+  "route": "language=cli, cli_backend=python",
+  "project_root": "/home/user/test100/paper2agent-curvecurator",
+  "owned_files": [
+    "/home/user/test100/paper2agent-curvecurator/src/tools/cli_wrapper.py",
+    "/home/user/test100/paper2agent-curvecurator/reports/implementation-cli_wrapper.json"
+  ],
+  "fastmcp_instance": "cli_wrapper_mcp",
+  "reference_constant": "https://github.com/kusterlab/curve_curator/blob/71e46f7222f825f446e9aff3fb5a3bee9473e309/curve_curator/__main__.py",
+  "attempts": [
+    {
+      "attempt": 1,
+      "outcome": "success",
+      "notes": "Single implementation attempt. No failed attempts to retain: the staging logic was dry-checked against both reference TOMLs before the first full pipeline run, and both MCP smoke calls succeeded on the first execution."
+    }
+  ],
+  "runtime": {
+    "project_python": "/home/user/test100/paper2agent-curvecurator/.venv/bin/python",
+    "python_version": "3.11.15",
+    "fastmcp_version": "4.0.3",
+    "executable": "/home/user/test100/paper2agent-curvecurator/.venv/bin/CurveCurator",
+    "executable_override_env_var": "CURVECURATOR_EXECUTABLE",
+    "pinned_source": "repo/curve_curator @ 71e46f7222f825f446e9aff3fb5a3bee9473e309 (origin https://github.com/kusterlab/curve_curator.git), curve_curator 0.6.0",
+    "identity_check": {
+      "invocation": "<executable> -h",
+      "why_not_version_flag": "curve_curator/__main__.py defines no --version flag; -h is the only supported identity invocation.",
+      "accepted_only_if": "exit code 0 AND the argparse description banner matching 'CurveCurator (v<version>)' AND the documented positional metavar '<PATH>' are present in the help text",
+      "rationale": "An executable bit plus exit code 0 is not sufficient: an unrelated program can exit 0 with empty output that would look like a valid empty scientific result. The parsed version is cached per resolved executable path and returned to the caller as cli_version.",
+      "observed": "CurveCurator (v0.6.0) -> cli_version = '0.6.0'"
+    },
+    "dependencies_added": "none (no packages installed, upgraded or removed by this agent)"
+  },
+  "exposed_tools": [
+    {
+      "tool_name": "run_dose_response_pipeline",
+      "upstream_binding": {
+        "symbol": "curve_curator.__main__:main",
+        "invoked_as": "the real installed console entry point, not an in-process import",
+        "argv_shape": "[<CurveCurator executable>] + ['--fdr'] + ['--mad'] + [<absolute staged toml path>]",
+        "shell": false,
+        "source_of_argument_surface": "the argparse block of repo/curve_curator/curve_curator/__main__.py at the pinned commit (the module docstring is stale and omits -f/-m, so it was not used)"
+      },
+      "signature": "run_dose_response_pipeline(toml_path: str, estimate_fdr: bool = False, run_mad: bool = False, output_dir: str | None = None, timeout_seconds: int = 3600) -> dict",
+      "docstring_lines": 2,
+      "parameters": [
+        {
+          "name": "toml_path",
+          "type": "Annotated[str, ...]",
+          "required": true,
+          "justification": "The single positional argument of the CLI (<PATH>). Required in the signature; no demo TOML is ever substituted. Must end in .toml: toml_parser.is_toml_file() gates the same check upstream, and batch files are deliberately unsupported here."
+        },
+        {
+          "name": "estimate_fdr",
+          "type": "Annotated[bool, ...]",
+          "default": false,
+          "justification": "Maps 1:1 onto the CLI's -f/--fdr store_true flag; upstream default is False, preserved. One bool per named toggle as the format requires."
+        },
+        {
+          "name": "run_mad",
+          "type": "Annotated[bool, ...]",
+          "default": false,
+          "justification": "Maps 1:1 onto -m/--mad (store_true); upstream default is False, preserved."
+        },
+        {
+          "name": "output_dir",
+          "type": "Annotated[str | None, ...]",
+          "default": null,
+          "justification": "Wrapper-side I/O parameter only (the CLI has no output-directory flag). Base directory under which a fresh per-call subdirectory is created; defaults to <project root>/outputs so the tool never writes into the caller's data directory unless asked. Does not change any scientific setting."
+        },
+        {
+          "name": "timeout_seconds",
+          "type": "Annotated[int, ...]",
+          "default": 3600,
+          "justification": "Required by the route (enforce a timeout). Default chosen from the recorded Stage 2 runtimes (viability base 949 s and FDR 1133 s under contention; a full kinobeads run ~13 min) so ordinary runs are not killed, while remaining user-adjustable for very large phosphoproteome inputs such as decryptM (>2 h)."
+        }
+      ],
+      "cli_flags_deliberately_not_exposed": [
+        {
+          "flag": "-b/--batch",
+          "reason": "Omitted at selection: a convenience loop over a list of TOML paths with no distinct computation. A calling agent invokes this tool once per TOML. The wrapper also rejects non-.toml inputs so a batch list cannot be passed by accident."
+        },
+        {
+          "flag": "-r/--random",
+          "reason": "Deferred at selection: unseeded H0 simulation, and data_simulator.sample() writes over the TOML's configured input_file, i.e. it destroys user input. Not exposed."
+        },
+        {
+          "flag": "--version",
+          "reason": "Does not exist in this CLI. Not invented; identity is established from -h instead."
+        }
+      ],
+      "seed_parameter": {
+        "exposed": false,
+        "reason": "No seed mechanism exists anywhere in this CLI. curve_curator/data_simulator.py draws its decoys/simulated values without seeding and no flag or TOML key sets a seed, so a seed parameter would promise behaviour the runtime cannot deliver."
+      },
+      "scientific_computation_in_wrapper": "none. No curve fitting, thresholding, FDR, MAD or statistical code is implemented or duplicated in the wrapper. All science is performed by the CurveCurator subprocess. The wrapper only resolves paths, stages a parameter file, runs the process, checks status/artifacts, and reads two tiny text outputs (fdr/mad) plus a newline count for reporting."
+    }
+  ],
+  "central_io_adaptation": {
+    "problem": "CurveCurator takes all of its input and output paths from the TOML's ['Paths'] section, resolved relative to the TOML file's own directory (curve_curator/toml_parser.py:update_toml_paths), and the shipped example TOMLs omit output paths so toml_parser.set_default_values() drops defaults next to the TOML. Executing a user's TOML in place would therefore write pipeline outputs into the user's own directory and could overwrite their files, and it cannot give a fresh output directory per invocation. Copying only the TOML into a staging directory would break its relative input_file reference.",
+    "option_chosen": "(a) stage a copy of the user's TOML into a fresh per-call directory with every ['Paths'] entry rewritten to an absolute path",
+    "evidence_that_absolute_paths_are_accepted": {
+      "code": "repo/curve_curator/curve_curator/toml_parser.py, update_toml_paths(): `for key, path in config['Paths'].items(): if not os.path.isabs(path): config['Paths'][key] = os.path.join(abs_folder_path, path)`",
+      "reading": "Entries that are already absolute are skipped and passed through unchanged; only relative entries are joined with the TOML's directory. update_toml_paths() is invoked both from load_toml() and again at the end of set_default_values(), so the same pass-through applies after defaults are filled in.",
+      "consumers_checked": [
+        "data_parser.load(): config['Paths']['input_file'] handed straight to pandas.read_csv",
+        "__main__: data.to_csv(config['Paths']['curves_file']) and decoys.to_csv(config['Paths']['decoys_file'])",
+        "dashboard.render(): config['Paths']['dashboard']",
+        "thresholding.estimate_fdr(): config['Paths']['fdr_file']",
+        "quality_control.mad_analysis(): config['Paths']['mad_file']",
+        "quantification.run_pipeline(): config['Paths'].get('normalization_file', '')"
+      ],
+      "runtime_confirmation": "The executed run log records ' * Loading data file /home/user/test100/paper2agent-curvecurator/notebooks/viability_ctrp_40/work/base/dose_responses_40.0.tsv.' - the absolute input path staged by the wrapper was accepted verbatim, and all outputs appeared inside the fresh run directory. The resulting curves_40.0.txt is byte-identical to the Stage 2 reference run.",
+      "why_not_option_b": "Option (b) (copying the input beside the TOML) would duplicate up to a 16 MiB input on every call - 8.2 MiB for the kinobeads example alone - for no benefit, now that the parser is confirmed to honour absolute paths."
+    },
+    "staging_mechanics": {
+      "fresh_directory": "<output_dir or PROJECT_ROOT/outputs>/curvecurator_<UTC-ish local timestamp>_<uuid4 hex[:12]>, created with exist_ok=False inside the tool call. The identifier is computed per call, never at import time, so repeated requests to a long-running server can never share a directory (verified: the two smoke calls produced curvecurator_20260926_230154_3bdbb7bd1884 and curvecurator_20260926_230701_b32c25c2dd83).",
+      "input_file": "resolved against the user's TOML directory (or used as-is if already absolute), resolved to an absolute real path, checked to exist and be a file, then written into the staged TOML as an absolute path. The user's input file is never copied, moved or modified.",
+      "output_entries": "curves_file, decoys_file, fdr_file, mad_file and dashboard are redirected to <fresh run dir>/<basename>. The basename is the user's own when the TOML declares one (so the viability example keeps curves_40.0.txt / dashboard_40.0.html and kinobeads keeps curves.txt / dashboard.html) and otherwise the fallback basename that toml_parser.set_default_values() itself uses (curves.txt, decoys.txt, fdr.txt, mad.txt, dashboard.html). Redirecting rather than relying on relative defaults also guarantees the fresh-directory contract for TOMLs that declare absolute or '../' output paths.",
+      "normalization_file": "redirected only when the user's TOML already declares it. set_default_values() gives this key no default, so quantification.run_pipeline() writes a normalization file only when the TOML declares it; inserting a default would have changed upstream behaviour for a TOML with normalization = true and no normalization_file.",
+      "text_level_rewrite": "No TOML writer (tomli_w/toml/tomlkit) is installed and none was added. The staged file is produced by copying the original text verbatim, dropping the ['Paths'] assignments for the seven known keys, and inserting the absolute assignments immediately after the ['Paths'] header. All other sections, values and comments are preserved exactly.",
+      "self_check": "The staged file is re-read with stdlib tomllib and every intended ['Paths'] value is asserted present and absolute; any mismatch is raised as an MCP tool error instead of being executed.",
+      "user_files_never_mutated": "The wrapper only reads the user's TOML and input file. Confirmed after the smoke runs: md5 of notebooks/viability_ctrp_40/work/base/parameters_40.0.toml = 6aeef986d4ece2368cbb1e0d161c338b, dose_responses_40.0.tsv = 056755e8ea76b8ab888e339c4fa182ce, and `git status --short notebooks/` is empty.",
+      "cwd_handling": "Every user-supplied path (toml_path, output_dir, and the TOML's input_file) is resolved to absolute form before the subprocess is started with cwd set to the fresh run directory. Because the staged TOML carries only absolute paths, the child's cwd cannot influence where anything is read or written; running from the run directory also keeps any incidental relative output inside it."
+    }
+  },
+  "declared_output_contract": {
+    "discovery_method": "Output paths are not hard-coded or taken from documentation: they are the ['Paths'] entries actually resolved for this call (returned as resolved_paths), and each is included in artifacts only after the file is confirmed to exist on disk.",
+    "always": [
+      "curves_file - per-curve fit results (pEC50, curve slope/front/back, fold change, F/p values, relevance score, regulation)",
+      "dashboard - interactive bokeh dashboard",
+      "curveCurator.log - written by user_interface.setup_logger() into the staged TOML's directory, i.e. the fresh run directory",
+      "the staged parameter file that was executed (provenance)",
+      "cli_stdout.log and cli_stderr.log - captured diagnostics"
+    ],
+    "with_estimate_fdr": [
+      "decoys_file - fitted decoy curves",
+      "fdr_file - global and filtered FDR estimates"
+    ],
+    "with_run_mad": [
+      "mad_file - median absolute deviation per dose channel"
+    ],
+    "conditional_other": [
+      "normalization_file - only when the TOML declares it and ['Processing'] normalization = true"
+    ],
+    "paths": "absolute for every artifact",
+    "summary_fields": [
+      "cli_version, command (argv), source_toml, input_file, output_dir, resolved_paths, estimate_fdr, run_mad, runtime_seconds, exit_code",
+      "num_curves - data rows of the curves file, counted by newlines without loading the table",
+      "num_decoy_curves - only with --fdr",
+      "fdr - {global_fdr, filtered_fdr} parsed from the two-line fdr file, only with --fdr",
+      "mad - per-dose-channel MAD parsed from the mad file (capped at 100 entries), only with --mad",
+      "stdout_tail - last 4000 characters of ANSI-stripped stdout"
+    ],
+    "excluded_from_return": "No full arrays, tables or embedded curve data. The curves/decoys tables and the dashboard are returned as file paths only."
+  },
+  "failure_handling": {
+    "timeout": "subprocess.TimeoutExpired is converted to a ToolError naming the timeout, the run directory holding partial outputs, and bounded stdout/stderr tails. Never a successful return.",
+    "nonzero_exit": "Converted to a ToolError with the exit code, the paths of the captured diagnostic files, and bounded tails.",
+    "upstream_quirk_zero_exit_on_bad_config": {
+      "observed": "curve_curator/toml_parser.py reports a rejected parameter file or a missing input file with ui.error(...) followed by a bare exit(), which raises SystemExit(None) and leaves the process exit code at 0. Verified empirically: an invalid TOML produced the CLI's ERROR banner with exit code 0.",
+      "wrapper_response": "Exit status alone is therefore not treated as success. After a zero exit the wrapper requires the declared artifacts to exist and be non-empty (curves_file and dashboard always; decoys_file+fdr_file when --fdr was requested; mad_file when --mad was requested) and otherwise raises a ToolError naming the missing outputs with the captured diagnostics.",
+      "note": "This is a post-condition check on the program's declared outputs, not a repair or replacement of any upstream method. No upstream file was modified. Most bad-input cases are additionally caught before the subprocess starts (missing/non-.toml file, missing ['Paths'], missing or non-existent input_file), which yields clearer errors than the upstream exit-0 path."
+    },
+    "diagnostics_and_protocol_stdout": "The wrapper never prints. Full child stdout/stderr are captured via subprocess pipes (never inherited), ANSI-stripped, written to cli_stdout.log / cli_stderr.log in the run directory, and only bounded tails are returned in the tool result or error message, so nothing reaches the MCP server's protocol stdout.",
+    "shell": "shell=False throughout; the argument list is built in code from the two booleans and the staged TOML path. No free-form command or arbitrary flag surface is exposed.",
+    "executable_override": "CURVECURATOR_EXECUTABLE is honoured but must pass the same -h identity check; an incompatible or unrelated override is reported as a tool error."
+  },
+  "checks_performed": {
+    "import_and_startup": {
+      "command": "PROJECT_PYTHON -c 'import tools.cli_wrapper' (via sys.path=src) and py_compile",
+      "result": "pass",
+      "notes": "cli_wrapper_mcp built; all imports used (verified by name-usage scan); no Colab/notebook scaffolding, no unused helpers."
+    },
+    "mcp_tool_listing": {
+      "pattern": "fastmcp.Client(cli_wrapper_mcp) -> list_tools()",
+      "result": "pass",
+      "observed": "exactly one tool 'run_dose_response_pipeline' with schema properties [estimate_fdr, output_dir, run_mad, timeout_seconds, toml_path]"
+    },
+    "executable_identity": {
+      "result": "pass",
+      "observed": "/home/user/test100/paper2agent-curvecurator/.venv/bin/CurveCurator -> CurveCurator (v0.6.0)"
+    },
+    "staging_dry_check": {
+      "inputs": [
+        "notebooks/viability_ctrp_40/work/base/parameters_40.0.toml (declares all seven ['Paths'] keys, suffixed '_40.0' names)",
+        "notebooks/kinobeads_dasatinib/work/base/parameters.toml (declares only input_file; output names come from upstream defaults)"
+      ],
+      "result": "pass",
+      "observed": "Both staged TOMLs parse with tomllib, carry absolute input_file pointing at the untouched original input, and carry absolute output paths inside the fresh run directory with the expected basenames (curves_40.0.txt / dashboard_40.0.html vs curves.txt / dashboard.html). normalization_file present only for the viability TOML, as declared."
+    },
+    "error_cases_through_mcp": [
+      {"case": "toml_path does not exist", "result": "ToolError 'TOML parameter file not found: ...'"},
+      {"case": "TOML without a ['Paths'] section", "result": "ToolError \"... has no ['Paths'] section; CurveCurator requires one.\""},
+      {"case": "TOML whose input_file does not exist", "result": "ToolError naming the resolved absolute input path and the declared relative value"}
+    ],
+    "development_smoke_check": {
+      "scope": "bounded: the fastest reference example only (viability_ctrp_40, 155 KiB input). The kinobeads (~13 min) and decryptM (>2 h, excluded) inputs were deliberately not run. Real scientific testing is left to the fresh verifier.",
+      "transport": "real MCP calls through fastmcp.Client(cli_wrapper_mcp).call_tool(...), result read from result.data",
+      "runs": [
+        {
+          "call": "run_dose_response_pipeline(toml_path=notebooks/viability_ctrp_40/work/base/parameters_40.0.toml, output_dir=<scratchpad>)",
+          "result": "success",
+          "exit_code": 0,
+          "runtime_seconds": 307.41,
+          "output_dir": "<scratchpad>/smoke/curvecurator_20260926_230154_3bdbb7bd1884",
+          "num_curves": 1211,
+          "artifacts_returned": ["curves_40.0.txt", "dashboard_40.0.html", "curveCurator.log", "parameters_40.0.toml (staged)", "cli_stdout.log", "cli_stderr.log"],
+          "comparison_with_stage2_reference": "curves_40.0.txt is byte-identical to notebooks/viability_ctrp_40/work/base/curves_40.0.txt (same sha256, 1211 rows, identical header); dashboard_40.0.html is the same size (663521 bytes) as the reference"
+        },
+        {
+          "call": "run_dose_response_pipeline(..., run_mad=True, output_dir=<same base>)",
+          "result": "success",
+          "exit_code": 0,
+          "runtime_seconds": 303.35,
+          "output_dir": "<scratchpad>/smoke/curvecurator_20260926_230701_b32c25c2dd83",
+          "num_curves": 1211,
+          "artifacts_returned": ["curves_40.0.txt", "dashboard_40.0.html", "mad_40.0.txt", "curveCurator.log", "parameters_40.0.toml (staged)", "cli_stdout.log", "cli_stderr.log"],
+          "mad_summary_parsed": "17 dose channels, Ratio 0 = 0.0452 ... Ratio 16 = 0.0189",
+          "notes": "Also exercises repeated calls: the second call got its own fresh directory and its curves_40.0.txt is likewise byte-identical to the Stage 2 reference. The mad file format matches the Stage 2 kinobeads mad_run1/mad.txt evidence (tab-separated 'Ratio <experiment>\\t<value>')."
+        }
+      ],
+      "not_exercised_here": [
+        "--fdr (reference evidence exists in notebooks/viability_ctrp_40/work/fdr_run1 and fdr_run2; the FDR parsing and decoy/fdr artifact requirements are implemented against that evidence but a full --fdr run, ~2x the runtime, was left to the verifier)",
+        "paths containing spaces, and the timeout path (both belong to the verifier's test matrix)",
+        "the default output_dir (PROJECT_ROOT/outputs); the smoke runs passed an explicit scratchpad directory so no artifacts were left in the project tree"
+      ]
+    },
+    "isolation": {
+      "repo_unchanged": "git status --short in repo/curve_curator is empty at the pinned commit 71e46f7222f825f446e9aff3fb5a3bee9473e309",
+      "notebooks_unchanged": "git status --short notebooks/ is empty; the reference inputs/outputs were only read",
+      "project_git_status": "only the two files this agent owns are new"
+    }
+  },
+  "deviations_and_limitations": [
+    "output_dir and timeout_seconds are wrapper-side I/O and safety parameters with no CLI counterpart (the CLI has no output-directory or timeout flag). They change no scientific setting; every scientific parameter continues to come from the user's TOML, unchanged.",
+    "The wrapper redirects the ['Paths'] output entries into a fresh per-call directory even when the user's TOML declares an explicit output location. This is required by the runtime's fresh-output-directory contract and prevents overwriting the user's files; the exact paths used are returned in resolved_paths, and the staged parameter file is returned as an artifact so the executed configuration is fully auditable.",
+    "Output basenames fall back to the same names toml_parser.set_default_values() uses when the TOML omits a key. These come from the pinned source, not from documentation, and the user's own basenames always win.",
+    "A ['Paths'] value spread over several physical lines would not be edited cleanly by the text-level rewrite; that case is caught by the tomllib re-parse and self-check of the staged file, which raises a tool error rather than executing anything. Single-line string assignments (the only form used by every shipped example and by the documented template) are handled.",
+    "The upstream exit(0)-on-bad-config behaviour is recorded as an upstream quirk and handled by checking the declared outputs. No upstream code was modified and no replacement for any upstream method was written.",
+    "Batch mode (-b) and random mode (-r) are not reachable through this tool, per the approved selection."
+  ],
+  "produced_files": [
+    {
+      "path": "/home/user/test100/paper2agent-curvecurator/src/tools/cli_wrapper.py",
+      "bytes": 20819,
+      "lines": 473,
+      "sha256": "18d3d5e503c90e3dc0424685f9c6f63f0de66c7363b1a365945a66bb563ff46b"
+    }
+  ],
+  "handoff": {
+    "production_edits_stopped": true,
+    "expected_tool_names_for_stage4": ["run_dose_response_pipeline"],
+    "notes_for_verifier": [
+      "Use fastmcp.Client(server) and result.data; the tool raises MCP tool errors (fastmcp.exceptions.ToolError) for missing/invalid inputs, nonzero exit, timeout, and missing declared outputs.",
+      "Expected-value source: notebooks/viability_ctrp_40/work/base (base), fdr_run1 / fdr_run2 (--fdr), notebooks/kinobeads_dasatinib/work/base and mad_run1 (--mad). The base viability curves file is reproduced byte-for-byte by this wrapper.",
+      "Decoy-dependent outputs are not reproducible byte-for-byte: data_simulator draws unseeded, which is why fdr_run1 and fdr_run2 differ (decoys_40.0.txt 1249182 vs 1248373 bytes). Compare FDR values within tolerance, not by hash.",
+      "A full CurveCurator run is CPU-bound and slow under contention: the viability example took ~305 s per call here on a loaded 4-core box (949 s in Stage 2 under heavier load), so tests need generous timeouts; pass timeout_seconds explicitly for kinobeads.",
+      "Do not add a seed parameter during repair: no seed mechanism exists in this CLI."
+    ]
+  }
+}

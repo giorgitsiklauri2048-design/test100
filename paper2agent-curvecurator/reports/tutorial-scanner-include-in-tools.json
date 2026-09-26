@@ -1,0 +1,64 @@
+{
+  "scan_metadata": {
+    "repository": "curve_curator",
+    "repository_path": "PROJECT_ROOT/repo/curve_curator",
+    "pinned_commit": "71e46f7222f825f446e9aff3fb5a3bee9473e309",
+    "paper": "Bayer et al. (2023), Nature Communications 14(1), 7902, doi:10.1038/s41467-023-43696-z",
+    "route": "language=cli, cli_backend=python, executable=CurveCurator",
+    "scan_date": "2026-09-26",
+    "counts": {
+      "evaluated_source_files": 21,
+      "included_source_files_in_tutorials": 3,
+      "in_scope_paths_with_no_cli_operation": 2
+    },
+    "success": true,
+    "explanation": "Of the requested scope, only the three example_datasets/ worked examples (decryptM_Dasatinib, kinobeads_Dasatinib, viability_CTRP_40) supply a real, complete, traceable (input + toml + reference output) Mode-1 CLI execution, and together they back a single exposed tool, run_dose_response_pipeline, owned by the cli_wrapper module. example_toml_files/ and example_api_usage/ matched the requested filter but yielded no additional tool (see tutorial-scanner.json's tool_review for the full reasoning: reference-only TOML templates with no companion input data, and notebooks that use the Python library API rather than the CLI)."
+  },
+  "included_sources": [
+    {
+      "path": "example_datasets/decryptM_Dasatinib/",
+      "title": "decryptM Dasatinib worked example (TMT phosphoproteome)",
+      "type": "documentation",
+      "suggested_tools": [
+        {
+          "tool_name": "run_dose_response_pipeline",
+          "source_section": "curve_curator.__main__:main (bound command: `CurveCurator <toml_path> [--fdr] [--mad]`)",
+          "description": "Runs the CurveCurator dose-response pipeline end-to-end on one parameters.toml: fits a 4-parameter logistic model per curve, applies SAM-style significance/relevance thresholding, optionally estimates FDR via target-decoy simulation (--fdr) and/or runs MAD-based noisy-channel detection (--mad), and renders the interactive bokeh dashboard.",
+          "primary_input": "Path to a completed parameters.toml file (its own [Paths].input_file, relative to the toml's directory, names the raw MaxQuant/DIA-NN/PD/MSFragger search-engine output or plain viability .tsv); optional estimate_fdr and run_mad booleans.",
+          "outputs": "curves.txt (per-curve pEC50, Curve Slope/Front/Back, Curve Fold Change, Curve F_Value, Curve P_Value, Curve Relevance Score, Curve Regulation, etc.), dashboard.html, curveCurator.log, and when requested decoys_file+fdr_file (--fdr) or mad_file (--mad), at the paths the toml declares.",
+          "applicable_to_new_data": true
+        }
+      ]
+    },
+    {
+      "path": "example_datasets/kinobeads_Dasatinib/",
+      "title": "kinobeads Dasatinib worked example (LFQ protein)",
+      "type": "documentation",
+      "suggested_tools": [
+        {
+          "tool_name": "run_dose_response_pipeline",
+          "source_section": "curve_curator.__main__:main (bound command: `CurveCurator <toml_path> [--fdr] [--mad]`)",
+          "description": "Same tool as above, validated on a second, independent input/measurement type (MaxQuant proteinGroups.txt, LFQ protein-level) to confirm the pipeline generalizes across the documented search-engine input formats.",
+          "primary_input": "Path to parameters.toml whose [Paths].input_file points to proteinGroups.txt; optional estimate_fdr and run_mad booleans.",
+          "outputs": "curves.txt, dashboard.html, curveCurator.log (and decoys_file/fdr_file or mad_file if requested).",
+          "applicable_to_new_data": true
+        }
+      ]
+    },
+    {
+      "path": "example_datasets/viability_CTRP_40/",
+      "title": "viability CTRP 40uM worked example (cell viability)",
+      "type": "documentation",
+      "suggested_tools": [
+        {
+          "tool_name": "run_dose_response_pipeline",
+          "source_section": "curve_curator.__main__:main (bound command: `CurveCurator <toml_path> [--fdr] [--mad]`)",
+          "description": "Same tool as above, validated on the non-proteomics viability data path (measurement_type/data_type/search_engine='OTHER') with control_fold_change and interpolation enabled; confirms the wrapper must honor whatever curves_file/dashboard output paths the toml declares (this example uses a '_40.0' suffix) rather than assuming fixed output filenames.",
+          "primary_input": "Path to parameters_40.0.toml whose [Paths].input_file points to dose_responses_40.0.tsv; optional estimate_fdr and run_mad booleans.",
+          "outputs": "curves_40.0.txt, dashboard_40.0.html, curveCurator.log (and decoys_file/fdr_file or mad_file if requested).",
+          "applicable_to_new_data": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,147 @@
+{
+  "execution_id": "decryptm_dasatinib",
+  "module": "cli_wrapper",
+  "status": "cancelled",
+  "status_detail": "Cancelled by the coordinator on resource grounds while the run was still fitting curves. This is NOT a success and NOT a scientific failure of CurveCurator or of the example; no numerical result was produced and none is asserted.",
+  "source": {
+    "path": "repo/curve_curator/example_datasets/decryptM_Dasatinib/parameters.toml",
+    "sha256": "4c75d5a90b79876f31a28220b63377a2e02d831cc25a24bc7a3d95f22372d50e",
+    "input_data_path": "repo/curve_curator/example_datasets/decryptM_Dasatinib/evidence.txt",
+    "input_data_sha256": "807cc3b6b32f5d293c64567f7d21844a69646245c96a9841a1b85801a4f38785",
+    "input_data_size_bytes": 16746036,
+    "input_data_lines": 19943,
+    "pinned_commit": "71e46f7222f825f446e9aff3fb5a3bee9473e309",
+    "pinned_commit_verified": "repo/curve_curator is its own git checkout of https://github.com/kusterlab/curve_curator.git; `git log -1` in that directory resolves HEAD to 71e46f7222f825f446e9aff3fb5a3bee9473e309 (2025-05-24 12:33:43 +0200, 'Update README.md'). The installed curve_curator==0.6.0 package's dist-info/direct_url.json records {\"url\": \"file:///home/user/test100/paper2agent-curvecurator/repo/curve_curator\", \"dir_info\": {}}, confirming the installed package was built from this exact pinned checkout.",
+    "source_url": "https://github.com/kusterlab/curve_curator/blob/71e46f7222f825f446e9aff3fb5a3bee9473e309/example_datasets/decryptM_Dasatinib/parameters.toml",
+    "dataset_description": "TMT phosphoproteome, Dasatinib dose-response in K562 cells (decryptM), id P033347, 10 doses (100 nM down to 0, log-scaled), MaxQuant peptide-level input."
+  },
+  "executable_identity": {
+    "path": "/home/user/test100/paper2agent-curvecurator/.venv/bin/CurveCurator",
+    "resolved_path": "/home/user/test100/paper2agent-curvecurator/.venv/bin/CurveCurator",
+    "resolved_via": "readlink -f (no symlink indirection; console-script entry point installed directly in .venv/bin)",
+    "package_name": "curve_curator",
+    "package_version": "0.6.0",
+    "pip_show_location": "/home/user/test100/paper2agent-curvecurator/.venv/lib/python3.11/site-packages",
+    "installer": "uv",
+    "direct_url_json": "{\"url\": \"file:///home/user/test100/paper2agent-curvecurator/repo/curve_curator\", \"dir_info\": {}}",
+    "python_interpreter": "/home/user/test100/paper2agent-curvecurator/.venv/bin/python",
+    "python_version": "3.11.15",
+    "confirmed_from_pinned_checkout": true
+  },
+  "execution_mode": "cli_direct_subprocess",
+  "execution_path": null,
+  "execution_path_note": "No notebook was used or is appropriate for a CLI route; per the shared role and CLI route guidance a driver/notebook is optional and native command execution with captured logs is the reference evidence. There is no completed execution_path file because the run did not finish; the attempted working copy of the inputs is retained at notebooks/decryptm_dasatinib/work/run/ (parameters.toml, evidence.txt only -- no output artifacts were produced).",
+  "isolation_setup": {
+    "hazard_avoided": "The shipped parameters.toml declares only input_file (no output paths), so CurveCurator writes curves.txt/dashboard.html/curveCurator.log as defaults next to the toml. Running in place inside repo/ would have overwritten the shipped ground-truth reference files.",
+    "action_taken": "The entire example directory was copied out of repo/ into notebooks/decryptm_dasatinib/work/ BEFORE any execution: a pristine copy at work/reference_shipped/ (all 5 shipped files, byte-identical to repo/) and a run-only copy at work/run/ containing just parameters.toml and evidence.txt (inputs only, no shipped outputs present, so nothing could be silently 'confirmed' as a false match).",
+    "repo_untouched": true
+  },
+  "command": {
+    "argv": ["/home/user/test100/paper2agent-curvecurator/.venv/bin/CurveCurator", "./parameters.toml"],
+    "display": "/home/user/test100/paper2agent-curvecurator/.venv/bin/CurveCurator ./parameters.toml",
+    "working_directory": "/home/user/test100/paper2agent-curvecurator/notebooks/decryptm_dasatinib/work/run",
+    "flags_used": [],
+    "config_deviation": "None. The shipped parameters.toml was run completely unchanged, including available_cores = 5 (oversubscribed relative to this container's 4 logical CPUs, as flagged in the assignment as an expected-slower-but-not-blocking condition). No config edit was made before the run was cancelled.",
+    "started_at_utc": "2026-09-26T22:02:53Z",
+    "terminated_at_utc": "approximately 2026-09-26T22:21:23Z (coordinator-reported); this executor's own last-observed progress snapshot in captured stderr was timestamped 2026-09-26T22:21:36Z with the process already gone by 2026-09-26T22:22:17Z",
+    "wall_clock_elapsed_seconds_before_termination": 1110,
+    "wall_clock_elapsed_before_termination_human": "~18.5 minutes",
+    "termination_cause": "SIGTERM sent by the coordinator process, not a self-initiated exit and not a crash inside CurveCurator or this executor's driver script. The coordinator's rationale (recorded independently in reports/exclusions/decryptm-dasatinib.json): three sibling executors in this pipeline run each launched a CurveCurator process honouring available_cores=5 concurrently on a container with only 4 logical CPUs, giving ~15 CPU-bound worker processes contending for 4 cores (load average ~47). tqdm was projecting ~2h51m remaining for this run alone at the time of termination. The user chose to exclude this example and proceed with two smaller ones rather than continue or serialize the runs.",
+    "exit_status": null,
+    "exit_status_note": "No real exit code exists. The driver wrapped the call as `( CurveCurator ./parameters.toml ; echo \"EXIT_CODE=$?\" > run_exit_code.txt )`; run_exit_code.txt was never created because the process was killed by SIGTERM before the pipeline (and the wrapper's own exit-code capture) reached completion. Reporting a specific number here would be invented provenance, so this field is explicitly null rather than guessed (e.g. as 0, 1, or 130/143)."
+  },
+  "progress_reached": {
+    "log_lines_completed": [
+      " * Executing CurveCurator pipeline version 0.6.0.",
+      " * Reading parameter file of experiment.",
+      " * Loading data file .../evidence.txt.",
+      " * 64 curves were removed because of >4 missing value(s).",
+      " * The following imputation value was used to fill NaNs: 6329.66",
+      " * 74 curves were removed because of >4 imputed value(s).",
+      " * The following normalization factors were applied: {'Raw 1': 0.58, 'Raw 2': 0.13, 'Raw 3': 0.2, 'Raw 4': -0.6, 'Raw 5': -0.31, 'Raw 6': 0.19, 'Raw 7': 0.24, 'Raw 8': -0.19, 'Raw 9': -0.08, 'Raw 10': -0.14}",
+      " * 0 curves were removed because they had no valid control value(s).",
+      " * Fitting curves parameters by standard OLS with 5 cores: (started, never completed)"
+    ],
+    "curve_fitting_stage": {
+      "total_curves_to_fit_per_worker_chunk": "~2431-2432 (5 parallel tqdm bars, one per worker, matching available_cores=5)",
+      "batches_completed_at_termination": "~277 of 2432 (~11%), per coordinator-observed final state; this executor's own last captured stderr snapshot (timestamped 22:21:36Z, ~18.5 min elapsed) showed the 5 worker bars individually at values in the 259-299 out of ~2431/2432 range (11-12%)",
+      "projected_remaining_time_at_termination": "~2h51m (tqdm ETA, coordinator-reported), consistent with this executor's own last observed per-worker ETAs of roughly 1h45m-4h30m depending on which of the 5 workers"
+    },
+    "note_on_normal_upstream_runtime": "The shipped curveCurator.log (in the untouched reference_shipped/ and repo/ copies) shows the original authors' run completed the entire fitting stage in 2m45s (16:27:43 to 16:30:27) using 5 real cores with no other contention. This run never reached that stage's completion because of container CPU oversubscription (4 logical CPUs, 5 declared cores per this run, times 3 concurrent sibling executor runs each also requesting multiple cores), not because of any defect in CurveCurator, the pinned checkout, or this example."
+  },
+  "data_seed_provenance": {
+    "seed_exposed_by_cli": false,
+    "note": "The CurveCurator CLI exposes a `-r [RANDOM]` flag (visible in `CurveCurator --help` usage) that is used only for the `-f/--fdr` decoy-simulation mode; it is irrelevant to a base run with no flags and was not used here. Independently inspected: quantification.py, models.py and toolbox.py (the curve-fitting code path exercised by a base run) contain no calls to numpy/random RNGs and no seed handling. dashboard.py contains one fixed, non-configurable `np.random.seed(8)` used only to render placeholder default-value markers in the interactive dashboard HTML; it does not affect curve_curator's numerical fit outputs and is irrelevant here because no dashboard was ever produced by this cancelled run. No seed was invented or assumed for this report."
+  },
+  "outputs": {
+    "curves_file_produced": false,
+    "dashboard_file_produced": false,
+    "log_file_produced_then_deleted": {
+      "existed": true,
+      "path_when_it_existed": "notebooks/decryptm_dasatinib/work/run/curveCurator.log",
+      "size_bytes_observed": 1060,
+      "sha256": null,
+      "sha256_note": "Not captured before deletion -- this executor removed the partial log/stdout/stderr files as part of routine attempt cleanup between attempt 1's failure notification and the coordinator's cancellation message, before being told to preserve partial evidence. No hash exists for it. This is an honest gap, not a fabricated value.",
+      "content_reconstructed_from_transcript": [
+        " * Executing CurveCurator pipeline version 0.6.0.",
+        " * Reading parameter file of experiment.",
+        " * Loading data file /home/user/test100/paper2agent-curvecurator/notebooks/decryptm_dasatinib/work/run/./evidence.txt.",
+        " * 64 curves were removed because of >4 missing value(s).",
+        " * The following imputation value was used to fill NaNs: 6329.66",
+        " * 74 curves were removed because of >4 imputed value(s).",
+        " * The following normalization factors were applied: {'Raw 1': 0.58, 'Raw 2': 0.13, 'Raw 3': 0.2, 'Raw 4': -0.6, 'Raw 5': -0.31, 'Raw 6': 0.19, 'Raw 7': 0.24, 'Raw 8': -0.19, 'Raw 9': -0.08, 'Raw 10': -0.14}",
+        " * 0 curves were removed because they had no valid control value(s).",
+        " * Fitting curves parameters by standard OLS with 5 cores:"
+      ],
+      "reconstruction_note": "This is captured console stdout from the actual run (mirrors the FileHandler-written log content up to the same point), preserved verbatim in this executor's tool-call transcript prior to deletion. It is presented as reconstructed context only, explicitly not as a hashed artifact, and is INCOMPLETE -- it stops mid-fit and has no curve results."
+    },
+    "no_other_outputs": "No curves.txt and no dashboard.html were ever created by this run at any point (both are written only after the fitting stage completes, per curve_curator/toml_parser.py defaults and curve_curator/user_interface.py flow), so there is nothing further to hash or label."
+  },
+  "reference_comparison": null,
+  "reference_comparison_note": "Not possible and not attempted. The run never reached the point of writing curves.txt, so there is no produced output to compare against the shipped reference_shipped/curves.txt (sha256 972a92c1cf7658996f2e930e44db933fad59ff929acadfa09be887ef87287a01). No comparison numbers, tolerances, row counts, or agreement statistics are asserted anywhere in this report; doing so would be fabricated provenance.",
+  "reference_integrity_proof": {
+    "purpose": "Proof that the shipped ground-truth reference outputs under repo/ were never at risk despite the run's cancellation, because execution was isolated into notebooks/decryptm_dasatinib/work/ before anything ran.",
+    "repo_path": "repo/curve_curator/example_datasets/decryptM_Dasatinib/",
+    "pre_run_sha256": {
+      "curveCurator.log": "9f1f1c814cb3ddf0c26ccbcd5106becc0d7fb18d9c300c225e494c62f149c63c",
+      "curves.txt": "972a92c1cf7658996f2e930e44db933fad59ff929acadfa09be887ef87287a01",
+      "dashboard.html": "82d0db1b1267e6d9cad121db1c343f1986704c62b929e6bda138f19a6f8a42fc",
+      "evidence.txt": "807cc3b6b32f5d293c64567f7d21844a69646245c96a9841a1b85801a4f38785",
+      "parameters.toml": "4c75d5a90b79876f31a28220b63377a2e02d831cc25a24bc7a3d95f22372d50e"
+    },
+    "post_run_sha256": {
+      "curveCurator.log": "9f1f1c814cb3ddf0c26ccbcd5106becc0d7fb18d9c300c225e494c62f149c63c",
+      "curves.txt": "972a92c1cf7658996f2e930e44db933fad59ff929acadfa09be887ef87287a01",
+      "dashboard.html": "82d0db1b1267e6d9cad121db1c343f1986704c62b929e6bda138f19a6f8a42fc",
+      "evidence.txt": "807cc3b6b32f5d293c64567f7d21844a69646245c96a9841a1b85801a4f38785",
+      "parameters.toml": "4c75d5a90b79876f31a28220b63377a2e02d831cc25a24bc7a3d95f22372d50e"
+    },
+    "post_run_check_timestamp_utc": "2026-09-26T22:22:xxZ (captured after both the run's own termination and this executor's cleanup, immediately before writing this report)",
+    "result": "IDENTICAL. Every shipped file's sha256 is unchanged between the pre-run capture (taken before the run was started at 22:02:53Z) and the post-run/post-cancellation capture. repo/ was never written to.",
+    "pristine_copy_also_verified": "notebooks/decryptm_dasatinib/work/reference_shipped/ (a separate, additional copy of all 5 shipped files made for this executor's own comparison use, never touched by the run) hashes identically to repo/ as well, listed above under the same values."
+  },
+  "figures": {
+    "applicable": false,
+    "note": "No dashboard.html was produced by this cancelled run, so there is no rendered figure/dashboard artifact from this execution to retain. The shipped reference_shipped/dashboard.html (sha256 82d0db1b1267e6d9cad121db1c343f1986704c62b929e6bda138f19a6f8a42fc) exists only as the untouched original example output, not as evidence from this executor's run."
+  },
+  "limitations": [
+    "This example (the largest and most convincing ground-truth comparison in the repository, ~12,000 curves) produced no usable reference evidence for the cli_wrapper module. Only the two smaller examples (kinobeads_dasatinib, viability_ctrp_40) provide verified base-run comparisons for that module; wrapper behaviour at ~16 MiB input / ~19,943-line evidence.txt / ~12k-curve scale is unverified.",
+    "No exit code, no partial curves file, and no dashboard were obtained. The only concrete evidence retained is: verified executable/version/pinned-commit identity, verified untouched sha256 of all 5 shipped reference files (both in repo/ and in this executor's own pristine copy), and a coordinator-corroborated progress/timing record of the cancelled attempt.",
+    "The partial curveCurator.log this run did produce (1060 bytes, ending mid-fit) was deleted by this executor during cleanup between the first (harness-level) attempt failure and the coordinator's cancellation instruction, before its sha256 was captured. Its content is reconstructed here verbatim from this executor's own tool-call transcript, not from a hash-verified file on disk. This is disclosed rather than concealed.",
+    "This exclusion is a container-resource/orchestration outcome (three sibling executors each honouring available_cores=5 concurrently on 4 logical CPUs), not a defect in curve_curator, in the pinned checkout, or in this example's data or config."
+  ],
+  "attempts": [
+    {
+      "attempt": 1,
+      "what_happened": "First execution attempt. `/home/user/test100/paper2agent-curvecurator/.venv/bin/CurveCurator ./parameters.toml` was launched from notebooks/decryptm_dasatinib/work/run/, backgrounded by the harness after exceeding its default foreground timeout. The run itself continued fitting curves (confirmed by growing stdout/stderr progress captured directly by this executor at multiple checkpoints, reaching ~277-299/2431-2432 per-worker batches, ~11-12%, by ~22:21Z), but the background task wrapper was itself reported as 'failed' with shell exit code 144 at approximately 22:04-22:06Z -- this reflects the wrapper/job-control mechanism, not CurveCurator terminating; the actual CurveCurator worker processes were independently confirmed still running afterward via `ps aux`.",
+      "outcome": "Superseded by the coordinator's cancellation before this executor could re-launch a clean attempt 2; the same underlying CurveCurator process instance that started at 22:02:53Z is the one the coordinator SIGTERM'd at ~22:21Z. No second CurveCurator process was ever started for this example."
+    }
+  ],
+  "hard_constraints_observed": {
+    "repo_read_only": true,
+    "namespace_respected": "notebooks/decryptm_dasatinib/** and this single report file only",
+    "no_packages_installed": true,
+    "no_git_mutations": true,
+    "notebooks_namespace_preserved_per_coordinator_instruction": "notebooks/decryptm_dasatinib/ was NOT deleted; work/reference_shipped/ (pristine shipped-file copy) and work/run/ (surviving input-only copy: parameters.toml, evidence.txt) remain on disk as evidence."
+  }
+}

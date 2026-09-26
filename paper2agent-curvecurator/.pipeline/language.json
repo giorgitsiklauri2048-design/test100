@@ -1,0 +1,30 @@
+{
+  "language": "cli",
+  "cli_backend": "python",
+  "requires_gpu": false,
+  "gpu_requirement": "none",
+  "language_reason": "The repository's public interface for the requested capability is a command-line entry point. pyproject.toml declares [tool.poetry.scripts] CurveCurator = 'curve_curator.__main__:main', and the installed wheel provides the executable 'CurveCurator' (verified: present in the environment bin/; lowercase 'curve_curator' is the importable package only and is absent). README.md 'Run pipeline' documents three CLI modes: 'CurveCurator <toml_path>', '--batch <batch_file>', and '--random <N>', with optional '--fdr' and '--mad'. All three worked examples under example_datasets/ are CLI runs: each ships an input file, the parameters.toml used, and the resulting curves.txt, curveCurator.log and dashboard.html. The requested capability (run the pipeline on an input file to produce curves.txt and an interactive dashboard, with target-decoy FDR) is reachable only through this CLI.",
+  "gpu_reason": "No CUDA-capable dependency and no device selection anywhere in the codebase. Dependencies are numpy, pandas, scipy, statsmodels, bokeh and tqdm; parallelism is CPU process-based via the TOML 'available_cores' parameter. Computation is ordinary CPU numerical fitting.",
+  "secondary_capability_deferred": {
+    "capability": "Python library API for single-curve fitting (curve_curator.models.LogisticModel, curve_curator.thresholding)",
+    "route_if_converted": "python",
+    "evidence": "example_api_usage/ ships two notebooks, 'Fit a dose-response model.ipynb' and 'Manual curve plotting from pipeline output.ipynb', which import curve_curator and call the model API directly.",
+    "reason_deferred": "Explicit user resource limit for this run. Not dropped silently: per language-routing.md a second capability needing a different route requires its own output directory and inventory, which is out of scope for this cost-bounded run. An independently built MCP server already covers this Python API surface (see branch claude/sweet-newton-2u7xfq), which is a further reason to prioritise the CLI capability that is not otherwise covered."
+  },
+  "repository": {
+    "identity": "https://github.com/kusterlab/curve_curator.git",
+    "commit": "71e46f7222f825f446e9aff3fb5a3bee9473e309",
+    "dirty_files": [],
+    "checkout_path": "repo/curve_curator"
+  },
+  "requested_filter": "example_api_usage/ notebooks, example_datasets/ (decryptM_Dasatinib, kinobeads_Dasatinib, viability_CTRP_40), example_toml_files/",
+  "route_override": null,
+  "evidence_paths": [
+    "repo/curve_curator/pyproject.toml",
+    "repo/curve_curator/README.md",
+    "repo/curve_curator/curve_curator/__main__.py",
+    "repo/curve_curator/example_datasets/decryptM_Dasatinib/parameters.toml",
+    "repo/curve_curator/example_datasets/kinobeads_Dasatinib/parameters.toml",
+    "repo/curve_curator/example_datasets/viability_CTRP_40/parameters_40.0.toml"
+  ]
+}

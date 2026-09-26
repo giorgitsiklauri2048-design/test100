@@ -1,0 +1,15 @@
+2026-09-26 22:02:37,471 - INFO -  * Executing CurveCurator pipeline version 0.6.0.
+2026-09-26 22:02:37,471 - INFO -  * Reading parameter file of experiment.
+2026-09-26 22:02:37,472 - INFO -  * Loading data file /home/user/test100/paper2agent-curvecurator/notebooks/kinobeads_dasatinib/work/base/./proteinGroups.txt.
+2026-09-26 22:02:37,803 - INFO -  * 836 curves were removed because of >7 missing value(s).
+2026-09-26 22:02:37,884 - INFO -  * The following imputation value was used to fill NaNs: 963994.0
+2026-09-26 22:02:37,884 - INFO -  * 666 curves were removed because of >7 imputed value(s).
+2026-09-26 22:02:37,888 - INFO -  * 0 curves were removed because they had no valid control value(s).
+2026-09-26 22:02:37,890 - INFO -  * Fit will use interpolation X values:
+2026-09-26 22:02:37,890 - INFO -    [-8.52, -8.26, -8.0, -7.76, -7.52, -7.26, -7.0, -6.76, -6.52, -6.26, -6.0, -5.76, -5.52, -5.27, -5.02, -4.77, -4.52]
+2026-09-26 22:02:37,891 - INFO -  * Fitting curves parameters by standard OLS with 2 cores:
+2026-09-26 22:15:46,594 - INFO -  * Fitting curves parameters done !
+2026-09-26 22:15:46,594 - INFO -  * Calculate Relevance Score and apply SAM user thresholds:
+2026-09-26 22:15:46,595 - INFO -    alpha=0.1, fc_lim=0.5, s0=0.2709
+2026-09-26 22:15:46,687 - INFO -  * Rendering interactive dashboard using webgl backend ...
+2026-09-26 22:15:47,241 - INFO -  * Dashboard successfully rendered.

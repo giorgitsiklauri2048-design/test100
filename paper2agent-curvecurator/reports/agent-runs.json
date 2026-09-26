@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "route": "cli",
+  "repository": {
+    "url": "https://github.com/kusterlab/curve_curator.git",
+    "commit": "71e46f7222f825f446e9aff3fb5a3bee9473e309"
+  },
+  "tutorials": [
+    {
+      "id": "decryptm_dasatinib",
+      "module": "cli_wrapper",
+      "source": "repo/curve_curator/example_datasets/decryptM_Dasatinib/parameters.toml",
+      "sha256": "4c75d5a90b79876f31a28220b63377a2e02d831cc25a24bc7a3d95f22372d50e"
+    },
+    {
+      "id": "kinobeads_dasatinib",
+      "module": "cli_wrapper",
+      "source": "repo/curve_curator/example_datasets/kinobeads_Dasatinib/parameters.toml",
+      "sha256": "0c6580c4a28026ef1ed88a0e67529b34c2c2cb1a754fce184b6b41413c306e09"
+    },
+    {
+      "id": "viability_ctrp_40",
+      "module": "cli_wrapper",
+      "source": "repo/curve_curator/example_datasets/viability_CTRP_40/parameters_40.0.toml",
+      "sha256": "e127f39da561d01dd5cf1cba68f53ca5ccaf0e4090a570ec753bd956a94849af"
+    }
+  ],
+  "runs": [
+    {
+      "id": "environment_setup_attempt_1",
+      "role": "environment",
+      "task": "project",
+      "agent_id": "a738335fb378ee11e",
+      "status": "succeeded",
+      "started_at": "2026-09-26T21:48:51.865Z",
+      "finished_at": "2026-09-26T21:51:54.113Z",
+      "owned_paths": [
+        ".venv",
+        "reports/environment-manager_results.md",
+        "reports/environment-requirements.txt",
+        "reports/python-version.txt"
+      ],
+      "report": "reports/environment-manager_results.md",
+      "report_sha256": "ed920b2b92eac163d04c50447edad3bd76581c923fe5e09c2df88afc829bd76a",
+      "produced_files": {
+        "reports/environment-requirements.txt": "eb79557856dc22e0f0374fd3b518214ac41f8bc114f044669e34e4e4ac48cc5f",
+        "reports/python-version.txt": "b1d173e941dbfa8bbabe0c832c75d9449f31942f882d76510e027fa02de2cae0"
+      }
+    },
+    {
+      "id": "scanner_selection_attempt_1",
+      "role": "scanner",
+      "task": "project",
+      "agent_id": "af69a15f40f3c793d",
+      "status": "succeeded",
+      "started_at": "2026-09-26T21:48:48.021Z",
+      "finished_at": "2026-09-26T21:54:49.737Z",
+      "owned_paths": [
+        "reports/tutorial-scanner.json",
+        "reports/tutorial-scanner-include-in-tools.json"
+      ],
+      "report": "reports/tutorial-scanner.json",
+      "report_sha256": "83a1b3a6fc2b507c7ef0e7f34302aa371e96d20ab562722f86236174559cb072",
+      "produced_files": {
+        "reports/tutorial-scanner-include-in-tools.json": "18e3e451038439a8c40c046e95407ead73efd91f789743edc3d7c596e05803da"
+      }
+    },
+    {
+      "id": "execute_decryptm_dasatinib_attempt_1",
+      "role": "executor",
+      "task": "decryptm_dasatinib",
+      "agent_id": "a1db50898c34802be",
+      "status": "cancelled",
+      "started_at": "2026-09-26T22:01:41.621Z",
+      "finished_at": "2026-09-26T22:24:56.681Z",
+      "owned_paths": [
+        "notebooks/decryptm_dasatinib",
+        "reports/executed_notebook_decryptm_dasatinib.json"
+      ],
+      "report": "reports/executed_notebook_decryptm_dasatinib.json",
+      "report_sha256": "960e4038654a164b6777837af32ea31f6206573ddd63de844ec84821aca293f2"
+    },
+    {
+      "id": "execute_kinobeads_dasatinib_attempt_1",
+      "role": "executor",
+      "task": "kinobeads_dasatinib",
+      "agent_id": "a03a9f260d8625bdb",
+      "status": "succeeded",
+      "started_at": "2026-09-26T22:01:41.117Z",
+      "finished_at": "2026-09-26T22:38:51.609Z",
+      "owned_paths": [
+        "notebooks/kinobeads_dasatinib",
+        "reports/executed_notebook_kinobeads_dasatinib.json"
+      ],
+      "report": "reports/executed_notebook_kinobeads_dasatinib.json",
+      "report_sha256": "d7d783730d4a40dc39c1b955e849e2badee4fb3c61d761c1bf092e7b6566ec94",
+      "produced_files": {
+        "notebooks/kinobeads_dasatinib/work/base/curves.txt": "8ff22ed7c45ba124291ea817a45064ada1b36fa6b585b82456bd742af163426a",
+        "notebooks/kinobeads_dasatinib/work/mad_run1/mad.txt": "ff895789d262d7a344c6ff2832a2215fc9b28ddc403877ca12c7dd0ad4ec7a36",
+        "notebooks/kinobeads_dasatinib/work/mad_run2/mad.txt": "ff895789d262d7a344c6ff2832a2215fc9b28ddc403877ca12c7dd0ad4ec7a36"
+      }
+    },
+    {
+      "id": "execute_viability_ctrp_40_attempt_1",
+      "role": "executor",
+      "task": "viability_ctrp_40",
+      "agent_id": "a39b5d23133937291",
+      "status": "succeeded",
+      "started_at": "2026-09-26T22:01:37.673Z",
+      "finished_at": "2026-09-26T22:52:18.073Z",
+      "owned_paths": [
+        "notebooks/viability_ctrp_40",
+        "reports/executed_notebook_viability_ctrp_40.json"
+      ],
+      "report": "reports/executed_notebook_viability_ctrp_40.json",
+      "report_sha256": "15f92c367067ebde594a39239d9b90b46b2b1cf843ec2f7cd6d74f39a0b59ba5",
+      "produced_files": {
+        "notebooks/viability_ctrp_40/work/base/curves_40.0.txt": "6d16700e0ccebdf43f9a218b3e23b4e19315ea95191e31cadac4e444c1592b0b",
+        "notebooks/viability_ctrp_40/work/fdr_run1/fdr_40.0.txt": "7783cc2ee6819486aeacef34ccdd2e8ded54f7451662ede9fba5b4eb2bcebecb",
+        "notebooks/viability_ctrp_40/work/fdr_run1/decoys_40.0.txt": "fe5f96d8b62132de7a5aeee514147843dec830d4b9cf56139ee0ddb009df9123",
+        "notebooks/viability_ctrp_40/work/fdr_run2/fdr_40.0.txt": "5ca8a66162809db2d79e6103e23f01d5158cac714d390d15be52d093e83031cd"
+      }
+    },
+    {
+      "id": "extract_cli_wrapper_attempt_1",
+      "role": "implementer",
+      "task": "cli_wrapper",
+      "agent_id": "a0a778f78fc452cf4",
+      "status": "succeeded",
+      "started_at": "2026-09-26T22:56:18.385Z",
+      "finished_at": "2026-09-26T23:15:08.841Z",
+      "owned_paths": [
+        "src/tools/cli_wrapper.py",
+        "reports/implementation-cli_wrapper.json"
+      ],
+      "report": "reports/implementation-cli_wrapper.json",
+      "report_sha256": "bf84b11936351d9d1d8e5411f84595833703b94e5fd9547e7274e35af0b36e1d",
+      "produced_files": {
+        "src/tools/cli_wrapper.py": "18d3d5e503c90e3dc0424685f9c6f63f0de66c7363b1a365945a66bb563ff46b"
+      }
+    },
+    {
+      "id": "verify_cli_wrapper_attempt_1",
+      "role": "verifier",
+      "task": "cli_wrapper",
+      "agent_id": "aaf54bd89f104fd69",
+      "status": "cancelled",
+      "started_at": "2026-09-26T23:17:12.769Z",
+      "finished_at": "2026-09-27T00:05:00.000Z",
+      "owned_paths": [
+        "reports/cancelled/verify-cli_wrapper-attempt-1.json",
+        "reports/mcp-acceptance-cli_wrapper.json",
+        "reports/verification-cli_wrapper.json",
+        "src/tools/cli_wrapper.py",
+        "tests/code",
+        "tests/logs",
+        "tests/results",
+        "tests/summary"
+      ],
+      "report": "reports/cancelled/verify-cli_wrapper-attempt-1.json",
+      "implementation_run_id": "extract_cli_wrapper_attempt_1",
+      "report_sha256": "b3a276e4353c985c395e854e74728234c7c690461d100fcf50ebefeab686e1e7"
+    }
+  ],
+  "exclusions": [
+    {
+      "kind": "tutorial",
+      "id": "decryptm_dasatinib",
+      "reason": "Excluded on resource grounds by explicit user decision: the run reached ~11% of curve fitting (277/2432 batches) in 18.5 min with ~2h51m projected remaining, because three concurrent executors requested 5/2/5 cores on a 4-CPU container, ~12 workers, load ~47. Terminated with SIGTERM; no curves file was produced, so no reference comparison exists. Two smaller examples remain and still cover the cli_wrapper module.",
+      "at": "2026-09-26T22:22:00Z",
+      "report": "reports/exclusions/decryptm-dasatinib.json",
+      "report_sha256": "c60a106589d0bcbd04dc9ff3fca5b8a66fb410263118039e9b0b827daac3af5a"
+    }
+  ]
+}

@@ -1,0 +1,243 @@
+{
+  "ref_rows": 1211,
+  "new_rows": 1211,
+  "ref_cols": [
+    "Name",
+    "N duplicates",
+    "Raw 0",
+    "Raw 1",
+    "Raw 2",
+    "Raw 3",
+    "Raw 4",
+    "Raw 5",
+    "Raw 6",
+    "Raw 7",
+    "Raw 8",
+    "Raw 9",
+    "Raw 10",
+    "Raw 11",
+    "Raw 12",
+    "Raw 13",
+    "Raw 14",
+    "Raw 15",
+    "Raw 16",
+    "Ratio 0",
+    "Ratio 1",
+    "Ratio 2",
+    "Ratio 3",
+    "Ratio 4",
+    "Ratio 5",
+    "Ratio 6",
+    "Ratio 7",
+    "Ratio 8",
+    "Ratio 9",
+    "Ratio 10",
+    "Ratio 11",
+    "Ratio 12",
+    "Ratio 13",
+    "Ratio 14",
+    "Ratio 15",
+    "Ratio 16",
+    "Signal Quality",
+    "pEC50",
+    "Curve Slope",
+    "Curve Front",
+    "Curve Back",
+    "Curve Fold Change",
+    "Curve AUC",
+    "Curve RMSE",
+    "Curve R2",
+    "pEC50 Error",
+    "Curve Slope Error",
+    "Curve Front Error",
+    "Curve Back Error",
+    "Null Model",
+    "Null RMSE",
+    "Curve F_Value",
+    "Curve P_Value",
+    "Curve Log P_Value",
+    "Curve F_Value SAM Corrected",
+    "Curve Relevance Score",
+    "Curve Regulation"
+  ],
+  "new_cols": [
+    "Name",
+    "N duplicates",
+    "Raw 0",
+    "Raw 1",
+    "Raw 2",
+    "Raw 3",
+    "Raw 4",
+    "Raw 5",
+    "Raw 6",
+    "Raw 7",
+    "Raw 8",
+    "Raw 9",
+    "Raw 10",
+    "Raw 11",
+    "Raw 12",
+    "Raw 13",
+    "Raw 14",
+    "Raw 15",
+    "Raw 16",
+    "Ratio 0",
+    "Ratio 1",
+    "Ratio 2",
+    "Ratio 3",
+    "Ratio 4",
+    "Ratio 5",
+    "Ratio 6",
+    "Ratio 7",
+    "Ratio 8",
+    "Ratio 9",
+    "Ratio 10",
+    "Ratio 11",
+    "Ratio 12",
+    "Ratio 13",
+    "Ratio 14",
+    "Ratio 15",
+    "Ratio 16",
+    "Signal Quality",
+    "pEC50",
+    "Curve Slope",
+    "Curve Front",
+    "Curve Back",
+    "Curve Fold Change",
+    "Curve AUC",
+    "Curve RMSE",
+    "Curve R2",
+    "pEC50 Error",
+    "Curve Slope Error",
+    "Curve Front Error",
+    "Curve Back Error",
+    "Null Model",
+    "Null RMSE",
+    "Curve F_Value",
+    "Curve P_Value",
+    "Curve Log P_Value",
+    "Curve F_Value SAM Corrected",
+    "Curve Relevance Score",
+    "Curve Regulation"
+  ],
+  "cols_match": true,
+  "ids_identical_order": true,
+  "ids_same_set": true,
+  "ids_identical_after_sort": true,
+  "numeric_columns": {
+    "pEC50": {
+      "max_abs_diff": 0.20623832542831266,
+      "max_rel_diff": 0.07919516214681996,
+      "n_nan_mismatch": 0,
+      "n_both_nan": 0,
+      "example_at_max_abs": {
+        "Name": "GSU_NPC-26",
+        "ref": 2.6041783341003497,
+        "new": 2.397940008672037
+      }
+    },
+    "Curve Slope": {
+      "max_abs_diff": 0.0019632956011959024,
+      "max_rel_diff": 0.0135890431682534,
+      "n_nan_mismatch": 0,
+      "n_both_nan": 0,
+      "example_at_max_abs": {
+        "Name": "HARA_CIL70",
+        "ref": 6.103881242608231,
+        "new": 6.105844538209427
+      }
+    },
+    "Curve Front": {
+      "max_abs_diff": 0.0001646188416708494,
+      "max_rel_diff": 0.0001645574261515574,
+      "n_nan_mismatch": 0,
+      "n_both_nan": 0,
+      "example_at_max_abs": {
+        "Name": "GSU_NPC-26",
+        "ref": 1.0003732163338253,
+        "new": 1.0002085974921544
+      }
+    },
+    "Curve Back": {
+      "max_abs_diff": 0.005077141971285615,
+      "max_rel_diff": 0.00393467523592281,
+      "n_nan_mismatch": 0,
+      "n_both_nan": 0,
+      "example_at_max_abs": {
+        "Name": "GSU_NPC-26",
+        "ref": 1.2903585853623465,
+        "new": 1.295435727333632
+      }
+    },
+    "Curve Fold Change": {
+      "max_abs_diff": 0.0005511887049629849,
+      "max_rel_diff": 0.0030849363783188133,
+      "n_nan_mismatch": 0,
+      "n_both_nan": 0,
+      "example_at_max_abs": {
+        "Name": "GSU_NPC-26",
+        "ref": 0.1786710120950255,
+        "new": 0.1792222007999885
+      }
+    },
+    "Curve F_Value": {
+      "max_abs_diff": 0.0003831924002430931,
+      "max_rel_diff": 0.00017699241550030748,
+      "n_nan_mismatch": 0,
+      "n_both_nan": 0,
+      "example_at_max_abs": {
+        "Name": "GSU_NPC-26",
+        "ref": 2.165021586715547,
+        "new": 2.164638394315304
+      }
+    },
+    "Curve P_Value": {
+      "max_abs_diff": 5.8894873908699186e-05,
+      "max_rel_diff": 0.00038914661856011935,
+      "n_nan_mismatch": 0,
+      "n_both_nan": 0,
+      "example_at_max_abs": {
+        "Name": "GSU_NPC-26",
+        "ref": 0.151343660974406,
+        "new": 0.1514025558483147
+      }
+    },
+    "Curve Relevance Score": {
+      "max_abs_diff": 0.0003494996824862026,
+      "max_rel_diff": 0.010114907687178057,
+      "n_nan_mismatch": 0,
+      "n_both_nan": 0,
+      "example_at_max_abs": {
+        "Name": "GSU_NPC-26",
+        "ref": 0.0345529285382642,
+        "new": 0.0349024282207504
+      }
+    },
+    "Curve AUC": {
+      "max_abs_diff": 1.549881203177783e-05,
+      "max_rel_diff": 1.3896756450628865e-05,
+      "n_nan_mismatch": 0,
+      "n_both_nan": 0,
+      "example_at_max_abs": {
+        "Name": "GSU_NPC-26",
+        "ref": 1.1152826982929869,
+        "new": 1.115267199480955
+      }
+    },
+    "Curve R2": {
+      "max_abs_diff": 4.069607559831212e-05,
+      "max_rel_diff": 0.0001178576240238707,
+      "n_nan_mismatch": 0,
+      "n_both_nan": 0,
+      "example_at_max_abs": {
+        "Name": "GSU_NPC-26",
+        "ref": 0.3452986256542012,
+        "new": 0.3452579295786029
+      }
+    }
+  },
+  "curve_regulation": {
+    "n_total": 1211,
+    "n_exact_match": 1211,
+    "n_mismatch": 0
+  }
+}

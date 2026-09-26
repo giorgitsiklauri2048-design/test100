@@ -1,0 +1,35 @@
+# Project environment: regenerable, and orchestration requires generated
+# environments to stay out of the tracked scientific tree.
+# Restore: python3 -m venv .venv && uv pip install --python .venv/bin/python \
+#          ./repo/curve_curator 'fastmcp==4.0.3' 'pytest>=7.4.3,<8' pytest-asyncio==0.23.8
+.venv/
+
+# Pinned upstream source. Not vendored: its exact identity is recorded in
+# .pipeline/language.json and reports/agent-runs.json (url + commit
+# 71e46f7222f825f446e9aff3fb5a3bee9473e309) and restored with:
+#   git clone https://github.com/kusterlab/curve_curator.git repo/curve_curator
+#   git -C repo/curve_curator checkout 71e46f7222f825f446e9aff3fb5a3bee9473e309
+repo/
+
+# Scratch I/O for wrapper calls and verifier runs.
+tmp/
+
+# Bulk execution artifacts that are regenerable from the pinned commit.
+#
+# Stage 2 executors copied each example out of the read-only repo/ tree before
+# running, because the shipped parameters.toml files declare no output paths and
+# CurveCurator writes next to the toml. Only the large INPUT copies and the bokeh
+# dashboards are excluded here (~20 MB per example). The produced text outputs
+# ARE tracked -- curves*.txt, decoys*.txt, fdr*.txt, mad*.txt, logs, drivers and
+# the before/after hash captures, about 7 MB in total -- because they are the
+# reference evidence that Stage 3's tests compare against and cannot be
+# regenerated without re-running the pipeline (5-16 minutes per example).
+notebooks/**/evidence.txt
+notebooks/**/proteinGroups.txt
+notebooks/**/*.tsv
+notebooks/**/*.html
+
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/

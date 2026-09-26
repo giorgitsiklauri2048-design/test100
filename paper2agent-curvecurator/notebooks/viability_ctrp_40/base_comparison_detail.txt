@@ -1,0 +1,191 @@
+{
+  "pEC50": {
+    "threshold": 0.0001,
+    "n_rows_exceeding": 1,
+    "n_rows_total": 1211,
+    "median_abs_diff": 8.881784197001252e-16,
+    "p99_abs_diff": 9.044276255920801e-07,
+    "max_abs_diff": 0.20623832542831266,
+    "names_exceeding": [
+      "GSU_NPC-26"
+    ]
+  },
+  "Curve Slope": {
+    "threshold": 0.0001,
+    "n_rows_exceeding": 3,
+    "n_rows_total": 1211,
+    "median_abs_diff": 1.7763568394002505e-15,
+    "p99_abs_diff": 4.0080390552034385e-07,
+    "max_abs_diff": 0.0019632956011959024,
+    "names_exceeding": [
+      "GSU_NPC-26",
+      "HARA_CIL70",
+      "L3.3_NPC-26"
+    ]
+  },
+  "Curve Front": {
+    "threshold": 0.0001,
+    "n_rows_exceeding": 1,
+    "n_rows_total": 1211,
+    "median_abs_diff": 2.220446049250313e-16,
+    "p99_abs_diff": 3.407182032066929e-08,
+    "max_abs_diff": 0.0001646188416708494,
+    "names_exceeding": [
+      "GSU_NPC-26"
+    ]
+  },
+  "Curve Back": {
+    "threshold": 0.0001,
+    "n_rows_exceeding": 1,
+    "n_rows_total": 1211,
+    "median_abs_diff": 1.1102230246251565e-16,
+    "p99_abs_diff": 4.944069087281707e-07,
+    "max_abs_diff": 0.005077141971285615,
+    "names_exceeding": [
+      "GSU_NPC-26"
+    ]
+  },
+  "Curve Fold Change": {
+    "threshold": 0.0001,
+    "n_rows_exceeding": 1,
+    "n_rows_total": 1211,
+    "median_abs_diff": 1.9012569296705806e-15,
+    "p99_abs_diff": 2.0560822264342855e-07,
+    "max_abs_diff": 0.0005511887049629849,
+    "names_exceeding": [
+      "GSU_NPC-26"
+    ]
+  },
+  "Curve F_Value": {
+    "threshold": 0.0001,
+    "n_rows_exceeding": 1,
+    "n_rows_total": 1211,
+    "median_abs_diff": 2.7533531010703882e-14,
+    "p99_abs_diff": 9.533946745299654e-07,
+    "max_abs_diff": 0.0003831924002430931,
+    "names_exceeding": [
+      "GSU_NPC-26"
+    ]
+  },
+  "Curve P_Value": {
+    "threshold": 0.0001,
+    "n_rows_exceeding": 0,
+    "n_rows_total": 1211,
+    "median_abs_diff": 4.0234064994579266e-20,
+    "p99_abs_diff": 1.845044086679074e-08,
+    "max_abs_diff": 5.8894873908699186e-05,
+    "names_exceeding": []
+  },
+  "Curve Relevance Score": {
+    "threshold": 0.0001,
+    "n_rows_exceeding": 1,
+    "n_rows_total": 1211,
+    "median_abs_diff": 6.106226635438361e-16,
+    "p99_abs_diff": 6.753998229115935e-08,
+    "max_abs_diff": 0.0003494996824862026,
+    "names_exceeding": [
+      "GSU_NPC-26"
+    ]
+  },
+  "Curve AUC": {
+    "threshold": 1e-06,
+    "n_rows_exceeding": 2,
+    "n_rows_total": 1211,
+    "median_abs_diff": 1.1102230246251565e-16,
+    "p99_abs_diff": 2.3371941071382673e-08,
+    "max_abs_diff": 1.549881203177783e-05,
+    "names_exceeding": [
+      "GSU_NPC-26",
+      "LS 180_CIL70"
+    ]
+  },
+  "Curve R2": {
+    "threshold": 1e-06,
+    "n_rows_exceeding": 2,
+    "n_rows_total": 1211,
+    "median_abs_diff": 1.1102230246251565e-16,
+    "p99_abs_diff": 6.094376652776804e-08,
+    "max_abs_diff": 4.069607559831212e-05,
+    "names_exceeding": [
+      "769-P_CIL70",
+      "GSU_NPC-26"
+    ]
+  }
+}
+
+=== Outlier row details ===
+
+--- L3.3_NPC-26 ---
+  Signal Quality: ref=0.0  new=0.0
+  pEC50: ref=8.974576736038525  new=8.974575738221596
+  Curve Slope: ref=7.043491325031965  new=7.043772025810871
+  Curve Front: ref=1.000012514408742  new=1.0000125363435433
+  Curve Back: ref=1.0721075768386217  new=1.0721075492756438
+  Curve Fold Change: ref=0.1004496751844985  new=0.1004496380940302
+  Curve RMSE: ref=0.0200998780602667  new=0.0200998777230249
+  Curve R2: ref=0.4478801124563223  new=0.4478801309835892
+  Null RMSE: ref=0.0271641608831765  new=0.0271641608831765
+  Curve F_Value: ref=3.3057655962394605  new=3.305765841396136
+  Curve P_Value: ref=0.0518244852487267  new=0.0518244742471907
+  Curve Relevance Score: ref=0.0029417492096038  new=0.0029417404194448
+  Curve Regulation: ref=not  new=not
+
+--- 769-P_CIL70 ---
+  Signal Quality: ref=0.0  new=0.0
+  pEC50: ref=4.687689388597884  new=4.68773586636388
+  Curve Slope: ref=10.0  new=10.0
+  Curve Front: ref=0.940922656102791  new=0.9409228182788836
+  Curve Back: ref=0.9030724417991935  new=0.9030803950816936
+  Curve Fold Change: ref=-0.1470099083311829  new=-0.1469973007724613
+  Curve RMSE: ref=0.0355834679438978  new=0.0355834885088831
+  Curve R2: ref=0.0829715970293085  new=0.0829705370606185
+  Null RMSE: ref=0.0372078417488125  new=0.0372078417488125
+  Curve F_Value: ref=0.396878796480262  new=0.3968734252830945
+  Curve P_Value: ref=0.9167511359127836  new=0.9167541893412492
+  Curve Relevance Score: ref=3.447177858555707e-05  new=3.4403985060833856e-05
+  Curve Regulation: ref=not  new=not
+
+--- LS 180_CIL70 ---
+  Signal Quality: ref=0.0  new=0.0
+  pEC50: ref=4.292787693809889  new=4.292788616417897
+  Curve Slope: ref=10.0  new=10.0
+  Curve Front: ref=0.9892119913727156  new=0.9892134862013158
+  Curve Back: ref=0.0001  new=0.0001
+  Curve Fold Change: ref=-0.1383916953689961  new=-0.138392014986688
+  Curve RMSE: ref=0.0361059886907652  new=0.0361059850460535
+  Curve R2: ref=0.2372495509307594  new=0.2372497049221288
+  Null RMSE: ref=0.0413774737275229  new=0.0413774737275229
+  Curve F_Value: ref=1.1749375442472982  new=1.1749385385410869
+  Curve P_Value: ref=0.4386990007117862  new=0.4386985349376316
+  Curve Relevance Score: ref=0.0048688396214622  new=0.0048689095586335
+  Curve Regulation: ref=not  new=not
+
+--- GSU_NPC-26 ---
+  Signal Quality: ref=0.0  new=0.0
+  pEC50: ref=2.6041783341003497  new=2.397940008672037
+  Curve Slope: ref=0.0453011631563108  new=0.045916762618014
+  Curve Front: ref=1.0003732163338253  new=1.0002085974921544
+  Curve Back: ref=1.2903585853623465  new=1.295435727333632
+  Curve Fold Change: ref=0.1786710120950255  new=0.1792222007999885
+  Curve RMSE: ref=0.0406956844421174  new=0.0406969492393104
+  Curve R2: ref=0.3452986256542012  new=0.3452579295786029
+  Null RMSE: ref=0.0505225965155324  new=0.0505225965155324
+  Curve F_Value: ref=2.165021586715547  new=2.164638394315304
+  Curve P_Value: ref=0.151343660974406  new=0.1514025558483147
+  Curve Relevance Score: ref=0.0345529285382642  new=0.0349024282207504
+  Curve Regulation: ref=nan  new=nan
+
+--- HARA_CIL70 ---
+  Signal Quality: ref=0.0  new=0.0
+  pEC50: ref=4.560724016498464  new=4.560741745301595
+  Curve Slope: ref=6.103881242608231  new=6.105844538209427
+  Curve Front: ref=1.017687770270366  new=1.0176870735568715
+  Curve Back: ref=0.898136916611498  new=0.8981447418988235
+  Curve Fold Change: ref=-0.1374076429409809  new=-0.1374120961145185
+  Curve RMSE: ref=0.0325679408001538  new=0.032567929118984
+  Curve R2: ref=0.3788417584258708  new=0.3788422040084492
+  Null RMSE: ref=0.0413537148843055  new=0.0413537148843055
+  Curve F_Value: ref=2.602316092933953  new=2.6023210083881403
+  Curve P_Value: ref=0.0936127702900394  new=0.0936123141562018
+  Curve Relevance Score: ref=0.0141294725495983  new=0.0141317142197587
+  Curve Regulation: ref=not  new=not

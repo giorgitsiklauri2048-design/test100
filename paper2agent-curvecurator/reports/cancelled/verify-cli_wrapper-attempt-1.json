@@ -1,0 +1,27 @@
+{
+  "attempt": "verify_cli_wrapper_attempt_1",
+  "role": "verifier",
+  "module": "cli_wrapper",
+  "status": "cancelled",
+  "cancelled_by": "coordinator, at the user's instruction to stop the session",
+  "cancelled_at": "2026-09-27T00:05:00Z",
+  "reason": "The session was paused by user decision. The container is ephemeral, so the running pytest session and its CurveCurator subprocesses were terminated with SIGTERM. This is not a test failure and not a defect in the module under verification.",
+  "progress_at_cancellation": {
+    "tests_defined": 29,
+    "tests_completed": 28,
+    "passed": 24,
+    "failed": 0,
+    "tests_not_reached": [
+      "test_wrong_runtime_override_is_rejected"
+    ],
+    "module_modified_by_verifier": false,
+    "module_sha256_at_cancellation": "18d3d5e503c90e3dc0424685f9c6f63f0de66c7363b1a365945a66bb563ff46b",
+    "note": "The module hash is unchanged from the implementer's produced_files entry, so no repair was attempted or needed. Zero failures were recorded across the completed tests."
+  },
+  "deliverables_not_written": [
+    "reports/verification-cli_wrapper.json",
+    "reports/mcp-acceptance-cli_wrapper.json"
+  ],
+  "consequence": "Stage 3B is incomplete and the `verification` gate was NOT run. The phase must be re-run by a fresh verifier whose agent_id differs from the implementer (a0a778f78fc452cf4) and from this cancelled attempt (aaf54bd89f104fd69). This record is retained; do not rewrite it. See RESUME.md.",
+  "reusable_work": "tests/code/test_run_dose_response_pipeline.py (31 tests) and pytest.ini are committed and can be reused as-is. The Stage 2 reference outputs the tests compare against are now tracked in git, so Stage 2 does not need redoing."
+}

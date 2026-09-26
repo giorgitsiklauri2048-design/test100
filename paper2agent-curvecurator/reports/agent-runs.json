@@ -64,6 +64,48 @@
       "produced_files": {
         "reports/tutorial-scanner-include-in-tools.json": "18e3e451038439a8c40c046e95407ead73efd91f789743edc3d7c596e05803da"
       }
+    },
+    {
+      "id": "execute_decryptm_dasatinib_attempt_1",
+      "role": "executor",
+      "task": "decryptm_dasatinib",
+      "agent_id": "a1db50898c34802be",
+      "status": "running",
+      "started_at": "2026-09-26T22:01:41.621Z",
+      "finished_at": null,
+      "owned_paths": [
+        "notebooks/decryptm_dasatinib",
+        "reports/executed_notebook_decryptm_dasatinib.json"
+      ],
+      "report": "reports/executed_notebook_decryptm_dasatinib.json"
+    },
+    {
+      "id": "execute_kinobeads_dasatinib_attempt_1",
+      "role": "executor",
+      "task": "kinobeads_dasatinib",
+      "agent_id": "a03a9f260d8625bdb",
+      "status": "running",
+      "started_at": "2026-09-26T22:01:41.117Z",
+      "finished_at": null,
+      "owned_paths": [
+        "notebooks/kinobeads_dasatinib",
+        "reports/executed_notebook_kinobeads_dasatinib.json"
+      ],
+      "report": "reports/executed_notebook_kinobeads_dasatinib.json"
+    },
+    {
+      "id": "execute_viability_ctrp_40_attempt_1",
+      "role": "executor",
+      "task": "viability_ctrp_40",
+      "agent_id": "a39b5d23133937291",
+      "status": "running",
+      "started_at": "2026-09-26T22:01:37.673Z",
+      "finished_at": null,
+      "owned_paths": [
+        "notebooks/viability_ctrp_40",
+        "reports/executed_notebook_viability_ctrp_40.json"
+      ],
+      "report": "reports/executed_notebook_viability_ctrp_40.json"
     }
   ],
   "exclusions": []

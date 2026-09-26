@@ -16,3 +16,25 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 *.egg-info/
+
+# Executor working copies and bulk artifacts.
+#
+# Each Stage 2 executor copies its example directory out of the read-only repo/
+# tree before running, because the shipped parameters.toml files declare no
+# output paths and CurveCurator therefore writes next to the toml -- running in
+# place would overwrite the shipped reference curves.txt/dashboard.html.
+#
+# Those copies plus the regenerated outputs run to ~31 MB per example (a 16 MiB
+# evidence.txt, a 10.9 MB curves.txt, a 4 MB bokeh dashboard), so they are not
+# committed. The evidence that matters is tracked: each executor's driver, logs
+# and reports/executed_notebook_<id>.json, which records every input and output
+# path with its sha256 plus the full reference comparison. Any artifact can be
+# regenerated from the pinned commit and the recorded command, and checked
+# against those hashes.
+notebooks/*/work/
+notebooks/**/*.html
+notebooks/**/curves*.txt
+notebooks/**/decoys*.txt
+notebooks/**/evidence.txt
+notebooks/**/proteinGroups.txt
+notebooks/**/*.tsv

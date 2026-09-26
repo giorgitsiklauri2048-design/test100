@@ -5,7 +5,26 @@
     "url": "https://github.com/kusterlab/curve_curator.git",
     "commit": "71e46f7222f825f446e9aff3fb5a3bee9473e309"
   },
-  "tutorials": [],
+  "tutorials": [
+    {
+      "id": "decryptm_dasatinib",
+      "module": "cli_wrapper",
+      "source": "repo/curve_curator/example_datasets/decryptM_Dasatinib/parameters.toml",
+      "sha256": "4c75d5a90b79876f31a28220b63377a2e02d831cc25a24bc7a3d95f22372d50e"
+    },
+    {
+      "id": "kinobeads_dasatinib",
+      "module": "cli_wrapper",
+      "source": "repo/curve_curator/example_datasets/kinobeads_Dasatinib/parameters.toml",
+      "sha256": "0c6580c4a28026ef1ed88a0e67529b34c2c2cb1a754fce184b6b41413c306e09"
+    },
+    {
+      "id": "viability_ctrp_40",
+      "module": "cli_wrapper",
+      "source": "repo/curve_curator/example_datasets/viability_CTRP_40/parameters_40.0.toml",
+      "sha256": "e127f39da561d01dd5cf1cba68f53ca5ccaf0e4090a570ec753bd956a94849af"
+    }
+  ],
   "runs": [
     {
       "id": "environment_setup_attempt_1",
@@ -33,14 +52,18 @@
       "role": "scanner",
       "task": "project",
       "agent_id": "af69a15f40f3c793d",
-      "status": "running",
+      "status": "succeeded",
       "started_at": "2026-09-26T21:48:48.021Z",
-      "finished_at": null,
+      "finished_at": "2026-09-26T21:54:49.737Z",
       "owned_paths": [
         "reports/tutorial-scanner.json",
         "reports/tutorial-scanner-include-in-tools.json"
       ],
-      "report": "reports/tutorial-scanner.json"
+      "report": "reports/tutorial-scanner.json",
+      "report_sha256": "83a1b3a6fc2b507c7ef0e7f34302aa371e96d20ab562722f86236174559cb072",
+      "produced_files": {
+        "reports/tutorial-scanner-include-in-tools.json": "18e3e451038439a8c40c046e95407ead73efd91f789743edc3d7c596e05803da"
+      }
     }
   ],
   "exclusions": []

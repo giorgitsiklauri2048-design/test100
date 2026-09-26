@@ -1,0 +1,185 @@
+{
+  "scan_metadata": {
+    "repository": "curve_curator",
+    "repository_path": "PROJECT_ROOT/repo/curve_curator",
+    "pinned_commit": "71e46f7222f825f446e9aff3fb5a3bee9473e309",
+    "paper": "Bayer et al. (2023), \"Statistical analysis of dose-dependent...\" Nature Communications 14(1), 7902, doi:10.1038/s41467-023-43696-z",
+    "route": "language=cli, cli_backend=python, executable=CurveCurator (declared [tool.poetry.scripts] CurveCurator = 'curve_curator.__main__:main')",
+    "scan_date": "2026-09-26",
+    "scope_filter_applied": [
+      "example_api_usage/",
+      "example_datasets/decryptM_Dasatinib/",
+      "example_datasets/kinobeads_Dasatinib/",
+      "example_datasets/viability_CTRP_40/",
+      "example_toml_files/"
+    ],
+    "supporting_source_read_outside_filter": [
+      "README.md (section 'Run pipeline' and toml-schema section, for the CLI contract)",
+      "curve_curator/__main__.py (real argparse contract)",
+      "curve_curator/data_simulator.py (checked for RNG/seed usage)",
+      "curve_curator/quality_control.py (checked mad_analysis for RNG usage)",
+      "curve_curator/quantification.py, curve_curator/models.py, curve_curator/toolbox.py (checked for RNG usage in default OLS fitting path)"
+    ],
+    "counts": {
+      "evaluated_source_files": 21,
+      "included_source_files_in_tutorials": 9,
+      "in_scope_paths_with_no_cli_operation": 2
+    },
+    "success": true,
+    "explanation": "All four requested scope entries (example_api_usage/, example_datasets/{decryptM_Dasatinib,kinobeads_Dasatinib,viability_CTRP_40}/, example_toml_files/) were located and inspected at the pinned commit. The three example_datasets/ subfolders each ship a real input file, the parameters.toml used, and the resulting curves.txt/curveCurator.log/dashboard.html, and were used as ground truth for the single exposed tool. example_toml_files/ contains only reference TOML schema files and a placeholder batch file (no companion input data), so it supports the tool's documented parameter contract but yields no independently runnable tool. example_api_usage/'s two notebooks exercise the Python library API (curve_curator.models.LogisticModel/MeanModel) directly and never invoke the CurveCurator executable, so they match the requested path filter but contain no CLI operation to expose under language=cli; this is reported rather than the filter being broadened to fabricate a CLI wrapper around library-only code (which a companion Python-API MCP server already covers per this run's brief)."
+  },
+  "tutorials": [
+    {
+      "path": "example_api_usage/Fit a dose-response model.ipynb",
+      "title": "Fit a dose-response model",
+      "description": "Fits a single curve_curator.models.LogisticModel to a hand-typed dose/response array via find_best_guess_ols/efficiently_fit_ols/evaluate, then plots it with matplotlib. Uses the Python library API only; never invokes the CurveCurator executable.",
+      "type": "notebook",
+      "include_in_tools": false,
+      "reason_for_include_or_exclude": "No CLI operation is demonstrated (pure curve_curator.models Python API). Out of scope for the language=cli route; single-curve fitting is already covered by a separate Python-API MCP server per this run's brief."
+    },
+    {
+      "path": "example_api_usage/Manual curve plotting from pipeline output.ipynb",
+      "title": "Manual curve plotting from pipeline output",
+      "description": "Loads example_datasets/decryptM_Dasatinib/curves.txt with pandas, reconstructs a LogisticModel/MeanModel from its fitted-parameter columns for one selected 'Modified sequence', and re-plots that single dose-response curve with matplotlib. Uses the Python library API only.",
+      "type": "notebook",
+      "include_in_tools": false,
+      "reason_for_include_or_exclude": "Consumes a CLI-produced curves.txt but performs the re-plotting itself via curve_curator.models (Python API), not via the CurveCurator executable. No bounded CLI command corresponds to 'render one curve from an existing curves.txt'; out of scope for the CLI route and overlaps the companion library-API MCP server's coverage of single-curve fitting/plotting."
+    },
+    {
+      "path": "example_datasets/decryptM_Dasatinib/ (parameters.toml, evidence.txt, curves.txt, curveCurator.log, dashboard.html)",
+      "title": "decryptM Dasatinib worked example (TMT phosphoproteome)",
+      "description": "Real Mode-1 CLI run: 'CurveCurator parameters.toml' on a MaxQuant evidence.txt (TMT, peptide-level) with 11 experiments/doses. Ships the exact input, the toml used, and the resulting curves.txt (12157 curves x 59 columns incl. pEC50, Curve F_Value, Curve P_Value, Curve Relevance Score, Curve Fold Change, Curve Regulation), dashboard.html, and curveCurator.log (version 0.6; s0=0.2141, alpha=0.05, fc_lim=0.45; 64 curves removed for >4 missing, 74 removed for >4 imputed).",
+      "type": "documentation",
+      "include_in_tools": true,
+      "reason_for_include_or_exclude": "Complete, real, traceable Mode-1 execution (input + config + reference outputs) with deterministic OLS fitting (no RNG found in quantification.py/models.py/toolbox.py). Serves as verification ground truth for run_dose_response_pipeline."
+    },
+    {
+      "path": "example_datasets/kinobeads_Dasatinib/ (parameters.toml, proteinGroups.txt, curves.txt, curveCurator.log, dashboard.html)",
+      "title": "kinobeads Dasatinib worked example (LFQ protein)",
+      "description": "Real Mode-1 CLI run on a MaxQuant proteinGroups.txt (LFQ, protein-level). Ships input, toml, curves.txt, dashboard.html, and curveCurator.log (s0=0.2709, alpha=0.1, fc_lim=0.5; 836 removed for >7 missing, 666 removed for >7 imputed).",
+      "type": "documentation",
+      "include_in_tools": true,
+      "reason_for_include_or_exclude": "Second independent, real Mode-1 execution with a different measurement/data type (LFQ protein vs TMT peptide), confirming run_dose_response_pipeline generalizes across the documented search-engine input formats."
+    },
+    {
+      "path": "example_datasets/viability_CTRP_40/ (parameters_40.0.toml, dose_responses_40.0.tsv, curves_40.0.txt, curveCurator.log, dashboard_40.0.html)",
+      "title": "viability CTRP 40uM worked example (cell viability)",
+      "description": "Real Mode-1 CLI run on a plain viability .tsv (measurement_type/data_type/search_engine = 'OTHER', 17 doses, control_fold_change=true, interpolation=true). Ships input, toml, curves_40.0.txt, dashboard_40.0.html, curveCurator.log (s0=0.1692, alpha=0.05, fc_lim=0.3; 9 curves removed for >4 missing).",
+      "type": "documentation",
+      "include_in_tools": true,
+      "reason_for_include_or_exclude": "Third independent, real Mode-1 execution covering the non-proteomics viability data path and the control_fold_change/interpolation Curve Fit options; output filenames carry a '_40.0' suffix from the toml, unlike the other two examples -- confirms the tool must honor whatever curves_file/dashboard path is configured in the toml rather than assuming fixed names."
+    },
+    {
+      "path": "example_toml_files/minimal_parameters.toml",
+      "title": "Minimal parameters template",
+      "description": "Fully commented minimal required-parameter TOML (Meta/Experiment/Paths/F Statistic only). References './evidence.txt' as input_file, which is not shipped in this directory.",
+      "type": "documentation",
+      "include_in_tools": false,
+      "reason_for_include_or_exclude": "Reference schema only; no companion input data at the pinned commit, so it cannot be executed as its own example. Used to confirm the minimal required TOML keys accepted by run_dose_response_pipeline's toml_path input, not exposed as a separate tool."
+    },
+    {
+      "path": "example_toml_files/minimal_parameters_with_triplicates.toml",
+      "title": "Minimal parameters template (triplicate design)",
+      "description": "Minimal TOML variant for a triplicated-dose experimental design. References './input.txt', not shipped in this directory.",
+      "type": "documentation",
+      "include_in_tools": false,
+      "reason_for_include_or_exclude": "Same as minimal_parameters.toml: schema reference only, no companion input data, not independently runnable."
+    },
+    {
+      "path": "example_toml_files/all_parameters.toml",
+      "title": "All parameters reference template",
+      "description": "Exhaustive, heavily commented TOML documenting every optional key across Meta/Experiment/Paths/Processing/Curve Fit/F Statistic/Dashboard sections (weights, speed, slope/front/back fixing, mtc_method, decoy_ratio, dashboard backend, etc.). References './evidence.txt', not shipped in this directory.",
+      "type": "documentation",
+      "include_in_tools": false,
+      "reason_for_include_or_exclude": "Not runnable on its own (no companion input data), but is the authoritative source for which optional parameters exist in the toml contract that run_dose_response_pipeline's toml_path input may legitimately set; used to inform the wrapper's documentation/validation, not exposed as its own tool."
+    },
+    {
+      "path": "example_toml_files/batch_file.txt",
+      "title": "Batch file template",
+      "description": "Commented template for Mode 2 (--batch); its three sample lines are placeholders ('..\\..\\<path1_to_toml>\\parameters.toml', etc.), not real paths.",
+      "type": "documentation",
+      "include_in_tools": false,
+      "reason_for_include_or_exclude": "Placeholder-only template, not a runnable example. Batch mode itself is omitted as a separate tool (see tool_review); this file cannot supply verification evidence for it as shipped."
+    }
+  ],
+  "tool_review": [
+    {
+      "candidate": "Run the CurveCurator pipeline on one parameter file (Mode 1: `CurveCurator <toml_path>`, optionally with -f/--fdr and -m/--mad)",
+      "task_and_io": "User supplies a completed parameters.toml (which itself names a raw proteomics search-engine output or a plain viability .tsv as its [Paths].input_file) and gets back: curves.txt (per-curve fitted 4-parameter logistic model, statistics, and SAM-style regulation call), an interactive dashboard.html, and curveCurator.log. Optionally, with estimate_fdr=true, also decoys_file+fdr_file (target-decoy FDR estimate); with run_mad=true, also mad_file (median-absolute-deviation noisy-channel detection).",
+      "implementation": {
+        "repo_path": "repo/curve_curator/curve_curator/__main__.py:main()",
+        "pinned_commit": "71e46f7222f825f446e9aff3fb5a3bee9473e309",
+        "bound_command": "CurveCurator <toml_path> [--fdr] [--mad]  (argparse: positional dest='path', -b/--batch store_true, -f/--fdr store_true, -m/--mad store_true, -r/--random type=int nargs='?')",
+        "internal_calls": "toml_parser.load_toml/set_default_values -> data_parser.load -> quantification.run_pipeline -> thresholding.apply_significance_thresholds -> [quality_control.mad_analysis if --mad] -> [data_simulator.get_decoys + quantification.run_pipeline(decoy_mode=True) + thresholding.estimate_qvalues/estimate_fdr if --fdr] -> data.to_csv(curves_file) -> dashboard.render",
+        "documentation_vs_parser_disagreement": "curve_curator/__main__.py's own module docstring ('usage: python -m curve_curator [-h] [-r [RANDOM]] [-b] <PARAM PATH>') omits -f/--fdr and -m/--mad, even though the argparse block below it defines both. README.md's usage line matches the real argparse exactly (h,b,f,m,r,path) and is the more reliable doc. Resolved in favor of the actual argparse contract (source of truth): --fdr and --mad are real, supported flags at this pinned commit. Separately, README shows 'CurveCurator --batch <batch_file>' as if --batch took an argument; in the real parser -b/--batch is a bare store_true flag and <batch_file> is actually the shared positional 'path' argument -- functionally identical on the command line, but --batch itself takes no value."
+      },
+      "verification_source": {
+        "datasets": [
+          "example_datasets/decryptM_Dasatinib/{parameters.toml,evidence.txt} -> curves.txt (12157 rows x 59 cols incl. pEC50, Curve F_Value, Curve P_Value, Curve Relevance Score, Curve Fold Change, Curve Regulation), dashboard.html, curveCurator.log",
+          "example_datasets/kinobeads_Dasatinib/{parameters.toml,proteinGroups.txt} -> curves.txt, dashboard.html, curveCurator.log",
+          "example_datasets/viability_CTRP_40/{parameters_40.0.toml,dose_responses_40.0.tsv} -> curves_40.0.txt, dashboard_40.0.html, curveCurator.log"
+        ],
+        "comparison": "Re-run the pinned CurveCurator executable on each shipped (toml,input) pair in its own working directory; numerically diff the wrapper-produced curves.txt against the shipped curves.txt row-by-row (matched by the dataset's identifier column, e.g. 'Modified sequence' / 'Proteins' / 'Name') on pEC50, Curve Slope/Front/Back, Curve Fold Change, Curve F_Value, Curve P_Value, Curve Relevance Score, and Curve Regulation, with a small float tolerance; confirm curveCurator.log reports the same removed-row counts and the same alpha/fc_lim/s0 values logged in the shipped log; confirm dashboard.html is produced and is well-formed, non-trivial HTML (bokeh dashboards are not expected to be byte-identical across runs due to embedded plot/version IDs, so dashboard content is checked structurally, not diffed numerically). Default OLS fitting path (quantification.py/models.py/toolbox.py) contains no RNG at this commit, so exact numeric agreement on curves.txt is a meaningful pass/fail criterion for the base (no --fdr/--mad) case.",
+        "fdr_flag_caveat": "None of the three shipped curveCurator.log files mention decoys/FDR, confirming none of the shipped datasets was actually run with --fdr; there is no shipped decoys_file/fdr_file to diff against at this commit. data_simulator.get_decoys/simulate_h0_dataset call np.random.choice and scipy.stats rvs directly; the CLI exposes no seed for this path (-r/--random only accepts an integer N for a different mode, not a seed for --fdr's decoy RNG). Non-deterministic and unverifiable by exact value; a meaningful test is structural/statistical only (exit 0; decoys_file and fdr_file are created with their documented columns; decoy count is consistent with the configured decoy_ratio; reported FDR values fall in [0,1])  run directly by Stage 2/3 on a real shipped input as a documented-API driver, not against any pre-existing reference file.",
+        "mad_flag_caveat": "Likewise no shipped log used --mad, so no shipped mad_file exists to diff against. quality_control.mad_analysis contains no RNG at this commit (deterministic given the same fitted curves), so Stage 2/3 executing it directly on a real shipped input produces its own reproducible reference (re-running should reproduce the same mad_file), even without a shipped ground-truth file to compare to."
+      },
+      "decision_and_reason": "EXPOSE. This is the CLI route's one genuinely distinct, real, fully documented and shipped-with-ground-truth user task -- running the full pipeline end-to-end on a real input file to get curves.txt + dashboard.html, which is exactly the capability this run's brief identifies as not covered by the companion Python-library-API MCP server. --fdr and --mad are exposed as optional boolean parameters of the same tool (same underlying invocation contract, same output directory, just extra declared output files) because the brief explicitly calls out FDR estimation as part of the CLI route's value; their lack of shipped ground truth and (for --fdr) their non-determinism are recorded above rather than hidden, per the verification-feasibility requirement.",
+      "ownership": {
+        "tool_name": "run_dose_response_pipeline",
+        "module": "cli_wrapper"
+      }
+    },
+    {
+      "candidate": "H0 simulation mode (Mode 3: `CurveCurator <toml_path> --random <N>`)",
+      "task_and_io": "Given N and a toml file, curve_curator.data_simulator.sample(config, n) simulates N null-hypothesis (x,y independent) curves and OVERWRITES the toml's configured [Paths].input_file with the simulated data in place, then the normal pipeline runs on that simulated data (for calibrating F-value/p-value null distributions).",
+      "implementation": {
+        "repo_path": "repo/curve_curator/curve_curator/__main__.py:main() args.random branch -> curve_curator/data_simulator.py:sample()/simulate_h0_dataset()",
+        "pinned_commit": "71e46f7222f825f446e9aff3fb5a3bee9473e309",
+        "bound_command": "CurveCurator <toml_path> --random <N>"
+      },
+      "verification_source": "None. No file under example_datasets/ or example_toml_files/ at the pinned commit was generated with -r/--random (no curveCurator.log mentions it); there is no shipped simulated input, expected curve count, or expected statistic to compare against.",
+      "decision_and_reason": "DEFER with blocker. (1) No shipped execution/output exists in the pinned repo for this mode -- exposing it would require inventing an expected result, which the run's hard constraints forbid. (2) data_simulator.py calls scipy.stats.f.rvs/stats.norm.rvs directly with no seed exposed anywhere in the CLI's argparse contract (--random only takes the integer N), so results are non-reproducible and there is no way to construct even a fixed-seed reference. (3) It destructively overwrites the path in the toml's own [Paths].input_file as a side effect, which is a meaningfully different and riskier operation than the brief's stated capability gap of 'running the pipeline end-to-end on a real input file'. Revisit only if a future run adds a real, recorded --random execution (fixed inputs and captured outputs) to the repository, or accepts a purely structural (schema/exit-code only) test.",
+      "ownership": {
+        "tool_name": null,
+        "module": "cli_wrapper (not created)"
+      }
+    },
+    {
+      "candidate": "Batch mode (Mode 2: `CurveCurator --batch <batch_file>`)",
+      "task_and_io": "Process a list of toml files consecutively in one invocation; each line is a path to a parameters.toml, run through the same Mode-1 logic in sequence.",
+      "implementation": {
+        "repo_path": "repo/curve_curator/curve_curator/__main__.py:main() args.batch branch",
+        "pinned_commit": "71e46f7222f825f446e9aff3fb5a3bee9473e309",
+        "bound_command": "CurveCurator --batch <batch_file_path>"
+      },
+      "verification_source": "example_toml_files/batch_file.txt ships only placeholder Windows-style paths ('..\\..\\<path1_to_toml>\\parameters.toml') and is documentation, not a runnable example. A real batch file could in principle be composed from the three already-verified real toml paths under example_datasets/, whose individual Mode-1 outputs are established as ground truth above.",
+      "decision_and_reason": "OMIT (not built as a separate tool). Batch mode adds no distinct scientific computation over Mode 1 -- it is a convenience loop over the exact same per-file logic already exposed by run_dose_response_pipeline. The identical effect (processing several datasets) is trivially achievable by the calling MCP agent invoking run_dose_response_pipeline once per toml file; a dedicated batch tool would only test file-list plumbing (reading a batch text file, skipping comments/blank lines) rather than new capability, so exposing it would pad the inventory without a distinct user-facing task. Kept internal / not exposed.",
+      "ownership": {
+        "tool_name": null,
+        "module": "cli_wrapper (not created)"
+      }
+    },
+    {
+      "candidate": "example_toml_files/{minimal_parameters.toml, minimal_parameters_with_triplicates.toml, all_parameters.toml}",
+      "task_and_io": "None independently -- fully commented reference TOML files documenting the required and optional parameter schema (Meta/Experiment/Paths/Processing/Curve Fit/F Statistic/Dashboard sections).",
+      "implementation": "n/a -- each references an input_file ('./evidence.txt' or './input.txt') that is not shipped alongside it at the pinned commit, so none is independently executable.",
+      "verification_source": "n/a -- not runnable as shipped.",
+      "decision_and_reason": "KEEP INTERNAL. Used only as documentation/reference for which TOML keys run_dose_response_pipeline's toml_path input may legitimately contain (cross-checked against curve_curator/toml_parser.py's accepted keys); not exposed as their own tool since they perform no operation.",
+      "ownership": {
+        "tool_name": null,
+        "module": "cli_wrapper (reference only)"
+      }
+    },
+    {
+      "candidate": "example_api_usage/'Fit a dose-response model.ipynb' and 'Manual curve plotting from pipeline output.ipynb'",
+      "task_and_io": "Direct Python-API single-curve fitting (LogisticModel.find_best_guess_ols/efficiently_fit_ols/evaluate) and direct Python-API re-plotting of one curve reconstructed from an existing curves.txt row (LogisticModel/MeanModel construction from fitted-parameter columns).",
+      "implementation": "repo/curve_curator/curve_curator/models.py (LogisticModel, MeanModel) -- imported and called directly in the notebooks; the CurveCurator executable is never invoked in either notebook.",
+      "verification_source": "n/a for the CLI route -- there is no bounded CLI command corresponding to either notebook's operation.",
+      "decision_and_reason": "OMIT / out of route scope. Both notebooks match the requested example_api_usage/ path filter but contain zero CLI operations -- everything runs through the Python library API, which this run's brief states is already covered by a separate, companion Python-API MCP server (single-curve fitting and thresholding). Per the selection rules, an unmatched capability under the chosen route is reported rather than the scope being broadened to fabricate a CLI wrapper around library-only code that has no corresponding `CurveCurator` command.",
+      "ownership": {
+        "tool_name": null,
+        "module": "cli_wrapper (not applicable; belongs to the library-API server, out of this run's ownership)"
+      }
+    }
+  ]
+}

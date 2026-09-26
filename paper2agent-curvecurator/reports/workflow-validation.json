@@ -1,0 +1,41 @@
+{
+  "validator": "paper2agent-workflow",
+  "schema_version": 1,
+  "success": true,
+  "through": "setup",
+  "errors": [],
+  "passed_assignments": [
+    {
+      "role": "environment",
+      "task": "project",
+      "run_id": "environment_setup_attempt_1"
+    },
+    {
+      "role": "scanner",
+      "task": "project",
+      "run_id": "scanner_selection_attempt_1"
+    }
+  ],
+  "exclusions": [],
+  "scope": "Validates recorded state and artifact consistency; does not authenticate host identities or establish numerical/scientific correctness.",
+  "expected_assignments": [
+    {
+      "role": "environment",
+      "task": "project"
+    },
+    {
+      "role": "scanner",
+      "task": "project"
+    }
+  ],
+  "active_tutorials": [
+    "decryptm_dasatinib",
+    "kinobeads_dasatinib",
+    "viability_ctrp_40"
+  ],
+  "active_modules": [
+    "cli_wrapper"
+  ],
+  "project_root": "/home/user/test100/paper2agent-curvecurator",
+  "state": "/home/user/test100/paper2agent-curvecurator/reports/agent-runs.json"
+}
